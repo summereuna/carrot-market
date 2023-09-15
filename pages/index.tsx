@@ -25,8 +25,6 @@ const Home: NextPage = () => {
           </button>
         </div>
         {/* 두 번째: 프로필*/}
-        {/* Group Modifiers: 전체 카드를 타겟 했을 때 아바타 바뀌게 해보자 
-        타겟하는 group 클래스네임이 hover상태일 때, 지정한 아이템이 바뀜 */}
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden group">
           <div className="bg-blue-500 p-6 pb-14 flex justify-between text-2xl">
             <span className="text-white font-semibold">Profile</span>
@@ -38,7 +36,7 @@ const Home: NextPage = () => {
                 <span className="font-medium">613</span>
               </div>
               <div className="h-24 w-24 bg-gray-300 rounded-full group-hover:bg-yellow-400 transition" />
-              <div className="flex flex-col istems-center">
+              <div className="flex flex-col items-center">
                 <span className="text-sm text-gray-500">Spent</span>
                 <span className="font-medium">$2013</span>
               </div>
@@ -97,8 +95,60 @@ const Home: NextPage = () => {
             </div>
           </div>
         </div>
-        {/* 네 번째 */}
-        <div className="bg-white p-10 rounded-2xl shadow-xl"></div>
+        {/* 네 번째: 폼*/}
+        <div className="bg-white p-10 rounded-2xl shadow-xl">
+          <div>
+            <h4 className="font-semibold text-2xl mb-5">
+              Modifiers for Form: 일반적인 css랑 비슷
+            </h4>
+            <form className="flex flex-col space-y-2 bg-blue-500 p-5 focus-within:bg-blue-100">
+              <input
+                type="text"
+                required
+                placeholder="User Name"
+                className="required:border-2 border-yellow-400 invalid:bg-red-300 valid:bg-teal-300"
+              />
+              <input
+                type="password"
+                required
+                placeholder="Password"
+                className="placeholder-shown:bg-teal-500 placeholder:text-white"
+              />
+              <input type="submit" value="login" className="bg-white" />
+            </form>
+          </div>
+          <div className="mt-10 flex flex-col">
+            <span className="font-semibold text-2xl">⭐️ Peer Modifier</span>
+            <span className="text-s text-gray-500">
+              Peer Modifier를 사용하면 폼에서 많이 쓰는 패턴을 쉽게 구현할 수
+              있다.
+            </span>
+            <span className="text-xs text-gray-500">
+              예) 이 <b>input의 상태(state)</b>에 따라 경고 span의 스타일을
+              변경할 수 있다.
+            </span>
+            <p>1. peer를 label해 주기</p>
+            <p>2. peer 상태에 따른 스타일 변경 주기</p>
+            <form className="flex flex-col space-y-2 p-5">
+              <input
+                type="text"
+                required
+                placeholder="Username"
+                className="peer p-1 border border-gray-400 rounded"
+              />
+              <span className="hidden peer-invalid:block peer-invalid:text-red-500">
+                This input is invalid!
+              </span>
+              <span className="hidden peer-valid:block peer-valid:text-teal-500">
+                Awesome username!
+              </span>
+              <span className="hidden peer-hover:block peer-hover:text-amber-500">
+                Checkkkk!
+              </span>
+              <input type="submit" value="Login" className="bg-white" />
+            </form>
+          </div>
+        </div>
       </div>
     </>
   );
