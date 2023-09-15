@@ -6,28 +6,16 @@ const Home: NextPage = () => {
         {/* 첫 번째: 계산서 */}
         <div className="bg-white p-10 rounded-3xl shadow-xl">
           <span className="font-semibold text-3xl">Select Item</span>
-          {/* 모디파이어로 리스트 구현하기 */}
-          <ul>
-            {[1, 2, 3, 4, 5].map((i) => (
-              <div
-                key={i}
-                className="flex justify-between my-2 odd:bg-blue-50 even:bg-yellow-50 only:bg-red-50"
-                //first: 첫번째 child, last: 마지막 child, only: child가 하나일 경우 표시됨
-                //odd: 홀수 , even: 짝수
-              >
-                <span className="text-gray-500">Grey Chair</span>
-                <span className="font-semibold">$19</span>
-              </div>
-            ))}
-          </ul>
-          {/* empty 수도 셀렉터로는 빈 값을 표시하거나 숨길 수 있음 */}
-          <ul>
-            {["RM", "JIN", "SUGA", "J-HOPE", "JIMIN", "V", ""].map((c, i) => (
-              <li className="py-2 bg-purple-300 empty:hidden" key={i}>
-                {c}
-              </li>
-            ))}
-          </ul>
+          <div className="my-3 flex-col space-y-3">
+            <div className="flex justify-between">
+              <span className="text-gray-500">Grey Chair</span>
+              <span className="font-semibold">$19</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-500">Tooly Table</span>
+              <span className="font-semibold">$19</span>
+            </div>
+          </div>
           <div className="flex justify-between pt-2 border-t-2 border-dashed">
             <span>Total</span>
             <span className="font-semibold">$19</span>
@@ -37,7 +25,9 @@ const Home: NextPage = () => {
           </button>
         </div>
         {/* 두 번째: 프로필*/}
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+        {/* Group Modifiers: 전체 카드를 타겟 했을 때 아바타 바뀌게 해보자 
+        타겟하는 group 클래스네임이 hover상태일 때, 지정한 아이템이 바뀜 */}
+        <div className="bg-white rounded-2xl shadow-xl overflow-hidden group">
           <div className="bg-blue-500 p-6 pb-14 flex justify-between text-2xl">
             <span className="text-white font-semibold">Profile</span>
           </div>
@@ -47,13 +37,13 @@ const Home: NextPage = () => {
                 <span className="text-sm text-gray-500">Order</span>
                 <span className="font-medium">613</span>
               </div>
-              <div className="h-24 w-24 bg-yellow-400 rounded-full"></div>
-              <div className="flex flex-col items-center">
+              <div className="h-24 w-24 bg-gray-300 rounded-full group-hover:bg-yellow-400 transition" />
+              <div className="flex flex-col istems-center">
                 <span className="text-sm text-gray-500">Spent</span>
                 <span className="font-medium">$2013</span>
               </div>
             </div>
-            <div className="relative flex flex-col items-center -mt-5 ">
+            <div className="relative flex flex-col items-center -mt-10 ">
               <span className="text-lg font-medium">Eunhwa Jung</span>
               <span className="text-sm text-gray-500">Daegu, Korea</span>
             </div>
