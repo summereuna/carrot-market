@@ -25,7 +25,7 @@ const Home: NextPage = () => {
       </div>
       {/* 두 번째: 프로필*/}
       <div className="bg-white rounded-2xl shadow-xl overflow-hidden group">
-        <div className="bg-blue-500 p-6 pb-14 xl:pb-40 flex justify-between text-2xl">
+        <div className="portrait:bg-blue-500 landscape:bg-teal-500 p-6 pb-14 xl:pb-40 flex justify-between text-2xl">
           <span className="text-white font-semibold">Profile</span>
         </div>
         <div className="rounded-3xl p-6 relative -top-5 bg-white">
@@ -95,16 +95,22 @@ const Home: NextPage = () => {
         </div>
       </div>
       {/*
+      # 반응형 modifier
         반응형을 만들 때, 사람들은 보통 먼저 데스크탑 버전 부터 생각한 후 그걸 모바일 버전에 적용시킴
-        tailwind는 뒤집어져 있음, 모든 클래스가 모바일에 우선 적용된다.
+        tailwind는 모든 클래스가 모바일에 우선 적용된다.
         그러고 나서 큰 화면을 위해 디자인을 변경해야 한다.
-        크게 만들면 못생...
-        화면이 커지면 좌우로 3열이 정렬되게 보이게 만들어보자
-        - [] sm
-        - [] md
-        - [] lg
-        - [] xl
-        - [] 2xl
+        - sm: @media (min-width: 640px) {}
+        - md: @media (min-width: 768px) {}
+        - lg: @media (min-width: 1024px) {}
+        - xl: @media (min-width: 1280px) {}
+        - 2xl: @media (min-width: 1536px) {}
+
+        # 디바이스 방향(가로/세로)에 따라 바꾸기
+        - 디바이스가 가로 방향일 때
+        landscape: @media (orientation: landscape) {}
+        
+        - 디바이스가 세로 방향일 때 (원래 디폴트값이긴 함)
+        portrait: @media (orientation: portrait) {}
   */}
     </div>
   );
