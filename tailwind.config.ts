@@ -17,6 +17,9 @@ const config: Config = {
       },
     },
   },
+  darkMode: "media",
+  // darkMode: "media" 환경 설정 따라 다크모드
+  // darkMode: "class" 토글하면 다크모드
   plugins: [],
 };
 export default config;
