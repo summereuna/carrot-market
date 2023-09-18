@@ -99,21 +99,24 @@ const Home: NextPage = () => {
           </div>
         </div>
       </div>
-      {/*
-      # 다크모드
-      1. 컴퓨터 설정 따라서
-      tailwind css의 다크모드 쿼리는 기본값으로 브라우저의 설정을 따라간다.
-      ## 다크모드 사용하기: dark: 모디파이어 사용하기
-      - dark: @media (prefers-color-scheme: dark) {}
-      
-      2. 직접 토글
-      다크모드를 설정할 수 있는 버튼을 가진 웹사이트들은 브라우저 설정을 따라가지 않는다.
-      이 기능을 사용하려면 tailwind.config.js에서 
-      - 이렇게 media 쿼리가 빠진걸 알수 있음
-      :is(.dark .dark\:bg-black) {}
-       ## 다크모드 사용하기: dark모드 적용할 부분에 dark: 모디파이어로 작성 후, 부모 요소에 dark 클래스 넣어 활성화 시키기
-       따라서 유저가 버튼 클릭시 최상위 컴포넌트(root 컴포넌트)에 dark 클래스 추가하는 방법으로 토글 버튼 만들면 된다.
+      {/* 네 번째: 제품 화면 */}
+      <div className="bg-white dark:bg-black p-10 rounded-2xl shadow-xl lg:col-span-2 xl:col-span-1">
+        <div className="bg-[url('/vercel.svg')]">
+          <span className="text-[14.5px]">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem fugit
+            nisi, sed eius architecto nihil delectus, obcaecati odit consectetur
+            vero, corporis consequuntur laboriosam quos consequatur neque
+            distinctio saepe nesciunt dicta.
+          </span>
+        </div>
+        {/*
+      tailwind CSS 3 부터 Just In Time Compiler 덕분에 사용하지 않는 css파일 삭제해야 하는 css pursing 작업 없이도 바로바로 컴파일 된다.
+
+      tailwind에서 지정하는 값 말고 사용자가 값을 지정하고 싶은 경우 [] 대괄호를 사용하면된다.
+      예시: text-[14.5px]
+       bg-[url('/vercel.svg')]
   */}
+      </div>
     </div>
   );
 };
