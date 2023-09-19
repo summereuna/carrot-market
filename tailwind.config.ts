@@ -20,6 +20,6 @@ const config: Config = {
   darkMode: "media",
   // darkMode: "media" 환경 설정 따라 다크모드
   // darkMode: "class" 토글하면 다크모드
-  plugins: [],
+  plugins: [require("@tailwindcss/forms")], // @tailwindcss/forms: input에 reset layer 추가할 수 있는 plugin
 };
 export default config;
