@@ -3,24 +3,24 @@ import Link from "next/link";
 
 const Community: NextPage = () => {
   return (
-    <div className="py-16 px-4 space-y-8">
+    <div className="py-16 space-y-8">
       {[1, 2, 3, 4, 5].map((_, i) => (
         <div key={i} className="cursor-pointer flex flex-col items-start">
           <span
-            className="flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800
+            className="flex ml-4 items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800
         "
           >
             동네질문
           </span>
-          <div className="mt-2 text-gray-700">
+          <div className="mt-2 px-4 text-gray-700">
             <span className="text-orange-500 font-medium">Q.</span> 김밥 맛있는
             곳 추천해주세요!
           </div>
-          <div className="mt-5 flex items-center justify-between w-full text-gray-500 font-medium text-xs">
+          <div className="mt-5 px-4 flex items-center justify-between w-full text-gray-500 font-medium text-xs">
             <span>참치맛오이</span>
             <span>13시간 전</span>
           </div>
-          <div className="flex space-x-5 mt-3 text-gray-700 py-2.5 border-t border-b-[2px] w-full">
+          <div className="flex px-4 space-x-5 mt-3 text-gray-700 py-2.5 border-t border-b-[2px] w-full">
             <span className="flex space-x-2 items-center text-sm">
               <svg
                 className="w-4 h-4"
