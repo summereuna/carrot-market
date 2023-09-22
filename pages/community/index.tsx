@@ -59,23 +59,25 @@ const Community: NextPage = () => {
         </div>
       ))}
 
-      {/*플로팅 버튼: 클릭 시 새로운 글 등록하는 페이지로*/}
-      <Link href="/community/new">
-        <button className="fixed bottom-24 right-5 bg-orange-400 rounded-full p-4 text-white shadow-xl transition-colors hover:bg-orange-500 cursor-pointer">
+      {/*플로팅 버튼: 클릭 시 상품 추가하는 페이지로*/}
+      <Link href="/items/upload">
+        <button className="flex space-x-1 fixed bottom-24 right-5 bg-orange-400 rounded-full p-4 text-white shadow-xl transition-colors hover:bg-orange-500 cursor-pointer">
           <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+            className="h-6 w-6"
             xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            aria-hidden="true"
           >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth="2"
-              d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-            ></path>
+              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+            />
           </svg>
+          <span>글쓰기</span>
         </button>
       </Link>
     </div>
