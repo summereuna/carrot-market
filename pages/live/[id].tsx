@@ -5,11 +5,21 @@ const LiveDetail: NextPage = () => {
     <div className="py-10 px-4 space-y-4">
       {/* 라이브 스트리밍 동영상 */}
       <div className="w-full aspect-video rounded-md shadow-sm  bg-slate-300" />
-      <h3 className="text-gray-700 font-semibold text-2xl mt-2">
-        라이브스트림 제목
-      </h3>
+      <div className="mt-5">
+        <h1 className="text-gray-900 font-semibold text-3xl">
+          라이브스트림 제목
+        </h1>
+        <span className="text-2xl block mt-3 text-gray-900">₩10,000</span>
+        <p className=" my-6 text-gray-700">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda
+          voluptatum error exercitationem voluptate hic neque recusandae unde
+          quis modi pariatur, nesciunt illum consectetur tempora? Voluptatibus,
+          ipsam. Veniam at obcaecati quaerat!
+        </p>
+      </div>
 
       {/* 채팅창: 보이는 화면 50에 고정*/}
+      <h2 className="text-2xl font-semibold text-gray-900">라이브 채팅</h2>
       <div className="py-10 pb-16 h-[50vh] overflow-y-scroll px-4 space-y-3">
         {/*상대방*/}
         <div className="flex items-start space-x-2 w-[90%]">
@@ -155,19 +165,18 @@ const LiveDetail: NextPage = () => {
             <span className="text-xs text-gray-400">오후 12:50</span>
           </div>
         </div>
-      </div>
-
-      {/*플로팅 채팅창 고정*/}
-      <div className="bg-white fixed bottom-0 p-2 inset-x-0">
-        <div className="relative flex max-w-md items-center w-full mx-auto">
-          <input
-            type="text"
-            className="pr-12 shadow-sm rounded-full w-full border-gray-300 focus:outline-none focus:border-orange-500 focus:ring-orange-500"
-          />
-          <div className="absolute inset-y-0 flex py-1.5 pr-1.5 right-0">
-            <button className="flex items-center bg-orange-500 rounded-full px-3 hover:bg-orange-600 focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 text-sm text-white">
-              &rarr;
-            </button>
+        {/*플로팅 채팅창 고정*/}
+        <div className="bg-white fixed bottom-0 p-2 inset-x-0">
+          <div className="relative flex max-w-md items-center w-full mx-auto">
+            <input
+              type="text"
+              className="pr-12 shadow-sm rounded-full w-full border-gray-300 focus:outline-none focus:border-orange-500 focus:ring-orange-500"
+            />
+            <div className="absolute inset-y-0 flex py-1.5 pr-1.5 right-0">
+              <button className="flex items-center bg-orange-500 rounded-full px-3 hover:bg-orange-600 focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 text-sm text-white">
+                &rarr;
+              </button>
+            </div>
           </div>
         </div>
       </div>
