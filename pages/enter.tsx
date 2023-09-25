@@ -1,12 +1,5 @@
 import { useState } from "react";
-
-/** 클래스네임 가져와서 합쳐주는 함수
- * [1, 2, 3].join("") => "123"
- * [1, 2, 3].join("/") => "1/2/3"
- */
-function cls(...classname: string[]) {
-  return classname.join(" ");
-}
+import { cls } from "../libs/utils";
 
 export default function Enter() {
   const [method, setMethod] = useState("email");
