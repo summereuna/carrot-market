@@ -10,7 +10,7 @@ const Live: NextPage = () => {
       {[1, 1, 1, 1, 1].map((_, i) => (
         <div key={i} className="px-4 pt-4">
           <div className="w-full aspect-video rounded-md shadow-sm  bg-slate-300" />
-          <h3 className="text-gray-700 text-70 mt-2">라이브스트림 제목</h3>
+          <h3 className="text-gray-700 text-lg mt-2">라이브스트림 제목</h3>
         </div>
       ))}
 
