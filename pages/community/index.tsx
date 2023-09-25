@@ -61,7 +61,7 @@ const Community: NextPage = () => {
 
       {/*플로팅 버튼: 클릭 시 상품 추가하는 페이지로*/}
       <Link href="/community/write">
-        <button className="flex space-x-1 fixed bottom-24 right-5 bg-orange-400 rounded-full p-4 text-white shadow-xl transition-colors hover:bg-orange-500 cursor-pointer">
+        <button className="flex space-x-1 fixed bottom-24 right-5 bg-orange-400 rounded-full p-4 text-white shadow-xl transition-colors hover:bg-orange-500 cursor-pointer border-transparent">
           <svg
             className="h-6 w-6"
             xmlns="http://www.w3.org/2000/svg"
