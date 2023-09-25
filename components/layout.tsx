@@ -7,6 +7,7 @@ interface LayoutProps {
 
 import Link from "next/link";
 import { cls } from "../libs/utils";
+import { useRouter } from "next/router";
 
 export default function Layout({
   title,
@@ -14,20 +15,47 @@ export default function Layout({
   hasTabBar,
   children,
 }: LayoutProps) {
+  const router = useRouter();
+  const onClick = () => {
+    router.back();
+  };
   return (
     <div>
       {/*네비게이션 바
       모바일 사이즈로 일단 작업하기 위해 max-w-xl 줘서 fixed된 바 크기 조정*/}
-      <div className="fixed max-w-xl top-0 flex items-center justify-center bg-white w-full text-lg font-medium text-gray-800 py-3 border-b">
+      <div
+        className={cls(
+          "fixed max-w-xl top-0 flex items-center px-5 bg-white w-full text-lg font-medium text-gray-800 py-3 border-b",
+          !canGoBack ? "justify-center" : "justify-start"
+        )}
+      >
         {title ? <span>{title}</span> : null}
+        {canGoBack ? (
+          <button onClick={onClick}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15.75 19.5L8.25 12l7.5-7.5"
+              />
+            </svg>
+          </button>
+        ) : null}
       </div>
       {/*컨텐츠*/}
-      <div className={cls("pt-16", hasTabBar ? "pb-12" : "")}>{children}</div>
+      <div className={cls("pt-14", hasTabBar ? "pb-20" : "")}>{children}</div>
       {/*하단 탭*/}
       {/*모바일 사이즈로 일단 작업하기 위해 max-w-xl 줘서 fixed된 바 크기 조정*/}
       {hasTabBar ? (
         <nav className="bg-white max-w-xl text-gray-700 border-t fixed bottom-0 w-full px-10 py-3 flex justify-between text-xs">
-          <Link href="">
+          <Link href="/">
             <div className="flex flex-col items-center space-y-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -46,7 +74,7 @@ export default function Layout({
               <span>홈</span>
             </div>
           </Link>
-          <Link href="">
+          <Link href="/community">
             <div className="flex flex-col items-center space-y-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -65,7 +93,7 @@ export default function Layout({
               <span>동네생활</span>
             </div>
           </Link>
-          <Link href="">
+          <Link href="/chats">
             <div className="flex flex-col items-center space-y-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -84,7 +112,7 @@ export default function Layout({
               <span>채팅</span>
             </div>
           </Link>
-          <Link href="">
+          <Link href="/live">
             <div className="flex flex-col items-center space-y-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -102,7 +130,7 @@ export default function Layout({
               <span>라이브 스트리밍</span>
             </div>
           </Link>
-          <Link href="">
+          <Link href="profile">
             <div className="flex flex-col items-center space-y-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
