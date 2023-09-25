@@ -1,3 +1,4 @@
+import Button from "@/components/button";
 import type { NextPage } from "next";
 
 const EditProfile: NextPage = () => {
@@ -41,9 +42,7 @@ const EditProfile: NextPage = () => {
           />
         </div>
       </div>
-      <button className="mt-5 w-full bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">
-        프로필 수정하기
-      </button>
+      <Button text="프로필 수정하기" />
     </div>
   );
 };

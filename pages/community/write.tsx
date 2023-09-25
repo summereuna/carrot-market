@@ -1,3 +1,4 @@
+import Button from "@/components/button";
 import type { NextPage } from "next";
 
 const Write: NextPage = () => {
@@ -29,7 +30,7 @@ const Write: NextPage = () => {
           중고거래 관련, 명예훼손, 광고/홍보 목적의 글은 올리실 수 없어요.
         </span>
       </div>
-      <form>
+      <form className="space-y-2">
         <input
           type="text"
           placeholder="제목을 입력하세요"
@@ -41,11 +42,9 @@ const Write: NextPage = () => {
           id="community_question_write"
           rows={5}
           placeholder="가까이 사는 동네 이웃들에게 궁금한 것을 물어보세요! 근처 이웃이 친절하게 진짜 동네 정보를 알려줄거예요"
-          className="text-gray-800 mt-1 shadow-sm w-full border-gray-300 focus:outline-none focus:ring-orange-400 focus:border-orange-400 rounded-md "
+          className="text-gray-800 shadow-sm w-full border-gray-300 focus:outline-none focus:ring-orange-400 focus:border-orange-400 rounded-md "
         />
-        <button className="w-full mt-2 bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">
-          완료
-        </button>
+        <Button text="완료" />
       </form>
     </div>
   );

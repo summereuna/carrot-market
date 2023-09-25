@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { cls } from "../libs/utils";
+import Button from "@/components/button";
 
 export default function Enter() {
   const [method, setMethod] = useState("email");
@@ -37,7 +38,7 @@ export default function Enter() {
             </button>
           </div>
         </div>
-        <form className="flex flex-col mt-8">
+        <form className="flex flex-col mt-8 space-y-4">
           <label htmlFor="tab" className="text-sm font-medium text-gray-700">
             {method === "email" ? "Email address" : null}
             {method === "phone" ? "Phone number" : null}
@@ -66,10 +67,8 @@ export default function Enter() {
               </div>
             ) : null}
           </div>
-          <button className="mt-5 bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">
-            {method === "email" ? "Get login link" : null}
-            {method === "phone" ? "Get one-time password" : null}
-          </button>
+          {method === "email" ? <Button text="로그인 링크 받기" /> : null}
+          {method === "phone" ? <Button text="일회용 비밀번호 받기" /> : null}
         </form>
         <div className="mt-8">
           <div className="relative">

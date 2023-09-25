@@ -1,3 +1,4 @@
+import Button from "@/components/button";
 import Layout from "@/components/layout";
 import type { NextPage } from "next";
 
@@ -31,13 +32,10 @@ const ItemDetail: NextPage = () => {
               me when I&apos;m talking to you, motherfucker. You listen: we go
               in there, and that ni**a Winston or anybody else is in there, you
               the first motherfucker to get shot. You understand?
-            </p>
+            </p>{" "}
             <div className="flex items-center justify-between space-x-2">
               {/*direct-message btn*/}
-              {/*flex-1 주면 형제요소보다 flex보다 강해짐, 줄어드는거 방지가능 */}
-              <button className="flex-1 bg-orange-500 text-white py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 shadow-sm font-medium  hover:bg-orange-600">
-                채팅하기
-              </button>
+              <Button text="채팅하기" large />
               {/*add to like-list btn*/}
               <button className="p-3 flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-200">
                 <svg

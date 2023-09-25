@@ -1,3 +1,4 @@
+import Button from "@/components/button";
 import type { NextPage } from "next";
 
 const Upload: NextPage = () => {
@@ -81,9 +82,7 @@ const Upload: NextPage = () => {
           />
         </div>
       </div>
-      <button className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">
-        작성 완료
-      </button>
+      <Button text="작성완료" />
     </div>
   );
 };

@@ -1,3 +1,4 @@
+import Button from "@/components/button";
 import type { NextPage } from "next";
 
 const Create: NextPage = () => {
@@ -59,9 +60,7 @@ const Create: NextPage = () => {
           />
         </div>
       </div>
-      <button className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">
-        라이브 시작하기
-      </button>
+      <Button text="라이브 시작하기" />
     </div>
   );
 };
