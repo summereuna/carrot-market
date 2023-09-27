@@ -32,7 +32,7 @@ const ItemDetail: NextPage = () => {
               me when I&apos;m talking to you, motherfucker. You listen: we go
               in there, and that ni**a Winston or anybody else is in there, you
               the first motherfucker to get shot. You understand?
-            </p>{" "}
+            </p>
             <div className="flex items-center justify-between space-x-2">
               {/*direct-message btn*/}
               <Button text="채팅하기" large />
