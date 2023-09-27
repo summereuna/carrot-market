@@ -5,3 +5,9 @@
 export function cls(...classname: string[]) {
   return classname.join(" ");
 }
+
+/** 숫자 세 자리 씩 표시하는 함수
+ */
+export function threeDigitDivision(price: number) {
+  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
