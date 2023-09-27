@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { cls } from "../libs/utils";
 import Button from "@/components/button";
+import Input from "@/components/input";
 
 export default function Enter() {
   const [method, setMethod] = useState("email");
@@ -9,10 +10,10 @@ export default function Enter() {
 
   return (
     <div className="mt-16 px-4">
-      <h3 className="text-3xl font-bold text-center">Enter to Carrot</h3>
+      <h3 className="text-4xl font-bold text-center">지금 우리 동네는? 👀</h3>
       <div className="mt-12">
         <div className="flex flex-col items-center">
-          <h5 className="text-sm text-gray-500 font-md">Enter using:</h5>
+          <h5 className="text-2xl font-bold">지금 로그인하세요.</h5>
           <div className="grid grid-cols-2 gap-16 w-full mt-8 border-b">
             <button
               className={cls(
@@ -39,34 +40,17 @@ export default function Enter() {
           </div>
         </div>
         <form className="flex flex-col mt-8 space-y-4">
-          <label htmlFor="tab" className="text-sm font-medium text-gray-700">
-            {method === "email" ? "Email address" : null}
-            {method === "phone" ? "Phone number" : null}
-          </label>
-          <div className="mt-1">
-            {method === "email" ? (
-              <input
-                id="tab"
-                type="email"
-                required
-                className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-400 focus:border-orange-400
-                "
-              />
-            ) : null}
-            {method === "phone" ? (
-              <div className="flex rounded-md shadow-sm">
-                <span className="flex items-center justify-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 select-none text-sm">
-                  +82
-                </span>
-                <input
-                  id="tab"
-                  type="number"
-                  required
-                  className="w-full appearance-none px-3 py-2 border border-gray-300 rounded-r-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500"
-                />
-              </div>
-            ) : null}
-          </div>
+          {method === "email" ? (
+            <Input
+              label="이메일 주소"
+              name="email"
+              kind="email"
+              placeholder="이메일 주소를 입력하세요."
+            />
+          ) : null}
+          {method === "phone" ? (
+            <Input label="휴대전화 번호" name="phone" kind="phone" />
+          ) : null}
           {method === "email" ? <Button text="로그인 링크 받기" /> : null}
           {method === "phone" ? <Button text="일회용 비밀번호 받기" /> : null}
         </form>
@@ -75,7 +59,7 @@ export default function Enter() {
             <div className="absolute w-full border-t border-gray-300" />
             <div className="relative -top-3 text-center">
               <span className="bg-white px-2 text-sm text-gray-500">
-                Or enter with
+                또는 간편 로그인하기
               </span>
             </div>
           </div>

@@ -1,4 +1,5 @@
 import Button from "@/components/button";
+import Input from "@/components/input";
 import type { NextPage } from "next";
 
 const EditProfile: NextPage = () => {
@@ -14,34 +15,13 @@ const EditProfile: NextPage = () => {
           <input id="picture" type="file" className="hidden" accept="image/*" />
         </label>
       </div>
-      <div className="space-y-1">
-        <label htmlFor="email" className="text-sm font-medium text-gray-700">
-          이메일 주소
-        </label>
-        <input
-          id="email"
-          type="email"
-          required
-          className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-400 focus:border-orange-400
-                "
-        />
-      </div>
-      <div className="space-y-1">
-        <label htmlFor="phone" className="text-sm font-medium text-gray-700">
-          휴대전화 번호
-        </label>
-        <div className="flex rounded-md shadow-sm">
-          <span className="flex items-center justify-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 select-none text-sm">
-            +82
-          </span>
-          <input
-            id="phone"
-            type="number"
-            required
-            className="w-full appearance-none px-3 py-2 border border-gray-300 rounded-r-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500"
-          />
-        </div>
-      </div>
+      <Input
+        label="이메일 주소"
+        name="email"
+        kind="email"
+        placeholder="이메일 주소를 입력하세요."
+      />
+      <Input label="휴대전화 번호" name="phone" kind="phone" />
       <Button text="프로필 수정하기" />
     </div>
   );
