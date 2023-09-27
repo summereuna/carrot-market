@@ -23,15 +23,9 @@ export default function Layout({
     <div>
       {/*네비게이션 바
       모바일 사이즈로 일단 작업하기 위해 max-w-xl 줘서 fixed된 바 크기 조정*/}
-      <div
-        className={cls(
-          "fixed max-w-xl top-0 flex items-center px-5 bg-white w-full text-lg font-medium text-gray-800 py-3 border-b",
-          !canGoBack ? "justify-center" : "justify-start"
-        )}
-      >
-        {title ? <span>{title}</span> : null}
+      <div className="fixed max-w-xl top-0 flex items-center px-5 bg-white w-full text-lg font-medium text-gray-800 py-3 border-b justify-center h-12">
         {canGoBack ? (
-          <button onClick={onClick}>
+          <button onClick={onClick} className="absolute left-4">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -47,6 +41,9 @@ export default function Layout({
               />
             </svg>
           </button>
+        ) : null}
+        {title ? (
+          <span className={cls(canGoBack ? "mx-auto" : "", "")}>{title}</span>
         ) : null}
       </div>
       {/*컨텐츠*/}
