@@ -5,7 +5,7 @@ import type { NextPage } from "next";
 const Write: NextPage = () => {
   return (
     <Layout canGoBack title="동네생활 글쓰기">
-      <div className="px-4 py-10 space-y-2">
+      <div className="px-4 py-2 space-y-2">
         <div
           className="cursor-pointer flex items-center justify-between px-3 py-3 text-gray-800 border-b border-gray-300
         "

@@ -17,15 +17,21 @@ const CommunityPostDetail: NextPage = () => {
           <div className="w-10 h-10 rounded-full bg-slate-300" />
           <div>
             <p className="text-sm font-medium text-gray-700">짱구야놀자</p>
-            <p className="text-xs font-medium text-gray-500">
-              프로필 보기 &rarr;
-            </p>
+            <p className="text-xs font-medium text-gray-500">2시간 전</p>
           </div>
         </div>
         <div>
-          <div className="mt-2 px-4 text-gray-700">
-            <span className="text-orange-500 font-medium">Q.</span> 김밥 맛있는
-            곳 추천해주세요!
+          <div className="mt-2 px-4 text-gray-700 flex flex-col space-y-2">
+            <div className="text-xl font-semibold">
+              <span className="text-orange-500">Q. </span>
+              <span>김밥 맛있는 곳 추천해주세요!</span>
+            </div>
+            <p>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aliquam
+              corporis, quas maiores totam culpa fuga sapiente obcaecati
+              consectetur repellat sequi vero minima et quae dicta? Consectetur,
+              vel consequatur. Eligendi, cum.
+            </p>
           </div>
           <div className="flex px-4 space-x-5 mt-3 text-gray-700 py-2.5 border-t border-b-[2px] w-full">
             <span className="flex space-x-2 items-center text-sm">
