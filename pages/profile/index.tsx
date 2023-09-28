@@ -1,18 +1,16 @@
 import Layout from "@/components/layout";
+import User from "@/components/user";
 import type { NextPage } from "next";
+import Link from "next/link";
 
 const Profile: NextPage = () => {
   return (
     <Layout title="나의 당근" hasTabBar>
-      <div className="py-10 px-4">
+      <div className="py-5 px-4">
         {/* 유저 정보 */}
-        <div className="flex items-center space-x-3">
-          <div className="w-16 h-16 bg-slate-300 rounded-full" />
-          <div className="flex flex-col">
-            <span className="font-medium text-gray-900">참치맛오이</span>
-            <span className="text-sm text-gray-700">프로필 수정 &rarr;</span>
-          </div>
-        </div>
+        <Link href="/profile/edit">
+          <User name="참치맛오이" size="large" />
+        </Link>
         {/* 유저 활동 세부 정보 */}
         <div className="mt-10 flex justify-around">
           <div className="flex flex-col items-center space-y-2 cursor-pointer">

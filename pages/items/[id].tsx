@@ -1,5 +1,6 @@
 import Button from "@/components/button";
 import Layout from "@/components/layout";
+import User from "@/components/user";
 import type { NextPage } from "next";
 
 const ItemDetail: NextPage = () => {
@@ -10,14 +11,8 @@ const ItemDetail: NextPage = () => {
           {/*product-image"*/}
           <div className="h-96 bg-slate-300" />
           {/*user-profile"*/}
-          <div className="cursor-pointer flex items-center space-x-3 py-3 border-t border-b">
-            <div className="w-12 h-12 rounded-full bg-slate-300" />
-            <div>
-              <p className="text-sm font-medium text-gray-700">짱구야놀자</p>
-              <p className="text-xs font-medium text-gray-500">
-                프로필 보기 &rarr;
-              </p>
-            </div>
+          <div className="py-3 border-t border-b">
+            <User name="짱구야놀자" size="small" time="2시간 전" />
           </div>
           {/*product-info*/}
           <div className="mt-10">

@@ -1,6 +1,9 @@
 import Button from "@/components/button";
 import Layout from "@/components/layout";
 import Textarea from "@/components/textarea";
+import User from "@/components/user";
+import Comment from "@/components/comment";
+
 import type { NextPage } from "next";
 
 const CommunityPostDetail: NextPage = () => {
@@ -14,12 +17,8 @@ const CommunityPostDetail: NextPage = () => {
           동네질문
         </span>
         {/*user-profile"*/}
-        <div className="px-4 mb-3 cursor-pointer flex items-center space-x-3 py-3 border-b">
-          <div className="w-10 h-10 rounded-full bg-slate-300" />
-          <div>
-            <p className="text-sm font-medium text-gray-700">짱구야놀자</p>
-            <p className="text-xs font-medium text-gray-500">2시간 전</p>
-          </div>
+        <div className="px-4 mb-3 py-3 border-b">
+          <User name="짱구야놀자" size="small" time="2시간 전" />
         </div>
         <div>
           <div className="mt-2 px-4 text-gray-700 flex flex-col space-y-2">
@@ -71,17 +70,18 @@ const CommunityPostDetail: NextPage = () => {
             </span>
           </div>
         </div>
+        {/*댓글*/}
         <div className="px-4 my-5 space-y-5">
           <div className="flex items-start space-x-3">
-            <div className="w-8 h-8 bg-slate-300 rounded-full" />
+            <div>
+              <div className="w-8 h-8 rounded-full bg-slate-300" />
+            </div>
             <div>
               <span className="text-sm block font-medium text-gray-700">
                 당근케익
               </span>
               <span className="text-xs block text-gray-500">2시간 전</span>
-              <p className="text-gray-700">
-                저는 바르다김선생 좋아해요. 기본 맛도 깔끔하고 맛있답니다.
-              </p>
+              <p className="text-gray-700">바르다 김선생 추천이요!</p>
             </div>
           </div>
         </div>
