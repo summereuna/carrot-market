@@ -1,5 +1,6 @@
 import Button from "@/components/button";
 import Layout from "@/components/layout";
+import Textarea from "@/components/textarea";
 import type { NextPage } from "next";
 
 const Write: NextPage = () => {
@@ -40,11 +41,9 @@ const Write: NextPage = () => {
             className="text-gray-800 font-bold text-lg placeholder:text-gray-500 placeholder:font-bold placeholder:text-lg  appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-400 focus:border-orange-400
                 "
           />
-          <textarea
-            id="community_question_write"
-            rows={5}
+          <Textarea
+            name="community_write"
             placeholder="가까이 사는 동네 이웃들에게 궁금한 것을 물어보세요! 근처 이웃이 친절하게 진짜 동네 정보를 알려줄거예요"
-            className="text-gray-800 shadow-sm w-full border-gray-300 focus:outline-none focus:ring-orange-400 focus:border-orange-400 rounded-md "
           />
           <Button text="완료" />
         </form>

@@ -1,5 +1,6 @@
 import Button from "@/components/button";
 import Layout from "@/components/layout";
+import Textarea from "@/components/textarea";
 import type { NextPage } from "next";
 
 const CommunityPostDetail: NextPage = () => {
@@ -85,12 +86,7 @@ const CommunityPostDetail: NextPage = () => {
           </div>
         </div>
         <div className="px-4 space-y-2">
-          <textarea
-            id="reply"
-            rows={4}
-            placeholder="댓글을 달아주세요."
-            className="mt-1 shadow-sm w-full border-gray-300 focus:outline-none focus:ring-orange-400 focus:border-orange-400 rounded-md "
-          />
+          <Textarea name="reply" placeholder="댓글을 달아주세요." />
           <Button text="댓글달기" />
         </div>
       </div>
