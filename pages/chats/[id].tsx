@@ -1,46 +1,27 @@
 import Layout from "@/components/layout";
+import Message from "@/components/message";
 import type { NextPage } from "next";
 
 const ChatDetail: NextPage = () => {
   return (
     <Layout canGoBack title="유저 이름">
       <div className="px-4 py-3 space-y-3">
-        {/*상대방*/}
-        <div className="flex items-start space-x-2 w-[90%]">
-          <div>
-            <div className="w-8 h-8 rounded-full bg-slate-300" />
-          </div>
-          <div className="flex space-x-2 items-end">
-            <div className="text-gray-700 bg-gray-200 rounded-xl p-3 text-sm">
-              <p>
-                올리신 글 보고 연락드려요. 혹시 에누리로 2만원에 구매
-                가능한가요?
-              </p>
-            </div>
-            <span className="text-xs text-gray-400">오후 12:45</span>
-          </div>
-        </div>
-        {/*나: reverse 사용*/}
-        <div className="flex justify-end">
-          <div className="w-[90%] flex flex-row-reverse space-x-2 space-x-reverse items-end">
-            <div className="bg-orange-500 text-yellow-50 rounded-xl p-3 text-sm">
-              <p>안녕하세요 가능합니다~ 언제 가능하신가요?</p>
-            </div>
-            <span className="text-xs text-gray-400">오후 12:45</span>
-          </div>
-        </div>
-        {/*상대방*/}
-        <div className="flex space-x-2 w-[90%]">
-          <div>
-            <div className="w-8 h-8 rounded-full bg-slate-300" />
-          </div>
-          <div className="flex space-x-2 items-end">
-            <div className="text-gray-700 bg-gray-200 rounded-xl p-3 text-sm">
-              <p>오후 7시 이후 역 앞에서 가능하신가요?</p>
-            </div>
-            <span className="text-xs text-gray-400">오후 12:50</span>
-          </div>
-        </div>
+        <Message
+          message="올리신 글 보고 연락드려요. 혹시 에누리로 2만원에 구매
+                가능한가요?"
+          time="오후 12:45"
+          me={false}
+        />
+        <Message
+          message="안녕하세요 가능합니다~ 언제 가능하신가요?"
+          time="오후 12:45"
+          me={true}
+        />
+        <Message
+          message="오후 7시 이후 역 앞에서 가능하신가요?"
+          time="오후 12:50"
+          me={false}
+        />
         {/*플로팅 채팅창 고정*/}
         <div className="bg-white fixed bottom-0 p-2 inset-x-0">
           <div className="relative flex max-w-md items-center w-full mx-auto">
