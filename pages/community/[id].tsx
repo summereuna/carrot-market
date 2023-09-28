@@ -72,18 +72,14 @@ const CommunityPostDetail: NextPage = () => {
         </div>
         {/*댓글*/}
         <div className="px-4 my-5 space-y-5">
-          <div className="flex items-start space-x-3">
-            <div>
-              <div className="w-8 h-8 rounded-full bg-slate-300" />
-            </div>
-            <div>
-              <span className="text-sm block font-medium text-gray-700">
-                당근케익
-              </span>
-              <span className="text-xs block text-gray-500">2시간 전</span>
-              <p className="text-gray-700">바르다 김선생 추천이요!</p>
-            </div>
-          </div>
+          {[1, 1, 1].map((_, i) => (
+            <Comment
+              key={i}
+              name="참치맛오이"
+              time="2시간 전"
+              comment="저는 바르다 김선생 김밥 추천합니다. 저는 바르다 김선생 김밥 추천합니다. 저는 바르다 김선생 김밥 추천합니다."
+            />
+          ))}
         </div>
         <div className="px-4 space-y-2">
           <Textarea name="reply" placeholder="댓글을 달아주세요." />
