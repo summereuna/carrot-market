@@ -1,0 +1,39 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+//provider는 우리가 사용할 데이터베이스라고 생각하면 된다.
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+//데이터베이스에서 사용할 모델 만들기
+//schema.prisma 는 데이터베이스에 대한 모든 설명을 담은 파일이라서 아주 중요!
+//변경점을 데이터베이스에 push 할 때도 사용하고 client를 만들때도 사용함
+model User {
+  id      Int      @id @default(autoincrement())
+  name    String
+  phone   Int?     @unique
+  email   String?  @unique
+  avatar  String?
+  created DateTime @default(now())
+  updated DateTime @updatedAt
+}
+
+//타입 Int는 정수를 의미함
+//@id 이 파라미터는 이게 모델의 id라는 것을 설명하는 역할
+//@default(autoincrement()) 기본적으로 자동으로 증가하는 필드로 설정
+
+//유저는 폰 넘버 / 이메일 로 로그인 가능하므로 phone은 required는 아니다.
+//필수 사항이 아닌 선택적 옵션으로 만들고 싶으면 물음표?를 붙이면 된다.
+//유저에게 폰 넘버가 있으면 그 넘버는 유일해야 한다.
+
+//createdAt DateTime @default(now())
+//기본값으로 새 유저가 만들어질 때 그 시점의 날짜가 now() 되게
+
+//updated DateTime @updatedAt
+//@updatedAt로 유저가 업데이트될 때마다 이 필드가 변할거라고 프리즈마에게 알리기

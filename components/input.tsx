@@ -3,7 +3,7 @@ interface InputProps {
   name: string;
   kind?: "text" | "email" | "phone" | "price";
   placeholder?: string;
-  [key: string]: any;
+  [key: string]: any; //input에 원하는 prop 전달하고 싶을 때 사용하려고 일단 남겨둠: 타입 명시 등
 }
 
 export default function Input({
@@ -11,7 +11,7 @@ export default function Input({
   name,
   kind,
   placeholder,
-  ...rest
+  ...rest //여기서 나머지 prop들 포착해서 input에 넣어줌
 }: InputProps) {
   return (
     <div className="space-y-1">
@@ -25,7 +25,7 @@ export default function Input({
       {kind == "text" ? (
         <div className="relative rounded-md shadow-sm flex items-center">
           <input
-            {...rest}
+            {...rest} // 따라서 다른 props도 추가적으로 넣을수 있음
             id={name}
             type="text"
             placeholder={placeholder}
