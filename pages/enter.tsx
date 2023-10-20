@@ -2,7 +2,7 @@ import { useState } from "react";
 import { cls } from "../libs/utils";
 import Button from "@/components/button";
 import Input from "@/components/input";
-import { FieldError, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 interface EnterForm {
   email?: string;
@@ -10,6 +10,8 @@ interface EnterForm {
 }
 
 export default function Enter() {
+  const [submitting, setSubmitting] = useState(false);
+
   const { register, reset, handleSubmit } = useForm<EnterForm>();
 
   //email/phone 메소드 바꾸면 email/phone form clear 해줘야 함
@@ -27,7 +29,20 @@ export default function Enter() {
   //console.log(watch());
 
   const onValid = (data: EnterForm) => {
-    console.log(data);
+    //console.log(data);
+    setSubmitting(true);
+    //fetch
+    fetch("/api/users/enter", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: { "Content-Type": "application/json" },
+      //Uploading JSON data
+      //POST프로토콜로 JSON인코딩된 데이터를 보내기 위해 fetch()를 사용한다.
+      //body의 데이터 유형은 반드시 "Content-Type" 헤더와 일치해야 한다.
+      //https://developer.mozilla.org/ko/docs/Web/API/Fetch_API/Using_Fetch#uploading_json_data
+    }).then(() => {
+      setSubmitting(false);
+    });
   };
 
   return (
@@ -84,8 +99,12 @@ export default function Enter() {
               required
             />
           ) : null}
-          {method === "email" ? <Button text="로그인 링크 받기" /> : null}
-          {method === "phone" ? <Button text="일회용 비밀번호 받기" /> : null}
+          {method === "email" ? (
+            <Button text={submitting ? "로딩중..." : "로그인 링크 받기"} />
+          ) : null}
+          {method === "phone" ? (
+            <Button text={submitting ? "로딩중..." : "일회용 비밀번호 받기"} />
+          ) : null}
         </form>
         <div className="mt-8">
           <div className="relative">
