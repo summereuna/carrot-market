@@ -1,9 +1,13 @@
+import type { UseFormRegisterReturn } from "react-hook-form";
+
 interface InputProps {
   label: string;
   name: string;
   kind?: "text" | "email" | "phone" | "price";
   placeholder?: string;
-  [key: string]: any; //input에 원하는 prop 전달하고 싶을 때 사용하려고 일단 남겨둠: 타입 명시 등
+  required: boolean;
+  register: UseFormRegisterReturn;
+  //[key: string]: any; //input에 원하는 prop 전달하고 싶을 때 사용하려고 일단 남겨둠: 타입 명시 등
 }
 
 export default function Input({
@@ -11,7 +15,9 @@ export default function Input({
   name,
   kind,
   placeholder,
-  ...rest //여기서 나머지 prop들 포착해서 input에 넣어줌
+  required,
+  // ...rest //여기서 나머지 prop들 포착해서 input에 넣어줌
+  register, //react-hook-form register 프롭으로 보낸거 받기
 }: InputProps) {
   return (
     <div className="space-y-1">
@@ -25,11 +31,12 @@ export default function Input({
       {kind == "text" ? (
         <div className="relative rounded-md shadow-sm flex items-center">
           <input
-            {...rest} // 따라서 다른 props도 추가적으로 넣을수 있음
+            {...register}
+            // {...rest} // 따라서 다른 props도 추가적으로 넣을수 있음
             id={name}
             type="text"
             placeholder={placeholder}
-            required
+            required={required}
             className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-400 focus:border-orange-400"
           />
         </div>
@@ -38,11 +45,12 @@ export default function Input({
       {kind == "email" ? (
         <div className="relative rounded-md shadow-sm flex items-center">
           <input
-            {...rest}
+            {...register}
+            // {...rest}
             id={name}
             type="email"
             placeholder={placeholder}
-            required
+            required={required}
             className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-400 focus:border-orange-400"
           />
         </div>
@@ -54,11 +62,12 @@ export default function Input({
             <span className="text-gray-500 text-sm pointer-events-none">₩</span>
           </div>
           <input
-            {...rest}
+            {...register}
+            // {...rest}
             id={name}
             type="number"
             placeholder={placeholder}
-            required
+            required={required}
             className="pl-7 appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-400 focus:border-orange-400"
           />
           <div className="absolute right-0 pr-3 flex items-center pointer-events-none">
@@ -73,10 +82,11 @@ export default function Input({
             +82
           </span>
           <input
-            {...rest}
+            {...register}
+            // {...rest}
             id={name}
             type="number"
-            required
+            required={required}
             className="w-full appearance-none px-3 py-2 border border-gray-300 rounded-r-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500"
           />
         </div>

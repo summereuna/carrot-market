@@ -2,11 +2,33 @@ import { useState } from "react";
 import { cls } from "../libs/utils";
 import Button from "@/components/button";
 import Input from "@/components/input";
+import { FieldError, useForm } from "react-hook-form";
+
+interface EnterForm {
+  email?: string;
+  phone?: string;
+}
 
 export default function Enter() {
+  const { register, reset, handleSubmit } = useForm<EnterForm>();
+
+  //email/phone 메소드 바꾸면 email/phone form clear 해줘야 함
   const [method, setMethod] = useState("email");
-  const onEmailClick = () => setMethod("email");
-  const onPhoneClick = () => setMethod("phone");
+  const onEmailClick = () => {
+    reset();
+    setMethod("email");
+  };
+  const onPhoneClick = () => {
+    reset();
+    setMethod("phone");
+  };
+
+  //form이 정상작동하는지 보기
+  //console.log(watch());
+
+  const onValid = (data: EnterForm) => {
+    console.log(data);
+  };
 
   return (
     <div className="mt-16 px-4">
@@ -39,17 +61,28 @@ export default function Enter() {
             </button>
           </div>
         </div>
-        <form className="flex flex-col mt-8 space-y-4">
+        <form
+          className="flex flex-col mt-8 space-y-4"
+          onSubmit={handleSubmit(onValid)}
+        >
           {method === "email" ? (
             <Input
+              register={register("email", { required: true })}
               label="이메일 주소"
               name="email"
               kind="email"
               placeholder="이메일 주소를 입력하세요."
+              required
             />
           ) : null}
           {method === "phone" ? (
-            <Input label="휴대전화 번호" name="phone" kind="phone" />
+            <Input
+              register={register("phone", { required: true })}
+              label="휴대전화 번호"
+              name="phone"
+              kind="phone"
+              required
+            />
           ) : null}
           {method === "email" ? <Button text="로그인 링크 받기" /> : null}
           {method === "phone" ? <Button text="일회용 비밀번호 받기" /> : null}
