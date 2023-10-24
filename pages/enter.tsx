@@ -30,8 +30,9 @@ export default function Enter() {
   //form이 정상작동하는지 보기
   //console.log(watch());
 
-  const onValid = (data: EnterForm) => {
-    enter(data);
+  const onValid = (validForm: EnterForm) => {
+    enter(validForm);
+    console.log(loading, data, error);
   };
 
   return (
