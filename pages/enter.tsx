@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { cls } from "../libs/utils";
+import { cls } from "../libs/server/utils";
 import Button from "@/components/button";
 import Input from "@/components/input";
 import { useForm } from "react-hook-form";
+import useMutation from "@/libs/server/useMutation";
 
 interface EnterForm {
   email?: string;
@@ -10,6 +11,7 @@ interface EnterForm {
 }
 
 export default function Enter() {
+  const [enter, { loading, data, error }] = useMutation("/api/users/enter");
   const [submitting, setSubmitting] = useState(false);
 
   const { register, reset, handleSubmit } = useForm<EnterForm>();
@@ -29,20 +31,7 @@ export default function Enter() {
   //console.log(watch());
 
   const onValid = (data: EnterForm) => {
-    //console.log(data);
-    setSubmitting(true);
-    //fetch
-    fetch("/api/users/enter", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: { "Content-Type": "application/json" },
-      //Uploading JSON data
-      //POST프로토콜로 JSON인코딩된 데이터를 보내기 위해 fetch()를 사용한다.
-      //body의 데이터 유형은 반드시 "Content-Type" 헤더와 일치해야 한다.
-      //https://developer.mozilla.org/ko/docs/Web/API/Fetch_API/Using_Fetch#uploading_json_data
-    }).then(() => {
-      setSubmitting(false);
-    });
+    enter(data);
   };
 
   return (
