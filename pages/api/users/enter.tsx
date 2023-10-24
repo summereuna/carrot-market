@@ -1,26 +1,13 @@
 import client from "@/libs/client/client";
+import withHandler from "@/libs/server/withHandler";
 import { NextApiRequest, NextApiResponse } from "next";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  //req 메소드 확인하기
-  if (req.method !== "POST") {
-    res.status(401).end();
-  }
-
-  //form정보 정상적으로 받고 있는지 확인
+async function handler(req: NextApiRequest, res: NextApiResponse) {
+  //form정보 정상적으로 받고 있는지 확인하기 위해 백엔드에 콘솔찍기
   console.log(req.body);
-  res.json({ ok: true });
+  return res.status(200).end();
 }
 
-// await client.user.create({
-//   data: {
-//     name: "test",
-//     email: "test@test.com",
-//   },
-// });
-// res.json({
-//   ok: true,
-// });
+export default withHandler("POST", handler);
+//withHandler(HTTP 메소드, handler 함수)
+//외부에서 핸들러 함수를 고차 함수에 인자로 전달하여 더 유연하게 사용 가능
