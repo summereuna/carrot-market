@@ -8,7 +8,7 @@ interface UseMutationState {
 }
 
 //useMutation 반환 값
-type UseMutationResult = [(data?: any) => void, UseMutationState];
+type UseMutationResult = [(data: any) => void, UseMutationState];
 
 /**
  * useMutation("/어떤 url을 mutate할지 알아야 함")
@@ -18,13 +18,18 @@ type UseMutationResult = [(data?: any) => void, UseMutationState];
  */
 export default function useMutation(url: string): UseMutationResult {
   //상태: 로딩, 데이터, 에러
-  const [loading, setLoading] = useState(false);
-  const [data, setData] = useState<undefined | any>(undefined);
-  const [error, setError] = useState<undefined | any>(false);
+  const [state, setState] = useState<UseMutationState>({
+    loading: false,
+    data: undefined,
+    error: undefined,
+  });
+  // const [loading, setLoading] = useState(false);
+  // const [data, setData] = useState<undefined | any>(undefined);
+  // const [error, setError] = useState<undefined | any>(undefined);
 
   //api로 data POST로 fetch하는 함수
-  function mutation(data?: any) {
-    setLoading(true);
+  function mutation(data: any) {
+    setState((prev) => ({ ...prev, loading: true }));
 
     //fetch
     //Uploading JSON data
@@ -41,13 +46,13 @@ export default function useMutation(url: string): UseMutationResult {
           /*혹시 에러 있으면 일단 에러 무시*/
         })
       )
-      .then(setData) //.then(jsonData) => setData(jsonData));
-      .catch(setError) //.catch((error) => setError(error));
-      .finally(() => setLoading(false));
+      .then((jsonData) => setState((prev) => ({ ...prev, jsonData })))
+      .catch((error) => setState((prev) => ({ ...prev, error })))
+      .finally(() => setState((prev) => ({ ...prev, loading: false })));
   }
 
   //반환 값은 [] 어레이에 mutation함수와 상태 담은 객체
-  return [mutation, { loading, data, error }];
+  return [mutation, { ...state }];
 }
 
 //useMutation()의 return type은 array임
