@@ -1,33 +1,43 @@
 import client from "@/libs/client/client";
-import withHandler from "@/libs/server/withHandler";
+import withHandler, { ResponseType } from "@/libs/server/withHandler";
 import { NextApiRequest, NextApiResponse } from "next";
 
-async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<ResponseType>
+) {
   //api route가 받은 req.body에서 폰이나 이메일 둘 중 하나 가져오기
   const { email, phone } = req.body;
 
-  const payload = email ? { email } : { phone: +phone };
-  //es6: 객체 안에서 if else 같은 기능 사용하기
-  // email 있으면 { email: email } 리턴
-  // phone 있으면 { phone: +phone } 리턴
-  //form에서 넘긴 phone값은 string이라서 + 붙여서 number로 바꿔주기
+  const userEnterInfo = email ? { email } : phone ? { phone: +phone } : null;
 
-  //생성하거나 수정할 때 upsert 사용
-  const user = await client.user.upsert({
-    //user의 email에 req.body로 넘겨준 email 있는지
-    where: { ...payload }, //조건 따라 이메일할지 폰할지
-    //없으면 새로 만들고 user 반환 받음
-    create: {
-      name: "익명",
-      ...payload,
+  //유저 입력정보 null이면 배드리퀘스트 보내기
+  if (!userEnterInfo) return res.status(400).json({ ok: false });
+
+  const payload = Math.floor(100000 + Math.random() * 900000) + "";
+
+  //토큰 생성
+  const token = await client.token.create({
+    data: {
+      payload,
+      user: {
+        //connect는 새로운 토큰을 이미 존재하는 유저와 연결
+        //create는 새로운 토큰과 새로운 유저 생성
+        //connectOrCreate 는 유저를 찾아서 토큰 연결하므로 위의 코드 없어도 됨
+        connectOrCreate: {
+          //유저가 있으면 페이로드(이메일/폰넘버) 넣어주기
+          where: { ...userEnterInfo },
+          //유저가 없으면 유저 새로 만들고, 유저에 토큰 연결
+          create: {
+            name: "익명",
+            ...userEnterInfo,
+          },
+        },
+      },
     },
-    //있으면 유저 업데이트: 안할거니까 비워두기
-    update: {},
   });
 
-  //백엔드에서 유저 정보 콘솔에 찍어보기
-  console.log(user);
-  return res.status(200).end();
+  return res.json({ ok: true });
 }
 
 export default withHandler("POST", handler);
