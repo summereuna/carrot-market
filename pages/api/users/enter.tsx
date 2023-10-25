@@ -2,6 +2,14 @@ import client from "@/libs/client/client";
 import withHandler, { ResponseType } from "@/libs/server/withHandler";
 import { NextApiRequest, NextApiResponse } from "next";
 
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const messagingServiceSid = process.env.TWILIO_MESSAGING_SERVICE_SID;
+const fromNumber = process.env.TWILIO_PHONE_NUMBER;
+const toNumber = process.env.MY_PHONE_NUMBER;
+
+const twilioClient = require("twilio")(accountSid, authToken);
+
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseType>
@@ -36,6 +44,23 @@ async function handler(
       },
     },
   });
+
+  //폰이면 트윌리오 SMS 문자보내기
+  if (phone) {
+    const message = await twilioClient.messages.create({
+      messagingServiceSid: messagingServiceSid,
+      from: fromNumber,
+      to: toNumber!, //phone으로 줘야 하는게 맞지만 트라이얼이니까
+      // ! 사용하여 확실히 존재하는 변수라고 타입스크립트에게 알리기
+      body: `로그인을 위한 토큰은 ${payload} 입니다.`,
+    });
+    console.log(message);
+  }
+
+  //이메일일 때
+  if (email) {
+    //...`
+  }
 
   return res.json({ ok: true });
 }
