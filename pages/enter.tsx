@@ -1,3 +1,4 @@
+import { NextPage } from "next";
 import { useState } from "react";
 import { cls } from "../libs/server/utils";
 import Button from "@/components/button";
@@ -10,11 +11,29 @@ interface EnterForm {
   phone?: string;
 }
 
-export default function Enter() {
-  const [enter, { loading, data, error }] = useMutation("/api/users/enter");
+interface TokenForm {
+  token: string;
+}
+
+//enter 페이지에서 useMutation하면 응답 결과로 data.ok 반환받음
+interface MutationResult {
+  ok: boolean;
+}
+
+const Enter: NextPage = () => {
+  //유저가 이메일/폰 입력시
+  const [enter, { loading, data, error }] =
+    useMutation<MutationResult>("/api/users/enter");
+
+  //유저가 인증번호(토큰) 입력시
+  const [confirmToken, { loading: tokenLoading, data: tokenData }] =
+    useMutation<MutationResult>("/api/users/confirm");
+
   const [submitting, setSubmitting] = useState(false);
 
   const { register, reset, handleSubmit } = useForm<EnterForm>();
+  const { register: tokenRegister, handleSubmit: tokenHandleSubmit } =
+    useForm<TokenForm>();
 
   //email/phone 메소드 바꾸면 email/phone form clear 해줘야 함
   const [method, setMethod] = useState("email");
@@ -32,70 +51,97 @@ export default function Enter() {
 
   const onValid = (validForm: EnterForm) => {
     enter(validForm);
-    console.log(loading, data, error);
+  };
+
+  const onTokenValid = (validForm: TokenForm) => {
+    if (tokenLoading) return; //로딩 참이면 mutation 전송되었단 뜻이니 반환하고
+    //토큰 인증 완료
+    confirmToken(validForm);
   };
 
   return (
     <div className="mt-16 px-4">
       <h3 className="text-4xl font-bold text-center">지금 우리 동네는? 👀</h3>
       <div className="mt-12">
-        <div className="flex flex-col items-center">
-          <h5 className="text-2xl font-bold">지금 로그인하세요.</h5>
-          <div className="grid grid-cols-2 gap-16 w-full mt-8 border-b">
-            <button
-              className={cls(
-                "pb-4 font-md border-b-2",
-                method === "email"
-                  ? " border-orange-500 text-orange-400"
-                  : "border-transparent text-gray-500"
-              )}
-              onClick={onEmailClick}
-            >
-              Email
-            </button>
-            <button
-              className={cls(
-                "pb-4 font-md border-b-2",
-                method === "phone"
-                  ? " border-orange-500 text-orange-400"
-                  : "border-transparent text-gray-500"
-              )}
-              onClick={onPhoneClick}
-            >
-              Phone
-            </button>
-          </div>
-        </div>
-        <form
-          className="flex flex-col mt-8 space-y-4"
-          onSubmit={handleSubmit(onValid)}
-        >
-          {method === "email" ? (
+        {/*data가 undefined일 수 있기 때문에 ? 써주기 */}
+        {data?.ok ? (
+          <form
+            className="flex flex-col mt-8 space-y-4"
+            onSubmit={tokenHandleSubmit(onTokenValid)}
+          >
             <Input
-              register={register("email", { required: true })}
-              label="이메일 주소"
-              name="email"
-              kind="email"
-              placeholder="이메일 주소를 입력하세요."
+              register={tokenRegister("token", { required: true })}
+              label="인증번호"
+              name="token"
+              kind="token"
               required
             />
-          ) : null}
-          {method === "phone" ? (
-            <Input
-              register={register("phone", { required: true })}
-              label="휴대전화 번호"
-              name="phone"
-              kind="phone"
-              required
-            />
-          ) : null}
-          {method === "email" ? (
-            <Button text={submitting ? "로딩중..." : "로그인 링크 받기"} />
-          ) : null}
-          {method === "phone" ? (
-            <Button text={submitting ? "로딩중..." : "일회용 비밀번호 받기"} />
-          ) : null}
-        </form>
+
+            <Button text={submitting ? "로딩중..." : "인증하기 "} />
+          </form>
+        ) : (
+          <>
+            <div className="flex flex-col items-center">
+              <h5 className="text-2xl font-bold">지금 로그인하세요.</h5>
+              <div className="grid grid-cols-2 gap-16 w-full mt-8 border-b">
+                <button
+                  className={cls(
+                    "pb-4 font-md border-b-2",
+                    method === "email"
+                      ? " border-orange-500 text-orange-400"
+                      : "border-transparent text-gray-500"
+                  )}
+                  onClick={onEmailClick}
+                >
+                  Email
+                </button>
+                <button
+                  className={cls(
+                    "pb-4 font-md border-b-2",
+                    method === "phone"
+                      ? " border-orange-500 text-orange-400"
+                      : "border-transparent text-gray-500"
+                  )}
+                  onClick={onPhoneClick}
+                >
+                  Phone
+                </button>
+              </div>
+            </div>
+            <form
+              className="flex flex-col mt-8 space-y-4"
+              onSubmit={handleSubmit(onValid)}
+            >
+              {method === "email" ? (
+                <Input
+                  register={register("email", { required: true })}
+                  label="이메일 주소"
+                  name="email"
+                  kind="email"
+                  placeholder="이메일 주소를 입력하세요."
+                  required
+                />
+              ) : null}
+              {method === "phone" ? (
+                <Input
+                  register={register("phone", { required: true })}
+                  label="휴대전화 번호"
+                  name="phone"
+                  kind="phone"
+                  required
+                />
+              ) : null}
+              {method === "email" ? (
+                <Button text={submitting ? "로딩중..." : "로그인 링크 받기"} />
+              ) : null}
+              {method === "phone" ? (
+                <Button
+                  text={submitting ? "로딩중..." : "일회용 비밀번호 받기"}
+                />
+              ) : null}
+            </form>
+          </>
+        )}
         <div className="mt-8">
           <div className="relative">
             <div className="absolute w-full border-t border-gray-300" />
@@ -135,4 +181,6 @@ export default function Enter() {
       </div>
     </div>
   );
-}
+};
+
+export default Enter;

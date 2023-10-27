@@ -3,7 +3,7 @@ import type { UseFormRegisterReturn } from "react-hook-form";
 interface InputProps {
   label: string;
   name: string;
-  kind?: "text" | "email" | "phone" | "price";
+  kind?: "text" | "email" | "phone" | "price" | "token";
   placeholder?: string;
   required: boolean;
   register: UseFormRegisterReturn;
@@ -88,6 +88,20 @@ export default function Input({
             type="number"
             required={required}
             className="w-full appearance-none px-3 py-2 border border-gray-300 rounded-r-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+          />
+        </div>
+      ) : null}
+
+      {kind == "token" ? (
+        <div className="relative rounded-md shadow-sm flex items-center">
+          <input
+            {...register}
+            // {...rest}
+            id={name}
+            type="number"
+            placeholder={placeholder}
+            required={required}
+            className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-400 focus:border-orange-400"
           />
         </div>
       ) : null}

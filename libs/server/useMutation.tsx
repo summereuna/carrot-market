@@ -1,14 +1,14 @@
 import { useState } from "react";
 
 //useMutation 상태 별 타입
-interface UseMutationState {
+interface UseMutationState<T> {
   loading: boolean;
-  data?: object;
+  data?: T;
   error?: object;
 }
 
 //useMutation 반환 값
-type UseMutationResult = [(data: any) => void, UseMutationState];
+type UseMutationResult<T> = [(data: any) => void, UseMutationState<T>];
 
 /**
  * useMutation("/어떤 url을 mutate할지 알아야 함")
@@ -16,9 +16,11 @@ type UseMutationResult = [(data: any) => void, UseMutationState];
  * 배열의 첫 번째 요소는 호출할 수 있는 함수로, data를 백엔드에 POST 하면 데이터베이스의 상태를 mutate할수 있는 함수
  * 두 번째 요소는 loading, data, error를 포함한 객체
  */
-export default function useMutation(url: string): UseMutationResult {
+export default function useMutation<T = any>(
+  url: string
+): UseMutationResult<T> {
   //상태: 로딩, 데이터, 에러
-  const [state, setState] = useState<UseMutationState>({
+  const [state, setState] = useState<UseMutationState<T>>({
     loading: false,
     data: undefined,
     error: undefined,
@@ -41,12 +43,8 @@ export default function useMutation(url: string): UseMutationResult {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     })
-      .then((response) =>
-        response.json().catch(() => {
-          /*혹시 에러 있으면 일단 에러 무시*/
-        })
-      )
-      .then((jsonData) => setState((prev) => ({ ...prev, jsonData })))
+      .then((response) => response.json().catch(() => {})) //혹시 에러 있으면 일단 에러 무시
+      .then((data) => setState((prev) => ({ ...prev, data })))
       .catch((error) => setState((prev) => ({ ...prev, error })))
       .finally(() => setState((prev) => ({ ...prev, loading: false })));
   }

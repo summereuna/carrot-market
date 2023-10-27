@@ -62,6 +62,11 @@ async function handler(
     //이메일일 때
     // sendEmail(email, payload);
   }
+
+  //res 반환: data.ok
+  return res.json({
+    ok: true,
+  });
 }
 
 export default withHandler("POST", handler);
