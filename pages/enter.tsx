@@ -29,8 +29,6 @@ const Enter: NextPage = () => {
   const [confirmToken, { loading: tokenLoading, data: tokenData }] =
     useMutation<MutationResult>("/api/users/confirm");
 
-  const [submitting, setSubmitting] = useState(false);
-
   const { register, reset, handleSubmit } = useForm<EnterForm>();
   const { register: tokenRegister, handleSubmit: tokenHandleSubmit } =
     useForm<TokenForm>();
@@ -77,7 +75,7 @@ const Enter: NextPage = () => {
               required
             />
 
-            <Button text={submitting ? "로딩중..." : "인증하기 "} />
+            <Button text={tokenLoading ? "로딩중..." : "인증하기 "} />
           </form>
         ) : (
           <>
@@ -132,12 +130,10 @@ const Enter: NextPage = () => {
                 />
               ) : null}
               {method === "email" ? (
-                <Button text={submitting ? "로딩중..." : "로그인 링크 받기"} />
+                <Button text={loading ? "로딩중..." : "로그인 링크 받기"} />
               ) : null}
               {method === "phone" ? (
-                <Button
-                  text={submitting ? "로딩중..." : "일회용 비밀번호 받기"}
-                />
+                <Button text={loading ? "로딩중..." : "일회용 비밀번호 받기"} />
               ) : null}
             </form>
           </>
