@@ -1,4 +1,5 @@
 import client from "@/libs/client/client";
+import sendEmail from "@/libs/server/email";
 import withHandler, { ResponseType } from "@/libs/server/withHandler";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -52,17 +53,13 @@ async function handler(
       from: fromNumber,
       to: toNumber!, //phone으로 줘야 하는게 맞지만 트라이얼이니까
       // ! 사용하여 확실히 존재하는 변수라고 타입스크립트에게 알리기
-      body: `로그인을 위한 토큰은 ${payload} 입니다.`,
+      body: `타인노출금지 [당근마켓] 인증번호 [${payload}]`,
     });
     console.log(message);
+  } else if (email) {
+    //이메일일 때
+    sendEmail(email, payload);
   }
-
-  //이메일일 때
-  if (email) {
-    //...`
-  }
-
-  return res.json({ ok: true });
 }
 
 export default withHandler("POST", handler);
