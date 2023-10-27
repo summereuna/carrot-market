@@ -48,17 +48,19 @@ async function handler(
 
   //폰이면 트윌리오 SMS 문자보내기
   if (phone) {
-    const message = await twilioClient.messages.create({
-      messagingServiceSid: messagingServiceSid,
-      from: fromNumber,
-      to: toNumber!, //phone으로 줘야 하는게 맞지만 트라이얼이니까
-      // ! 사용하여 확실히 존재하는 변수라고 타입스크립트에게 알리기
-      body: `타인노출금지 [당근마켓] 인증번호 [${payload}]`,
-    });
-    console.log(message);
+    //돈 아껴야 되니까 주석 처리 ^^..
+    // const message = await twilioClient.messages.create({
+    //   messagingServiceSid: messagingServiceSid,
+    //   from: fromNumber,
+    //   to: toNumber!, //phone으로 줘야 하는게 맞지만 트라이얼이니까
+    //   // ! 사용하여 확실히 존재하는 변수라고 타입스크립트에게 알리기
+    //   body: `타인노출금지 [당근마켓] 인증번호 [${payload}]`,
+    //});
+    //console.log(message);
   } else if (email) {
+    //이메일도 마찬가지 주석 처리
     //이메일일 때
-    sendEmail(email, payload);
+    // sendEmail(email, payload);
   }
 }
 

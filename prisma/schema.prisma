@@ -14,7 +14,7 @@ datasource db {
 model User {
   id      Int      @id @default(autoincrement())
   name    String
-  phone   Int?     @unique
+  phone   BigInt?  @unique
   email   String?  @unique
   avatar  String?
   created DateTime @default(now())
@@ -25,7 +25,7 @@ model User {
 model Token {
   id      Int      @id @default(autoincrement())
   payload String   @unique
-  user    User     @relation(fields: [userId], references: [id])
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId  Int
   created DateTime @default(now())
   updated DateTime @updatedAt
@@ -36,3 +36,6 @@ model Token {
 //payload에 유저의 이메일/폰넘버 정보 확인하라고 보내줄것임
 //db에 실제 user 전체 데이터가 들어가지는 않기 때문에 user, userId가 있음 
 //user 필드는 디비에 들어가지 않고 대신 userId가 디비에 들어감
+
+//Cascade
+//User 삭제되면 Token도 삭제되게 연결
