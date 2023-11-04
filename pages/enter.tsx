@@ -57,6 +57,8 @@ const Enter: NextPage = () => {
     confirmToken(validForm);
   };
 
+  console.log(loading);
+
   return (
     <div className="mt-16 px-4">
       <h3 className="text-4xl font-bold text-center">지금 우리 동네는? 👀</h3>

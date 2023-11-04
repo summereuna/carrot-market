@@ -11,7 +11,10 @@ export default function withHandler(
   fn: (req: NextApiRequest, res: NextApiResponse) => void
 ) {
   //사용자가 api request를 보내면 nextJS가 실행할 fn을 반환해줘야 한다.
-  return async function (req: NextApiRequest, res: NextApiResponse) {
+  return async function (
+    req: NextApiRequest,
+    res: NextApiResponse
+  ): Promise<any> {
     //내가 원하는 메소드가 아닌 경우
     if (req.method !== method) {
       return res.status(405).end();

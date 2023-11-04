@@ -44,9 +44,10 @@ export default function useMutation<T = any>(
       body: JSON.stringify(data),
     })
       .then((response) => response.json().catch(() => {})) //혹시 에러 있으면 일단 에러 무시
-      .then((data) => setState((prev) => ({ ...prev, data })))
-      .catch((error) => setState((prev) => ({ ...prev, error })))
-      .finally(() => setState((prev) => ({ ...prev, loading: false })));
+      .then((data) => setState((prev) => ({ ...prev, data, loading: false })))
+      .catch((error) =>
+        setState((prev) => ({ ...prev, error, loading: false }))
+      );
   }
 
   //반환 값은 [] 어레이에 mutation함수와 상태 담은 객체
