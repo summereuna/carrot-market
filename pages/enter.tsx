@@ -1,10 +1,11 @@
 import { NextPage } from "next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cls } from "../libs/server/utils";
 import Button from "@/components/button";
 import Input from "@/components/input";
 import { useForm } from "react-hook-form";
 import useMutation from "@/libs/server/useMutation";
+import { useRouter } from "next/router";
 
 interface EnterForm {
   email?: string;
@@ -57,7 +58,16 @@ const Enter: NextPage = () => {
     confirmToken(validForm);
   };
 
-  console.log(loading);
+  //컨펌 ok 받으면  res 데이터를 얻는데 그건 token: tokenData에 들었음
+  //token을 confirm하는 과정 거쳐 token이 존재한다고 응답 받으면
+  //로그인할 준비 된거니까 useRouter 사용하여 홈으로 새로고침되게 하기
+  const router = useRouter();
+
+  useEffect(() => {
+    if (tokenData?.ok) {
+      router.push("/");
+    }
+  }, [tokenData, router]);
 
   return (
     <div className="mt-16 px-4">

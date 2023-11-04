@@ -18,7 +18,7 @@ async function handler(
   //api route가 받은 req.body에서 폰이나 이메일 둘 중 하나 가져오기
   const { email, phone } = req.body;
 
-  const userEnterInfo = email ? { email } : phone ? { phone: +phone } : null;
+  const userEnterInfo = email ? { email } : phone ? { phone } : null;
 
   //유저 입력정보 null이면 배드리퀘스트 보내기
   if (!userEnterInfo) return res.status(400).json({ ok: false });
