@@ -3,6 +3,15 @@ import client from "@/libs/client/client";
 import withHandler, { ResponseType } from "@/libs/server/withHandler";
 import { NextApiRequest, NextApiResponse } from "next";
 
+//타입스크립트에게 req.session에 user있다고 알리기
+declare module "iron-session" {
+  interface IronSessionData {
+    user?: {
+      id: number;
+    };
+  }
+}
+
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseType>
@@ -21,11 +30,11 @@ async function handler(
 
   //2. 존재하는지 확인
   //존재하지 않으면 null리턴
-  if (!exists) res.status(404).end();
+  if (!exists) return res.status(404).end();
 
   //3. 존재하면 해당 토큰 가진 유저의 id를 세션에 저장
   req.session.user = {
-    id: exists?.userId,
+    id: exists.userId,
   };
 
   //세션 데이터 암호화하고 쿠키 설정해 저장
