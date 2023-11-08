@@ -1,26 +1,27 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import useSWR from "swr";
 
-/**로그인한 유저 프로필 가져오는 훅 */
+/**데이터 불러와 그 데이터 리턴 */
+
+//useSWR
+//첫 번째 인자인 key: 요청 보낼 url
+//**이 url이 api를 요청할 url이면서 캐시를 저장할 때 사용할 key이기 때문에 key라고 함
+//두 번째 인자인 fetcher 함수: 첫번째 인자인 key에 입력된 url로 요청 보내는 함수
+
+/**로그인한 유저 프로필 가져오는 훅
+ * useUser호출 시 useSWR이 fetcher함수로 api 요청 처리함
+ * 그리고 fetcher함수가 리턴된 data나 error가 useSWR에 들어옴
+ */
 export default function useUser() {
-  const [user, setUser] = useState();
+  const { data, error } = useSWR("api/users/me");
   const router = useRouter();
 
-  //한번 만 싫랭되도록 디펜던시 설정 []
   useEffect(() => {
-    //"api/users/me" aoi url에서 데이터 불러올거임
-    fetch("api/users/me")
-      .then((response) => response.json())
-      .then((jsonData) => {
-        if (jsonData.ok === false) {
-          //유저를 로그인 페이지로 리다이렉트 시키기
-          //push말고 replace를 사용하면 브라우저에서 히스토리를 남기지 않울 수 있다.
-          return router.replace("/enter");
-        }
-        //jsonData 있으면 유저 설정
-        setUser(jsonData.profile);
-      });
-  }, [router]);
+    if (data && !data.ok) {
+      router.replace("/enter");
+    }
+  }, [data, router]);
 
-  return user;
+  return { user: data?.profile, isLoading: !data && !error };
 }

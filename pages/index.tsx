@@ -8,7 +8,7 @@ import Link from "next/link";
 
 //상품 리스트
 const Home: NextPage = () => {
-  const user = useUser();
+  const { user, isLoading } = useUser();
   console.log(user);
   return (
     <Layout title="홈" hasTabBar>
