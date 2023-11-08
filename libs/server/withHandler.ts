@@ -5,22 +5,38 @@ export interface ResponseType {
   [key: string]: any;
 }
 
+//인자 많아져서 객체로 따로 빼고 타입 설정
+interface ConfigType {
+  method: "GET" | "POST" | "DELETE";
+  handler: (req: NextApiRequest, res: NextApiResponse) => void;
+  isPrivate?: boolean;
+}
+
 //withHandler함수는 고차함수
-export default function withHandler(
-  method: "GET" | "POST" | "DELETE",
-  fn: (req: NextApiRequest, res: NextApiResponse) => void
-) {
-  //사용자가 api request를 보내면 nextJS가 실행할 fn을 반환해줘야 한다.
+export default function withHandler({
+  method,
+  handler,
+  isPrivate = true, //대부분의 api 프라이빗(로그인)이므로 기본값 true
+}: ConfigType) {
+  //사용자가 api request를 보내면 nextJS가 실행할 handler을 반환해줘야 한다.
   return async function (
     req: NextApiRequest,
     res: NextApiResponse
   ): Promise<any> {
-    //내가 원하는 메소드가 아닌 경우
+    //1. 올바른 메서드인지 체크
     if (req.method !== method) {
       return res.status(405).end();
     } //이렇게 하면 handler 펑션을 bad request로 부터 보호할 수 있다.
+
+    //2. 로그인 했는지 체크
+    //401은 인증되지 않은 요청
+    if (isPrivate && !req.session.user) {
+      return res.status(401).json({ ok: false, error: "로그인 해주세요." });
+    }
+
+    //3. 올바른 메서드 && isPrivate && 로그인 했으면 아래 코드 실행
     try {
-      await fn(req, res);
+      await handler(req, res);
       //이때 handler 펑션이 실행됨 ㅇㅇ!
     } catch (error) {
       console.log(error);

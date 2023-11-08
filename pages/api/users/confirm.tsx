@@ -42,9 +42,13 @@ async function handler(
   res.json({ ok: true });
 }
 
-export default withApiSession(withHandler("POST", handler));
+export default withApiSession(
+  withHandler({ method: "POST", handler, isPrivate: false })
+);
 //withHandler(HTTP 메소드, handler 함수)
 //외부에서 핸들러 함수를 고차 함수에 인자로 전달하여 더 유연하게 사용 가능
 
 //쿠키 암호화 하는데 쓰일 비번 (최소 32자 이상)
 //https://1password.com/password-generator/ 사용하면 랜덤 비번 생성됨
+
+//퍼블릭 핸들러(로그인 하기 전): isPrivate: false
