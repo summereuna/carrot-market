@@ -1,16 +1,27 @@
 import Button from "@/components/button";
 import Layout from "@/components/layout";
-import User from "@/components/user";
+import UserBox from "@/components/user-box";
+import { Product, User } from "@prisma/client";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 
+//프리즈마 클라이언트의 Product 타입에는 연결된 user에 대한 타입이 없으므로 확장시켜주기
+interface ProductWithUser extends Product {
+  user: User;
+}
+
+interface ProductDetailResponse {
+  ok: boolean;
+  product: ProductWithUser;
+}
+
 const ProductDetail: NextPage = () => {
   const router = useRouter();
   //router가 마운트 중이기 때문에 /${router.query.id}로 바로 보낼 수 없다
   //undefined 뜰 수도 있기 때문에 처음부터 id에 접근할 수 없으므로 먼저 있는지 체크하자 => optional query
-  const { data } = useSWR(
+  const { data } = useSWR<ProductDetailResponse>(
     router.query.id ? `/api/products/${router.query?.id}` : null
   );
 
@@ -30,7 +41,7 @@ const ProductDetail: NextPage = () => {
           */}
           <Link href={`/users/profiles/${data?.product?.userId}`}>
             <div className="py-3 border-t border-b">
-              <User
+              <UserBox
                 name={data?.product?.user?.name}
                 size="small"
                 time={`${data?.product?.created}시간 전`}

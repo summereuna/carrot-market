@@ -1,5 +1,5 @@
 import Layout from "@/components/layout";
-import User from "@/components/user";
+import User from "@/components/user-box";
 import type { NextPage } from "next";
 import Link from "next/link";
 

@@ -1,7 +1,7 @@
 import Button from "@/components/button";
 import Layout from "@/components/layout";
 import Textarea from "@/components/textarea";
-import User from "@/components/user";
+import User from "@/components/user-box";
 import Comment from "@/components/comment";
 
 import type { NextPage } from "next";

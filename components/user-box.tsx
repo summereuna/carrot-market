@@ -5,7 +5,7 @@ interface UserProps {
   size?: "large" | "small";
 }
 
-export default function User({ name, userUrl, time, size }: UserProps) {
+export default function UserBox({ name, userUrl, time, size }: UserProps) {
   return (
     <div className="cursor-pointer flex space-x-3 items-center">
       {size === "large" ? (
