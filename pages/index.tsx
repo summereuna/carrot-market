@@ -28,7 +28,7 @@ const Home: NextPage = () => {
           />
         ))}
       </div>
-      <FloatingButton href="/items/upload" text="글쓰기" />
+      <FloatingButton href="/products/upload" text="글쓰기" />
     </Layout>
   );
 };
