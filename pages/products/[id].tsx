@@ -2,31 +2,51 @@ import Button from "@/components/button";
 import Layout from "@/components/layout";
 import User from "@/components/user";
 import type { NextPage } from "next";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import useSWR from "swr";
 
 const ProductDetail: NextPage = () => {
+  const router = useRouter();
+  //router가 마운트 중이기 때문에 /${router.query.id}로 바로 보낼 수 없다
+  //undefined 뜰 수도 있기 때문에 처음부터 id에 접근할 수 없으므로 먼저 있는지 체크하자 => optional query
+  const { data } = useSWR(
+    router.query.id ? `/api/products/${router.query?.id}` : null
+  );
+
+  //? data 객체 있으면 데이터 출력하거나 로딩중임을 표시하는게 좋음
+  //1초 이상 걸리는 작업에는 로딩 중임을 표시하는게 더 좋음
+  //일단 ?로 만들고 나중에 필요하면 스켈레톤 넣기
   return (
     <Layout canGoBack>
       <div className="px-4 py-10">
         <div className="mb-8">
-          {/*product-image"*/}
+          {/*product-image
+          data?.product?.image
+          */}
           <div className="h-96 bg-slate-300" />
-          {/*user-profile"*/}
-          <div className="py-3 border-t border-b">
-            <User name="짱구야놀자" size="small" time="2시간 전" />
-          </div>
+          {/*user-profile
+          data?.product?.user?.avatar
+          */}
+          <Link href={`/users/profiles/${data?.product?.userId}`}>
+            <div className="py-3 border-t border-b">
+              <User
+                name={data?.product?.user?.name}
+                size="small"
+                time={`${data?.product?.created}시간 전`}
+              />
+            </div>
+          </Link>
           {/*product-info*/}
           <div className="mt-10">
-            <h1 className="text-3xl font-bold text-gray-900">Galaxy S50</h1>
-            <span className="mt-3 block text-3xl text-gray-900">₩ 140,000</span>
+            <h1 className="text-3xl font-bold text-gray-900">
+              {data?.product?.name}
+            </h1>
+            <span className="mt-3 block text-3xl text-gray-900">
+              ₩ {data?.product?.price}
+            </span>
             <p className="text-base my-6 text-gray-700">
-              My money&apos;s in that office, right? If she start giving me some
-              bullshit about it ain&apos;t there, and we got to go someplace
-              else and get it, I&apos;m gonna shoot you in the head then and
-              there. Then I&apos;m gonna shoot that bitch in the kneecaps, find
-              out where my goddamn money is. She gonna tell me too. Hey, look at
-              me when I&apos;m talking to you, motherfucker. You listen: we go
-              in there, and that ni**a Winston or anybody else is in there, you
-              the first motherfucker to get shot. You understand?
+              {data?.product?.description}
             </p>
             <div className="flex items-center justify-between space-x-2">
               {/*direct-message btn*/}

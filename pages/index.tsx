@@ -16,10 +16,10 @@ interface ProductsResponse {
 //상품 리스트
 const Home: NextPage = () => {
   const { user, isLoading } = useUser();
-  console.log(user);
+  //console.log(user);
 
   const { data } = useSWR<ProductsResponse>("/api/products");
-  console.log(data?.products);
+  //console.log(data?.products);
   return (
     <Layout title="홈" hasTabBar>
       <Head>
