@@ -1,6 +1,7 @@
 import Button from "@/components/button";
 import Layout from "@/components/layout";
 import UserBox from "@/components/user-box";
+import { threeDigitDivision } from "@/libs/server/utils";
 import { Product, User } from "@prisma/client";
 import type { NextPage } from "next";
 import Link from "next/link";
@@ -15,6 +16,7 @@ interface ProductWithUser extends Product {
 interface ProductDetailResponse {
   ok: boolean;
   product: ProductWithUser;
+  relatedProducts: Product[];
 }
 
 const ProductDetail: NextPage = () => {
@@ -54,7 +56,10 @@ const ProductDetail: NextPage = () => {
               {data?.product?.name}
             </h1>
             <span className="mt-3 block text-3xl text-gray-900">
-              ₩ {data?.product?.price}
+              ₩
+              {data?.product?.price
+                ? threeDigitDivision(data.product.price)
+                : null}
             </span>
             <p className="text-base my-6 text-gray-700">
               {data?.product?.description}
@@ -88,11 +93,15 @@ const ProductDetail: NextPage = () => {
         <div className="mt-5">
           <h2 className="text-2xl font-bold text-gray-900">비슷한 상품</h2>
           <div className="mt-6 grid grid-cols-2 gap-4">
-            {[1, 2, 3, 4, 5, 6].map((_, i) => (
-              <div key={i}>
-                <div className="mb-4 h-56 max-w-full bg-slate-300" />
-                <h3 className="text-gray-700 -mb-1">Galaxy S60</h3>
-                <span className="text-sm font-medium text-gray-900">$6</span>
+            {data?.relatedProducts.map((product) => (
+              <div key={product?.id}>
+                <Link href={`/products/${product?.id}`}>
+                  <div className="mb-4 h-56 max-w-full bg-slate-300" />
+                  <h3 className="text-gray-700 -mb-1">{product?.name}</h3>
+                  <span className="text-sm font-medium text-gray-900">
+                    ₩ {threeDigitDivision(product?.price)}
+                  </span>
+                </Link>
               </div>
             ))}
           </div>

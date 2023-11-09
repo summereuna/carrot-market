@@ -30,10 +30,27 @@ async function handler(
       include: { user: { select: { id: true, name: true, avatar: true } } },
     });
 
-    // console.log(product);
+    // 비슷한 상품 추천
+    //상품 이름 띄워쓰기로 구별해서 [] 배열 만들어 넣기
+    const terms = product?.name.split(" ").map((word) => ({
+      name: {
+        contains: word,
+      },
+    }));
+
+    const relatedProducts = await client.product.findMany({
+      where: {
+        OR: terms, //배열에 있는 이름 해당하는 상품 이름 다 가져오기
+        AND: {
+          id: { not: product?.id }, //본 상품은 빼고
+        },
+      },
+    });
+
     res.json({
       ok: true,
       product,
+      relatedProducts,
     });
   }
 }
