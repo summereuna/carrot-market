@@ -12,14 +12,15 @@ datasource db {
 }
 
 model User {
-  id      Int      @id @default(autoincrement())
-  name    String
-  phone   String?  @unique
-  email   String?  @unique
-  avatar  String?
-  created DateTime @default(now())
-  updated DateTime @updatedAt
-  tokens  Token[]
+  id       Int       @id @default(autoincrement())
+  name     String
+  phone    String?   @unique
+  email    String?   @unique
+  avatar   String?
+  created  DateTime  @default(now())
+  updated  DateTime  @updatedAt
+  tokens   Token[]
+  products Product[]
 }
 
 model Token {
@@ -39,3 +40,20 @@ model Token {
 
 //Cascade
 //User 삭제되면 Token도 삭제되게 연결
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  created     DateTime @default(now())
+  updated     DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int
+  image       String
+  name        String
+  price       Int
+  description String   @db.MediumText
+
+  @@index([userId])
+}
+
+//description는 길이가 좀 길 예정이니까 db에서 미디업 텍스트 설정해주면 된다.
+//String에 대한 기본 설정은 varChar()인데 191자 정도임
