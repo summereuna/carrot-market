@@ -56,4 +56,4 @@ model Product {
 }
 
 //description는 길이가 좀 길 예정이니까 db에서 미디업 텍스트 설정해주면 된다.
-//String에 대한 기본 설정은 varChar()인데 191자 정도임
+//String에 대한 기본 설정은 varChar()인데 최대 191자 제한있음
