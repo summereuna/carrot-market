@@ -3,25 +3,30 @@ import Input from "@/components/input";
 import Layout from "@/components/layout";
 import Textarea from "@/components/textarea";
 import useMutation from "@/libs/server/useMutation";
+import { Product } from "@prisma/client";
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 interface UploadProductForm {
   name: string;
   price: number;
   description: string;
+  //image: string; //아직 구현 안함
 }
 
 // products/upload 페이지에서 useMutation하면 응답 결과로 data.ok 반환받음
-interface MutationResult {
+interface UploadProductMutationResult {
   ok: boolean;
+  product: Product; //프리즈마 클라이언트에서 오는 type 사용가능
 }
 
 const Upload: NextPage = () => {
   const { register, handleSubmit } = useForm<UploadProductForm>();
 
   const [uploadProduct, { loading, data, error }] =
-    useMutation<MutationResult>("/api/products");
+    useMutation<UploadProductMutationResult>("/api/products");
 
   const onValid = (data: UploadProductForm) => {
     //로딩 중이면 멈춤
@@ -31,6 +36,15 @@ const Upload: NextPage = () => {
     //console.log(data);
     uploadProduct(data);
   };
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (data?.ok) {
+      router.push(`/products/${data.product.id}`);
+      //상품 업로드 끝나면 상품 상세 페이지로 이동
+    }
+  }, [data, router]);
 
   return (
     <Layout canGoBack title="상품 업로드">
