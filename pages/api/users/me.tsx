@@ -24,6 +24,6 @@ async function handler(
 //브라우저에 있는 쿠키의 세션에 userId가 저장되어 있기 때문에 프리즈마로 해당 id를 가진 user의 정보를 가져올 수 있다.
 
 //GET으로 해야 req.session.user 가져올 수 있음
-export default withApiSession(withHandler({ method: "GET", handler }));
+export default withApiSession(withHandler({ methods: ["GET"], handler }));
 //withHandler 설정 객체 보내기
 // isPrivate에 true를 보내면, me 핸들러는 로그인 한 유저만 호출할 수 있게 된다.

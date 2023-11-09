@@ -14,7 +14,7 @@ import useSWR from "swr";
  * 그리고 fetcher함수가 리턴된 data나 error가 useSWR에 들어옴
  */
 export default function useUser() {
-  const { data, error } = useSWR("api/users/me");
+  const { data, error } = useSWR("/api/users/me");
   const router = useRouter();
 
   useEffect(() => {

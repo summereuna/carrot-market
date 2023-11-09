@@ -43,7 +43,7 @@ async function handler(
 }
 
 export default withApiSession(
-  withHandler({ method: "POST", handler, isPrivate: false })
+  withHandler({ methods: ["POST"], handler, isPrivate: false })
 );
 //withHandler(HTTP 메소드, handler 함수)
 //외부에서 핸들러 함수를 고차 함수에 인자로 전달하여 더 유연하게 사용 가능

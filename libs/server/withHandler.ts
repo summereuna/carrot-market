@@ -5,16 +5,18 @@ export interface ResponseType {
   [key: string]: any;
 }
 
+type method = "GET" | "POST" | "DELETE";
+
 //인자 많아져서 객체로 따로 빼고 타입 설정
 interface ConfigType {
-  method: "GET" | "POST" | "DELETE";
+  methods: method[];
   handler: (req: NextApiRequest, res: NextApiResponse) => void;
   isPrivate?: boolean;
 }
 
 //withHandler함수는 고차함수
 export default function withHandler({
-  method,
+  methods,
   handler,
   isPrivate = true, //대부분의 api 프라이빗(로그인)이므로 기본값 true
 }: ConfigType) {
@@ -23,8 +25,8 @@ export default function withHandler({
     req: NextApiRequest,
     res: NextApiResponse
   ): Promise<any> {
-    //1. 올바른 메서드인지 체크
-    if (req.method !== method) {
+    //1. req.method가 있는지 확인 && methods 배열 안에 any 타입의 req.method 없는지 확인하면 오류
+    if (req.method && !methods.includes(req.method as any)) {
       return res.status(405).end();
     } //이렇게 하면 handler 펑션을 bad request로 부터 보호할 수 있다.
 
