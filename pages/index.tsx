@@ -2,29 +2,39 @@ import FloatingButton from "@/components/floating-button";
 import Item from "@/components/item";
 import Layout from "@/components/layout";
 import useUser from "@/libs/client/useUser";
+import { Product } from "@prisma/client";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
+import useSWR from "swr";
+
+interface ProductsResponse {
+  ok: boolean;
+  products: Product[];
+}
 
 //상품 리스트
 const Home: NextPage = () => {
   const { user, isLoading } = useUser();
   console.log(user);
+
+  const { data } = useSWR<ProductsResponse>("/api/products");
+  console.log(data?.products);
   return (
     <Layout title="홈" hasTabBar>
       <Head>
         <title>홈</title>
       </Head>
       <div className="flex flex-col space-y-5 pb-3 divide-y">
-        {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, i) => (
+        {data?.products?.map((product) => (
           <Item
-            productName="아이폰 15"
-            productInfo="검정색"
-            price={1100000}
+            productName={product.name}
+            productInfo={product.description}
+            price={product.price}
             hearts={1}
             comments={0}
-            id={i}
-            key={i}
+            id={product.id}
+            key={product.id}
           />
         ))}
       </div>
