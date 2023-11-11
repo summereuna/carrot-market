@@ -1,14 +1,27 @@
 import FloatingButton from "@/components/floating-button";
 import Layout from "@/components/layout";
+import { Post } from "@prisma/client";
 import type { NextPage } from "next";
 import Link from "next/link";
+import useSWR from "swr";
+
+interface PostWithRecsAndAnswers extends Post {
+  _count: { recommendations: number; answers: number };
+}
+
+interface PostResponse {
+  ok: boolean;
+  posts: PostWithRecsAndAnswers[];
+}
 
 const Community: NextPage = () => {
+  const { data } = useSWR<PostResponse>("/api/posts");
+  console.log(data?.posts);
   return (
     <Layout title="동네생활" hasTabBar>
       <div className="py-5 space-y-8">
-        {[1, 1, 1, 1, 1].map((_, i) => (
-          <div key={i}>
+        {data?.posts?.map((post) => (
+          <div key={post.id}>
             <Link href="/community/id">
               <div className="cursor-pointer flex flex-col items-start">
                 <span
@@ -18,12 +31,12 @@ const Community: NextPage = () => {
                   동네질문
                 </span>
                 <div className="mt-2 px-4 text-gray-700">
-                  <span className="text-orange-500 font-medium">Q.</span> 김밥
-                  맛있는 곳 추천해주세요!
+                  <span className="text-orange-500 font-medium">Q.</span>{" "}
+                  {post.title}
                 </div>
                 <div className="mt-5 px-4 flex items-center justify-between w-full text-gray-500 font-medium text-xs">
-                  <span>참치맛오이</span>
-                  <span>13시간 전</span>
+                  <span>{post.userId}</span>
+                  <span>{post.created.toString()}</span>
                 </div>
                 <div className="flex px-4 space-x-5 mt-3 text-gray-700 py-2.5 border-t border-b-[2px] w-full">
                   <span className="flex space-x-2 items-center text-sm">
@@ -41,7 +54,7 @@ const Community: NextPage = () => {
                         d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                       ></path>
                     </svg>
-                    <span>추천 1</span>
+                    <span>추천 {post._count.recommendations}</span>
                   </span>
                   <span className="flex space-x-2 items-center text-sm">
                     <svg
@@ -58,7 +71,7 @@ const Community: NextPage = () => {
                         d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
                       ></path>
                     </svg>
-                    <span>답변 1</span>
+                    <span>답변 {post._count.answers}</span>
                   </span>
                 </div>
               </div>
