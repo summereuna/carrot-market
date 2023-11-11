@@ -1,6 +1,7 @@
 import Button from "@/components/button";
 import Layout from "@/components/layout";
 import UserBox from "@/components/user-box";
+import useMutation from "@/libs/server/useMutation";
 import { threeDigitDivision } from "@/libs/server/utils";
 import { Product, User } from "@prisma/client";
 import type { NextPage } from "next";
@@ -26,6 +27,17 @@ const ProductDetail: NextPage = () => {
   const { data } = useSWR<ProductDetailResponse>(
     router.query.id ? `/api/products/${router.query?.id}` : null
   );
+
+  //Optimistic UI Update (백엔드로 보낸 요청이 작동할 거라는 것에 낙관적(optimistic)
+  //기본적으로 백엔드에 요청을 보낼 때 백엔드 응답 기다리지 않고 일단 변경사항 반영 ㅇㅇㅇ
+  //어차피 될거니까 ^^~~
+  //그래서 유저에게 클릭했다는 것을 표시하고 하트 색 바꾸자
+  const [toggleWish] = useMutation(`/api/products/${router.query?.id}/wish`);
+
+  const onWishClick = () => {
+    toggleWish({}); //빈 객체 보내어 body가 빈 post요청 보내기
+    //어짜피 걍 눈에 보이기만 하믄 되니깐.. 빈 바디 보내도 db의 ish 리스트에 잘 들어가지니까 문제 없음
+  };
 
   //? data 객체 있으면 데이터 출력하거나 로딩중임을 표시하는게 좋음
   //1초 이상 걸리는 작업에는 로딩 중임을 표시하는게 더 좋음
@@ -68,7 +80,10 @@ const ProductDetail: NextPage = () => {
               {/*direct-message btn*/}
               <Button text="채팅하기" large />
               {/*add to like-list btn*/}
-              <button className="p-3 flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-200">
+              <button
+                onClick={onWishClick}
+                className="p-3 flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-200"
+              >
                 <svg
                   className="h-6 w-6 "
                   xmlns="http://www.w3.org/3000/svg"
