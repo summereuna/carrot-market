@@ -22,7 +22,7 @@ const Community: NextPage = () => {
       <div className="py-5 space-y-8">
         {data?.posts?.map((post) => (
           <div key={post.id}>
-            <Link href="/community/id">
+            <Link href={`/community/${post.id}`}>
               <div className="cursor-pointer flex flex-col items-start">
                 <span
                   className="flex ml-4 items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800
