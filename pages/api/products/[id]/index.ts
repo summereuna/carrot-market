@@ -9,7 +9,10 @@ async function handler(
 ) {
   //프론트엔드에 router.query 있는 것 처럼, 백엔드엔 req.query 있음
   // console.log(req.query);
-  const { id } = req.query;
+  const {
+    query: { id },
+    session: { user },
+  } = req;
 
   //req.query로 부터 오는 id의 타입이 string | string[] | undefined 이기 때문에
   //아래에서 id로 찾을 때 .toString()써서 스트링으로 찾고,
@@ -47,9 +50,25 @@ async function handler(
       },
     });
 
+    //위시 버튼 눌렀는지 확인
+    //조건 만족하는 wish 레코드의 첫 번째 아이템 찾기
+    // productId 가 product.id와 같고 userId가 user.id와 같은
+    //결과 값은 wish 레코드를 리턴하기 때문에 이를 boolean으로 감싸주기
+    const isWished = Boolean(
+      await client.wish.findFirst({
+        where: {
+          productId: product?.id,
+          userId: user?.id,
+        },
+        select: { id: true },
+        //DB를 좀 더 경제적으로 사용하기 위해 wish 레코드의 모든 필드 가져오지 않고 id만 가져오기
+      })
+    );
+
     res.json({
       ok: true,
       product,
+      isWished,
       relatedProducts,
     });
   }
