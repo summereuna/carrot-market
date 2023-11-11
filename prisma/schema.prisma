@@ -71,5 +71,3 @@ model Wish {
 
   @@index([userId, productId])
 }
-
-// /products/[id]/wish 로 요청 보내서 + wish - wish
