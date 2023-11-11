@@ -25,7 +25,11 @@ const ProductDetail: NextPage = () => {
   const router = useRouter();
   //router가 마운트 중이기 때문에 /${router.query.id}로 바로 보낼 수 없다
   //undefined 뜰 수도 있기 때문에 처음부터 id에 접근할 수 없으므로 먼저 있는지 체크하자 => optional query
-  const { data } = useSWR<ProductDetailResponse>(
+
+  //bound mutate : 제한된 뮤테이트라는 말은 mutate가 여기에 있는 data만 변경할 수 있다는 뜻
+  //useSWR 함수로 부터 나온 결과값인 data, mutate 이므로
+  //useSWR로 보낸 요청으로 받은 응답 data를 변경하고 싶다면 mutate 함수를 사용
+  const { data, mutate } = useSWR<ProductDetailResponse>(
     router.query.id ? `/api/products/${router.query?.id}` : null
   );
 
@@ -36,8 +40,23 @@ const ProductDetail: NextPage = () => {
   const [toggleWish] = useMutation(`/api/products/${router.query?.id}/wish`);
 
   const onWishClick = () => {
+    //api에 요청보내기
     toggleWish({}); //빈 객체 보내어 body가 빈 post요청 보내기
     //어짜피 걍 눈에 보이기만 하믄 되니깐.. 빈 바디 보내도 db의 ish 리스트에 잘 들어가지니까 문제 없음
+
+    //빠른 반응형 UI위해 Optimistic UI Update
+    //Optimistic UI update를 위한 Bound(제한된) Mutation: SWR 캐시에 있는 데이터를 mutate 하는 방법
+    //api 응답 기다리지 않고 바로바로 하트 색 유저에게 보여주기 위해 데이터 mutate하기
+
+    //mutate 함수로 캐시만 변경, Api는 다시 부르지 않기(false)
+    if (!data) return;
+    mutate({ ...data, isWished: !data.isWished }, false);
+    // 첫 번째 인자: 캐시에 있는 데이터 대신 사용할 새로운 데이터(아무 객체나 넣어도 바로 새로운 데이터 됨)
+    // ㄴ 바로 첫번째 인자에 넣은 객체의 데이터로 변경됨, 따라서 유저에게 화면 UI의 변경사항 보여주기 위한 부분
+    // 두 번째 인자: true(SWR이 진짜 데이터 찾아서 불러오게 할 수 있음)/false(안불러옴)
+    // ㄴ 변경이 일어난 후, 다시 API에서 데이터를 불러올지 결정하는 부분
+
+    //그래서 이렇게 하면 api를 기다릴 필요 없이 아주 빠른 반응형 UI를 얻을 수 있음
   };
 
   //? data 객체 있으면 데이터 출력하거나 로딩중임을 표시하는게 좋음
@@ -93,7 +112,7 @@ const ProductDetail: NextPage = () => {
                 {data?.isWished ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
+                    className="h-6 w-6"
                     viewBox="0 0 20 20"
                     fill="currentColor"
                   >
@@ -129,7 +148,7 @@ const ProductDetail: NextPage = () => {
         <div className="mt-5">
           <h2 className="text-2xl font-bold text-gray-900">비슷한 상품</h2>
           <div className="mt-6 grid grid-cols-2 gap-4">
-            {data?.relatedProducts.map((product) => (
+            {data?.relatedProducts?.map((product) => (
               <div key={product?.id}>
                 <Link href={`/products/${product?.id}`}>
                   <div className="mb-4 h-56 max-w-full bg-slate-300" />
