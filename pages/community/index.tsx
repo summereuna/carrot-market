@@ -41,7 +41,7 @@ const Community: NextPage = () => {
                         d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                       ></path>
                     </svg>
-                    <span>궁금해요 1</span>
+                    <span>추천 1</span>
                   </span>
                   <span className="flex space-x-2 items-center text-sm">
                     <svg
