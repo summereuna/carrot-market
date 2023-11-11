@@ -9,7 +9,16 @@ async function handler(
 ) {
   if (req.method === "GET") {
     //프로덕트db 가져오기
-    const products = await client.product.findMany({}); //일단 다 가져오기
+    const products = await client.product.findMany({
+      //다 가져오기
+      //거기에 wishes 카운트도 포함해서
+      include: {
+        _count: {
+          select: { wishes: true },
+        },
+      },
+    });
+
     res.json({
       ok: true,
       products,

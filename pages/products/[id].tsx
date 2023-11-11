@@ -1,13 +1,14 @@
 import Button from "@/components/button";
 import Layout from "@/components/layout";
 import UserBox from "@/components/user-box";
+import useUser from "@/libs/client/useUser";
 import useMutation from "@/libs/server/useMutation";
 import { cls, threeDigitDivision } from "@/libs/server/utils";
 import { Product, User } from "@prisma/client";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 
 //프리즈마 클라이언트의 Product 타입에는 연결된 user에 대한 타입이 없으므로 확장시켜주기
 interface ProductWithUser extends Product {
@@ -29,7 +30,7 @@ const ProductDetail: NextPage = () => {
   //bound mutate : 제한된 뮤테이트라는 말은 mutate가 여기에 있는 data만 변경할 수 있다는 뜻
   //useSWR 함수로 부터 나온 결과값인 data, mutate 이므로
   //useSWR로 보낸 요청으로 받은 응답 data를 변경하고 싶다면 mutate 함수를 사용
-  const { data, mutate } = useSWR<ProductDetailResponse>(
+  const { data, mutate: boundMutate } = useSWR<ProductDetailResponse>(
     router.query.id ? `/api/products/${router.query?.id}` : null
   );
 
@@ -50,10 +51,10 @@ const ProductDetail: NextPage = () => {
 
     //mutate 함수로 캐시만 변경, Api는 다시 부르지 않기(false)
     if (!data) return;
-    mutate({ ...data, isWished: !data.isWished }, false);
+    boundMutate((prev) => prev && { ...prev, isWished: !prev.isWished }, false);
     // 첫 번째 인자: 캐시에 있는 데이터 대신 사용할 새로운 데이터(아무 객체나 넣어도 바로 새로운 데이터 됨)
     // ㄴ 바로 첫번째 인자에 넣은 객체의 데이터로 변경됨, 따라서 유저에게 화면 UI의 변경사항 보여주기 위한 부분
-    // 두 번째 인자: true(SWR이 진짜 데이터 찾아서 불러오게 할 수 있음)/false(안불러옴)
+    // 두 번째 인자: revalidation으로 true(SWR이 진짜 데이터 찾아서 불러오게 할 수 있음)/false(안불러옴)
     // ㄴ 변경이 일어난 후, 다시 API에서 데이터를 불러올지 결정하는 부분
 
     //그래서 이렇게 하면 api를 기다릴 필요 없이 아주 빠른 반응형 UI를 얻을 수 있음

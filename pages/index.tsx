@@ -8,9 +8,13 @@ import Head from "next/head";
 import Link from "next/link";
 import useSWR from "swr";
 
+interface ProductWithCountWishes extends Product {
+  _count: { wishes: number };
+}
+
 interface ProductsResponse {
   ok: boolean;
-  products: Product[];
+  products: ProductWithCountWishes[];
 }
 
 //상품 리스트
@@ -19,7 +23,7 @@ const Home: NextPage = () => {
   //console.log(user);
 
   const { data } = useSWR<ProductsResponse>("/api/products");
-  //console.log(data?.products);
+  console.log(data?.products);
   return (
     <Layout title="홈" hasTabBar>
       <Head>
@@ -31,7 +35,7 @@ const Home: NextPage = () => {
             productName={product.name}
             productInfo={product.description}
             price={product.price}
-            hearts={1}
+            hearts={product._count.wishes}
             comments={0}
             id={product.id}
             key={product.id}
