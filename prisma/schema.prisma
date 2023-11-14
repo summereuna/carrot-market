@@ -25,6 +25,10 @@ model User {
   posts           Post[]
   answers         Answer[]
   recommendations Recommendation[]
+  writtenReviews  Review[]         @relation(name: "writtenReviews")
+  receivedReviews Review[]         @relation(name: "receivedReviews")
+  sales           Sale[]
+  purchases       Purchase[]
 }
 
 model Token {
@@ -46,34 +50,24 @@ model Token {
 //User 삭제되면 Token도 삭제되게 연결
 
 model Product {
-  id          Int      @id @default(autoincrement())
-  created     DateTime @default(now())
-  updated     DateTime @updatedAt
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id          Int        @id @default(autoincrement())
+  created     DateTime   @default(now())
+  updated     DateTime   @updatedAt
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      Int
   image       String
   name        String
   price       Int
-  description String   @db.MediumText
+  description String     @db.MediumText
   wishes      Wish[]
+  sales       Sale[]
+  purchases   Purchase[]
 
   @@index([userId])
 }
 
 //description는 길이가 좀 길 예정이니까 db에서 미디업 텍스트 설정해주면 된다.
 //String에 대한 기본 설정은 varChar()인데 최대 191자 제한있음
-
-model Wish {
-  id        Int      @id @default(autoincrement())
-  created   DateTime @default(now())
-  updated   DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    Int
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  productId Int
-
-  @@index([userId, productId])
-}
 
 model Post {
   id              Int              @id @default(autoincrement())
@@ -114,4 +108,53 @@ model Recommendation {
   postId  Int
 
   @@index([userId, postId])
+}
+
+model Review {
+  id           Int      @id @default(autoincrement())
+  created      DateTime @default(now())
+  updated      DateTime @updatedAt
+  review       String   @db.MediumText
+  createdBy    User     @relation(name: "writtenReviews", fields: [createdById], references: [id], onDelete: Cascade)
+  createdById  Int
+  createdFor   User     @relation(name: "receivedReviews", fields: [createdForId], references: [id], onDelete: Cascade)
+  createdForId Int
+
+  @@index([createdById, createdForId])
+}
+
+model Sale {
+  id        Int      @id @default(autoincrement())
+  created   DateTime @default(now())
+  updated   DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int
+
+  @@index([userId, productId])
+}
+
+model Purchase {
+  id        Int      @id @default(autoincrement())
+  created   DateTime @default(now())
+  updated   DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int
+
+  @@index([userId, productId])
+}
+
+model Wish {
+  id        Int      @id @default(autoincrement())
+  created   DateTime @default(now())
+  updated   DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int
+
+  @@index([userId, productId])
 }
