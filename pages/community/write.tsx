@@ -1,6 +1,7 @@
 import Button from "@/components/button";
 import Layout from "@/components/layout";
 import Textarea from "@/components/textarea";
+import useCoords from "@/libs/client/useCoords";
 import useMutation from "@/libs/server/useMutation";
 import { Post } from "@prisma/client";
 import type { NextPage } from "next";
@@ -11,6 +12,8 @@ import { useForm } from "react-hook-form";
 interface WriteForm {
   title: string;
   content: string;
+  latitude: number;
+  longitude: number;
 }
 interface WriteFormResponse {
   ok: boolean;
@@ -18,6 +21,9 @@ interface WriteFormResponse {
 }
 
 const Write: NextPage = () => {
+  //위도경도 가져와서 위치 설정
+  const { latitude, longitude } = useCoords();
+
   const {
     register,
     formState: { errors },
@@ -30,7 +36,7 @@ const Write: NextPage = () => {
   const onValid = (data: WriteForm) => {
     //console.log(postData);
     if (loading) return;
-    post(data); //요청 보내기
+    post({ ...data, latitude, longitude }); //요청 보낼때 위도경도 같이 보내기
   };
 
   const router = useRouter();

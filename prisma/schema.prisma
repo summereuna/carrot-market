@@ -83,6 +83,8 @@ model Post {
   content         String           @db.MediumText
   user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId          Int
+  latitude        Float?
+  longitude       Float?
   answers         Answer[]
   recommendations Recommendation[]
 

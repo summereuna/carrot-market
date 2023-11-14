@@ -30,7 +30,7 @@ async function handler(
     // 동네생활 write form의 post 데이터
     // req.session의 유저
     const {
-      body: { title, content },
+      body: { title, content, latitude, longitude },
       session: { user },
     } = req;
 
@@ -40,6 +40,8 @@ async function handler(
       data: {
         title,
         content,
+        latitude,
+        longitude,
         user: { connect: { id: user?.id } }, //현재 로그인한 세션 유저의 유저db와 연결
       },
     });
