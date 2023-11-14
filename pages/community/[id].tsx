@@ -11,6 +11,8 @@ import { Post, Answer, User } from "@prisma/client";
 import useMutation from "@/libs/server/useMutation";
 import Link from "next/link";
 import { cls } from "@/libs/server/utils";
+import { useForm } from "react-hook-form";
+import { useEffect } from "react";
 
 interface AnswerWithUser extends Answer {
   user: User;
@@ -28,8 +30,23 @@ interface CommunityPostResponse {
   isRecommend: boolean;
 }
 
+interface AnswerForm {
+  answer: string;
+}
+
+interface AnswerFormResponse {
+  ok: boolean;
+  answer: Answer;
+}
+
 const CommunityPostDetail: NextPage = () => {
   const router = useRouter();
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    reset: resetAnswerForm,
+  } = useForm<AnswerForm>();
 
   const {
     data,
@@ -41,7 +58,7 @@ const CommunityPostDetail: NextPage = () => {
 
   console.log(data);
 
-  const [toggleRecommendation] = useMutation(
+  const [toggleRecommendation, { loading: recommendLoading }] = useMutation(
     `/api/posts/${router.query.id}/recommendation`
   );
 
@@ -66,10 +83,26 @@ const CommunityPostDetail: NextPage = () => {
       false
     );
 
-    // 백엔드로 보내기
-    toggleRecommendation({});
+    // 백엔드로 보내기: 빠르게 토글했을 때 발생하는 race condition 문제 해결 위해 이전 요청 완료된 후에만 요청 보내기
+    if (!recommendLoading) {
+      toggleRecommendation({});
+    }
   };
 
+  //답변 보내기
+  const [sendAnswer, { loading: answerLoading, data: answerData }] =
+    useMutation<AnswerFormResponse>(`/api/posts/${router.query.id}/answers`);
+
+  const onValid = (answerForm: AnswerForm) => {
+    if (answerLoading) return;
+    sendAnswer(answerForm);
+  };
+
+  useEffect(() => {
+    if (answerData && answerData.ok) {
+      resetAnswerForm();
+    }
+  }, [answerData, resetAnswerForm]);
   return (
     <Layout canGoBack>
       <div>
@@ -145,16 +178,28 @@ const CommunityPostDetail: NextPage = () => {
           {data?.post?.answers?.map((answer) => (
             <Comment
               key={answer.id}
-              name={answer.user.id.toString()}
-              time={answer.created.toString()}
+              name={answer.user.name}
+              time={answer.updated.toString()}
               comment={answer.answer}
             />
           ))}
         </div>
-        <div className="px-4 space-y-2">
-          <Textarea name="reply" placeholder="댓글을 달아주세요." />
-          <Button text="댓글달기" />
-        </div>
+        <form className="px-4 space-y-2" onSubmit={handleSubmit(onValid)}>
+          <Textarea
+            register={register("answer", {
+              required: true,
+              minLength: {
+                value: 2,
+                message: "댓글을 2글자 이상 입력해주세요.",
+              },
+            })}
+            name="answer"
+            placeholder="댓글을 달아주세요."
+            required
+          />
+          {errors?.answer ? <p>{errors.answer?.message}</p> : null}
+          <Button text={answerLoading ? "로딩중..." : "댓글달기"} />
+        </form>
       </div>
     </Layout>
   );
