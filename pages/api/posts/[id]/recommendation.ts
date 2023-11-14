@@ -16,6 +16,18 @@ async function handler(
     session: { user },
   } = req;
 
+  //post 존재하는지 확인
+  const isPostExist = await client.post.findUnique({
+    where: { id: +id!.toString() },
+    select: { id: true },
+  });
+
+  if (!isPostExist) {
+    return res
+      .status(404)
+      .json({ ok: false, error: "존재하지 않는 게시물 입니다." });
+  }
+
   //해당 상품이 db의 유저와 상품의 recommendation 리스트에 존재하는지 체크
   const alreadyExistsRecommendation = await client.recommendation.findFirst({
     where: {

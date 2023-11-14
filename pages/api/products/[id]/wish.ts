@@ -16,6 +16,18 @@ async function handler(
     session: { user },
   } = req;
 
+  //프로덕트 있는지 확인, 없으면 404
+  const isProductExist = await client.product.findUnique({
+    where: { id: +id!.toString() },
+    select: { id: true },
+  });
+
+  if (!isProductExist) {
+    return res
+      .status(404)
+      .json({ ok: false, error: "존재하지 않는 상품 입니다." });
+  }
+
   //해당 상품이 db의 유저와 상품의 wishes 리스트에 존재하는지 체크
   const alreadyExistsWish = await client.wish.findFirst({
     where: {

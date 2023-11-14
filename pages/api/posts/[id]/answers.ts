@@ -13,16 +13,19 @@ async function handler(
     body: { answer },
   } = req;
 
-  //post 찾기  > 앤써 넣기
-  const post = await client.post.findUnique({
+  //post 존재하는지 확인
+  const isPostExist = await client.post.findUnique({
     where: { id: +id!.toString() },
     select: { id: true },
   });
 
-  if (!post) {
-    return res.status(404); //게시물을 찾을 수 없습니다.
+  if (!isPostExist) {
+    return res
+      .status(404)
+      .json({ ok: false, error: "존재하지 않는 게시물 입니다." });
   }
 
+  //해당 포스트 존재하면 answer 생성
   const newAnswer = await client.answer.create({
     data: {
       user: { connect: { id: user?.id } }, //현재 로그인한 세션 유저의 유저db와 연결
