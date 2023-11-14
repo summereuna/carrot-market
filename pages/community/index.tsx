@@ -1,12 +1,12 @@
 import FloatingButton from "@/components/floating-button";
 import Layout from "@/components/layout";
-import { Post } from "@prisma/client";
+import { User, Post } from "@prisma/client";
 import type { NextPage } from "next";
 import Link from "next/link";
 import useSWR from "swr";
 
 interface PostWithRecsAndAnswers extends Post {
-  user: { name: string };
+  user: User;
   _count: { recommendations: number; answers: number };
 }
 

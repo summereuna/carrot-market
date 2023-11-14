@@ -8,7 +8,7 @@ async function handler(
   res: NextApiResponse<ResponseType>
 ) {
   if (req.method === "GET") {
-    //포스트 db가져오기
+    //포스트 db가져오기: 실제 프로덕션에서는 페이지네이션 하는게 좋음
     const posts = await client.post.findMany({
       //다 가져오기
       //거기에 추천, 답변 카운트도 포함해서
@@ -16,7 +16,7 @@ async function handler(
         _count: {
           select: { recommendations: true, answers: true },
         },
-        user: { select: { name: true } },
+        user: { select: { name: true, id: true, avatar: true } },
       },
     });
 

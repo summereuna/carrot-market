@@ -101,7 +101,8 @@ const CommunityPostDetail: NextPage = () => {
   useEffect(() => {
     if (answerData && answerData.ok) {
       resetAnswerForm();
-      //boundMutate 호출하여 data re-fetch 하기
+      //댓글도 optimistic ui update in local 하려니까
+      //너무 코드 길어져서 그냥 boundMutate 호출하여 data re-fetch 해오기
       boundMutate();
     }
   }, [answerData, resetAnswerForm, boundMutate]);
