@@ -16,6 +16,7 @@ async function handler(
         _count: {
           select: { recommendations: true, answers: true },
         },
+        user: { select: { name: true } },
       },
     });
 

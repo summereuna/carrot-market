@@ -40,18 +40,34 @@ const CommunityPostDetail: NextPage = () => {
   );
 
   console.log(data);
+
   const [toggleRecommendation] = useMutation(
     `/api/posts/${router.query.id}/recommendation`
   );
 
   const onRecommendationClick = () => {
-    toggleRecommendation({});
-
     if (!data) return;
+
+    //optimistic ui update in local
     boundMutate(
-      (prev) => prev && { ...prev, isRecommend: !prev.isRecommend },
+      {
+        ...data,
+        post: {
+          ...data?.post,
+          _count: {
+            ...data.post._count,
+            recommendations: data.isRecommend
+              ? data.post._count.recommendations - 1
+              : data.post._count.recommendations + 1,
+          },
+        },
+        isRecommend: !data.isRecommend,
+      },
       false
     );
+
+    // 백엔드로 보내기
+    toggleRecommendation({});
   };
 
   return (
@@ -82,33 +98,29 @@ const CommunityPostDetail: NextPage = () => {
             <p>{data?.post?.content}</p>
           </div>
           <div className="flex px-4 space-x-5 mt-3 text-gray-700 py-2.5 border-t border-b-[2px] w-full">
-            <span className="flex space-x-2 items-center text-sm">
-              <button
-                onClick={onRecommendationClick}
-                className={cls(
-                  "focus:outline-none",
-                  data?.isRecommend
-                    ? "text-green-400"
-                    : "text-gray-700 hover:text-green-400"
-                )}
+            <button
+              onClick={onRecommendationClick}
+              className={cls(
+                "flex space-x-2 items-center text-sm focus:outline-none",
+                data?.isRecommend ? "text-green-400" : ""
+              )}
+            >
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                  ></path>
-                </svg>
-              </button>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
               <span>추천 {data?.post?._count.recommendations}</span>
-            </span>
+            </button>
             <span className="flex space-x-2 items-center text-sm">
               <svg
                 className="w-4 h-4"

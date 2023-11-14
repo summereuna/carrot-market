@@ -6,6 +6,7 @@ import Link from "next/link";
 import useSWR from "swr";
 
 interface PostWithRecsAndAnswers extends Post {
+  user: { name: string };
   _count: { recommendations: number; answers: number };
 }
 
@@ -35,7 +36,7 @@ const Community: NextPage = () => {
                   {post.title}
                 </div>
                 <div className="mt-5 px-4 flex items-center justify-between w-full text-gray-500 font-medium text-xs">
-                  <span>{post.userId}</span>
+                  <span>{post.user.name}</span>
                   <span>{post.created.toString()}</span>
                 </div>
                 <div className="flex px-4 space-x-5 mt-3 text-gray-700 py-2.5 border-t border-b-[2px] w-full">
