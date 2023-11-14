@@ -11,12 +11,24 @@ async function handler(
     session: { user },
   } = req;
 
-  const myWishes = await client.wish.findMany({
+  const wishes = await client.wish.findMany({
     where: { userId: user?.id },
-    include: { product: true },
+    include: {
+      product: {
+        select: {
+          id: true,
+          name: true,
+          price: true,
+          image: true,
+          description: true,
+          userId: true,
+          _count: { select: { wishes: true } },
+        },
+      },
+    },
   });
 
-  res.json({ ok: true, myWishes });
+  res.json({ ok: true, wishes });
 }
 
 export default withApiSession(withHandler({ methods: ["GET"], handler }));
