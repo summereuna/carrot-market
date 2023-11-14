@@ -101,8 +101,10 @@ const CommunityPostDetail: NextPage = () => {
   useEffect(() => {
     if (answerData && answerData.ok) {
       resetAnswerForm();
+      //boundMutate 호출하여 data re-fetch 하기
+      boundMutate();
     }
-  }, [answerData, resetAnswerForm]);
+  }, [answerData, resetAnswerForm, boundMutate]);
   return (
     <Layout canGoBack>
       <div>
