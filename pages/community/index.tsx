@@ -1,5 +1,6 @@
 import FloatingButton from "@/components/floating-button";
 import Layout from "@/components/layout";
+import useCoords from "@/libs/client/useCoords";
 import { User, Post } from "@prisma/client";
 import type { NextPage } from "next";
 import Link from "next/link";
@@ -16,8 +17,16 @@ interface PostResponse {
 }
 
 const Community: NextPage = () => {
-  const { data } = useSWR<PostResponse>("/api/posts");
-  console.log(data?.posts);
+  //유저의 위치와 가까운 곳에 있는 포스트만 보기
+  //위 api에 위도경도 담아보내야함
+  const { latitude, longitude } = useCoords();
+
+  const { data } = useSWR<PostResponse>(
+    `/api/posts?latitude=${latitude}&longitude=${longitude}`
+  );
+  //console.log(data?.posts);
+
+  console.log(latitude, longitude);
   return (
     <Layout title="동네생활" hasTabBar>
       <div className="py-5 space-y-8">

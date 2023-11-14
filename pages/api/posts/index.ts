@@ -8,6 +8,15 @@ async function handler(
   res: NextApiResponse<ResponseType>
 ) {
   if (req.method === "GET") {
+    // req.query.id => /posts/[id]
+    // req.query.params => /posts?params=lalala
+    const {
+      query: { latitude, longitude },
+    } = req;
+
+    const parsedLatitudeNumber = parseFloat(latitude!.toString());
+    const parsedLongitudeNumber = parseFloat(longitude!.toString());
+
     //포스트 db가져오기: 실제 프로덕션에서는 페이지네이션 하는게 좋음
     const posts = await client.post.findMany({
       //다 가져오기
@@ -17,6 +26,18 @@ async function handler(
           select: { recommendations: true, answers: true },
         },
         user: { select: { name: true, id: true, avatar: true } },
+      },
+
+      //위치정보 범위 설정하여 포스트 필터링
+      where: {
+        latitude: {
+          gte: parsedLatitudeNumber - 0.005, //gte: greater than equal 크거나 같거나
+          lte: parsedLatitudeNumber + 0.005, //lte: less than equal 작거나 같거나
+        },
+        longitude: {
+          gte: parsedLongitudeNumber - 0.005,
+          lte: parsedLongitudeNumber + 0.005,
+        },
       },
     });
 
