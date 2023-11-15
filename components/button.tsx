@@ -9,6 +9,7 @@ interface ButtonProps {
 export default function Button({
   large = false,
   onClick,
+  loading,
   text,
   ...rest
 }: ButtonProps) {
@@ -21,7 +22,7 @@ export default function Button({
         large ? "py-3 text-base" : "py-2 text-sm"
       )}
     >
-      {text}
+      {loading ? "로딩 중..." : text}
     </button>
   );
 }

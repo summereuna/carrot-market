@@ -110,7 +110,8 @@ const EditProfile: NextPage = () => {
         ) : null}
         <Button
           onClick={() => clearErrors()}
-          text={loading ? "로딩 중..." : "프로필 수정하기"}
+          text="프로필 수정하기"
+          loading={loading}
         />
       </form>
     </Layout>

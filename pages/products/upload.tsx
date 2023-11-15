@@ -91,7 +91,7 @@ const Upload: NextPage = () => {
             placeholder="올릴 게시글 내용을 작성해 주세요.&#10;(판매 금지 물품은 게시가 제한될 수 있어요.)&#10;신뢰할수 있는 거래를 위해 자세히 적어주세요."
             required
           />
-          <Button text={loading ? "로딩중..." : "작성 완료"} />
+          <Button loading={loading} text="작성 완료" />
         </div>
       </form>
     </Layout>

@@ -106,7 +106,7 @@ const Write: NextPage = () => {
           />
           {errors?.title ? <p>{errors.title?.message}</p> : null}
           {errors?.content ? <p>{errors.content?.message}</p> : null}
-          <Button text={loading ? "로딩중..." : "완료"} />
+          <Button loading={loading} text="완료" />
         </form>
       </div>
     </Layout>

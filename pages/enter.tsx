@@ -87,7 +87,7 @@ const Enter: NextPage = () => {
               required
             />
 
-            <Button text={tokenLoading ? "로딩중..." : "인증하기 "} />
+            <Button loading={tokenLoading} text="인증하기" />
           </form>
         ) : (
           <>
@@ -142,10 +142,10 @@ const Enter: NextPage = () => {
                 />
               ) : null}
               {method === "email" ? (
-                <Button text={loading ? "로딩중..." : "로그인 링크 받기"} />
+                <Button loading={loading} text="로그인 링크 받기" />
               ) : null}
               {method === "phone" ? (
-                <Button text={loading ? "로딩중..." : "일회용 비밀번호 받기"} />
+                <Button loading={loading} text="일회용 비밀번호 받기" />
               ) : null}
             </form>
           </>

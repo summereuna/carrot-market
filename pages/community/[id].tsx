@@ -201,7 +201,7 @@ const CommunityPostDetail: NextPage = () => {
             required
           />
           {errors?.answer ? <p>{errors.answer?.message}</p> : null}
-          <Button text={answerLoading ? "로딩중..." : "댓글달기"} />
+          <Button loading={answerLoading} text="댓글달기" />
         </form>
       </div>
     </Layout>
