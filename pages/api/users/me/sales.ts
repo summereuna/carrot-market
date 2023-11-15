@@ -15,13 +15,7 @@ async function handler(
     where: { userId: user?.id },
     include: {
       product: {
-        select: {
-          id: true,
-          name: true,
-          price: true,
-          image: true,
-          description: true,
-          userId: true,
+        include: {
           _count: { select: { wishes: true } },
         },
       },

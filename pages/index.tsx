@@ -8,7 +8,7 @@ import Head from "next/head";
 import Link from "next/link";
 import useSWR from "swr";
 
-interface ProductWithCountWishes extends Product {
+export interface ProductWithCountWishes extends Product {
   _count: { wishes: number };
 }
 
