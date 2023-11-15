@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 interface EditProfileForm {
+  name?: string;
   email?: string;
   phone?: string;
   formErrors?: string;
@@ -34,21 +35,22 @@ const EditProfile: NextPage = () => {
 
   //user가 있거나 변경되면 setValue함수로 email폼에 user.email 자동으로 채우기
   useEffect(() => {
+    if (user?.name) setValue("name", user.name);
     if (user?.email) setValue("email", user.email);
     if (user?.phone) setValue("phone", user.phone);
   }, [user, setValue]);
 
-  const onValid = ({ email, phone }: EditProfileForm) => {
+  const onValid = ({ name, email, phone }: EditProfileForm) => {
     if (loading) return;
     // 이메일/폰 모두 입력 안한 경우
-    if (email === "" && phone === "") {
+    if (email === "" && phone === "" && name === "") {
       return setError("formErrors", {
         message: "이메일 혹은 전화번호 중 하나를 입력하세요.",
       });
     }
 
     //console.log({ email, phone });
-    editProfile({ email, phone });
+    editProfile({ email, phone, name });
   };
 
   //editProfile로 뮤테이션한 data 지켜보고 data 변경될 때마다 바뀌기
@@ -78,6 +80,14 @@ const EditProfile: NextPage = () => {
             />
           </label>
         </div>
+        <Input
+          register={register("name")}
+          required={false}
+          label="이름"
+          name="name"
+          kind="text"
+          placeholder="이름을 입력하세요."
+        />
         <Input
           register={register("email")}
           required={false}
