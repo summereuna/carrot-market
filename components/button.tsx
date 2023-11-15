@@ -14,6 +14,7 @@ export default function Button({
 }: ButtonProps) {
   return (
     <button
+      onClick={onClick}
       {...rest}
       className={cls(
         "w-full bg-orange-500 hover:bg-orange-600 px-4 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 shadow-sm font-medium ",

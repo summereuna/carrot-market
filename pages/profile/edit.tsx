@@ -1,12 +1,68 @@
 import Button from "@/components/button";
 import Input from "@/components/input";
 import Layout from "@/components/layout";
+import useUser from "@/libs/client/useUser";
+import useMutation from "@/libs/server/useMutation";
 import type { NextPage } from "next";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 
+interface EditProfileForm {
+  email?: string;
+  phone?: string;
+  formErrors?: string;
+}
+
+interface EditProfileResponse {
+  ok: boolean;
+  error?: string;
+}
 const EditProfile: NextPage = () => {
+  const { user } = useUser();
+
+  const [editProfile, { data, loading, error }] =
+    useMutation<EditProfileResponse>(`/api/users/me`);
+
+  const {
+    register,
+    setValue,
+    handleSubmit,
+    setError,
+    clearErrors,
+    formState: { errors },
+  } = useForm<EditProfileForm>();
+
+  //user가 있거나 변경되면 setValue함수로 email폼에 user.email 자동으로 채우기
+  useEffect(() => {
+    if (user?.email) setValue("email", user.email);
+    if (user?.phone) setValue("phone", user.phone);
+  }, [user, setValue]);
+
+  const onValid = ({ email, phone }: EditProfileForm) => {
+    if (loading) return;
+    // 이메일/폰 모두 입력 안한 경우
+    if (email === "" && phone === "") {
+      return setError("formErrors", {
+        message: "이메일 혹은 전화번호 중 하나를 입력하세요.",
+      });
+    }
+
+    //console.log({ email, phone });
+    editProfile({ email, phone });
+  };
+
+  //editProfile로 뮤테이션한 data 지켜보고 data 변경될 때마다 바뀌기
+  useEffect(() => {
+    if (data && !data.ok) {
+      return setError("formErrors", {
+        message: data.error,
+      });
+    }
+  }, [data, setError]);
+
   return (
     <Layout canGoBack title="프로필">
-      <div className="py-5 px-4 space-y-4">
+      <form onSubmit={handleSubmit(onValid)} className="py-5 px-4 space-y-4">
         <div className="flex items-center space-x-3">
           <div className="w-14 h-14 rounded-full bg-slate-300" />
           <label
@@ -23,14 +79,30 @@ const EditProfile: NextPage = () => {
           </label>
         </div>
         <Input
+          register={register("email")}
+          required={false}
           label="이메일 주소"
           name="email"
           kind="email"
           placeholder="이메일 주소를 입력하세요."
         />
-        <Input label="휴대전화 번호" name="phone" kind="phone" />
-        <Button text="프로필 수정하기" />
-      </div>
+        <Input
+          register={register("phone")}
+          required={false}
+          label="휴대전화 번호"
+          name="phone"
+          kind="phone"
+        />
+        {errors.formErrors ? (
+          <span className="my-2 text-red-500 font-medium block">
+            {errors.formErrors.message}
+          </span>
+        ) : null}
+        <Button
+          onClick={() => clearErrors()}
+          text={loading ? "로딩 중..." : "프로필 수정하기"}
+        />
+      </form>
     </Layout>
   );
 };

@@ -1,7 +1,12 @@
+import { User } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import useSWR from "swr";
 
+interface ProfileResponse {
+  ok: boolean;
+  profile: User;
+}
 /**데이터 불러와 그 데이터 리턴 */
 
 //useSWR
@@ -14,7 +19,7 @@ import useSWR from "swr";
  * 그리고 fetcher함수가 리턴된 data나 error가 useSWR에 들어옴
  */
 export default function useUser() {
-  const { data, error } = useSWR("/api/users/me");
+  const { data, error } = useSWR<ProfileResponse>("/api/users/me");
   const router = useRouter();
 
   useEffect(() => {
