@@ -1,7 +1,7 @@
 import Layout from "@/components/layout";
 import UserBox from "@/components/user-box";
 import useUser from "@/libs/client/useUser";
-import { cls } from "@/libs/server/utils";
+import { cls } from "@/libs/client/utils";
 import { Review, User } from "@prisma/client";
 import type { NextPage } from "next";
 import Link from "next/link";

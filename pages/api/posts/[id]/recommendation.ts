@@ -1,6 +1,6 @@
 import withHandler, { ResponseType } from "@/libs/server/withHandler";
 import { NextApiRequest, NextApiResponse } from "next";
-import client from "@/libs/client/client";
+import client from "@/libs/server/client";
 import { withApiSession } from "@/libs/server/withSession";
 
 // /posts/[id]/recommendation 로 요청 보내서 + recommendation - recommendation

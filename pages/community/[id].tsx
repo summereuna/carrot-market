@@ -8,9 +8,9 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import { Post, Answer, User } from "@prisma/client";
-import useMutation from "@/libs/server/useMutation";
+import useMutation from "@/libs/client/useMutation";
 import Link from "next/link";
-import { cls } from "@/libs/server/utils";
+import { cls } from "@/libs/client/utils";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 

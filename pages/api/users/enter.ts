@@ -1,4 +1,4 @@
-import client from "@/libs/client/client";
+import client from "@/libs/server/client";
 import sendEmail from "@/libs/server/email";
 import withHandler, { ResponseType } from "@/libs/server/withHandler";
 import { NextApiRequest, NextApiResponse } from "next";

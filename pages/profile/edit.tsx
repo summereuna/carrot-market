@@ -2,7 +2,7 @@ import Button from "@/components/button";
 import Input from "@/components/input";
 import Layout from "@/components/layout";
 import useUser from "@/libs/client/useUser";
-import useMutation from "@/libs/server/useMutation";
+import useMutation from "@/libs/client/useMutation";
 import type { NextPage } from "next";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";

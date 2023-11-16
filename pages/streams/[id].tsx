@@ -1,8 +1,8 @@
 import Layout from "@/components/layout";
 import Message from "@/components/message";
 import useUser from "@/libs/client/useUser";
-import useMutation from "@/libs/server/useMutation";
-import { threeDigitDivision } from "@/libs/server/utils";
+import useMutation from "@/libs/client/useMutation";
+import { threeDigitDivision } from "@/libs/client/utils";
 import { Message as MessageModel, Stream } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";

@@ -1,4 +1,4 @@
-import { threeDigitDivision } from "@/libs/server/utils";
+import { threeDigitDivision } from "@/libs/client/utils";
 import Link from "next/link";
 
 interface ItemProps {

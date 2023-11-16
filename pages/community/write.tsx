@@ -2,7 +2,7 @@ import Button from "@/components/button";
 import Layout from "@/components/layout";
 import Textarea from "@/components/textarea";
 import useCoords from "@/libs/client/useCoords";
-import useMutation from "@/libs/server/useMutation";
+import useMutation from "@/libs/client/useMutation";
 import { Post } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";

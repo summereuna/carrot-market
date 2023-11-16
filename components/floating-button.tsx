@@ -1,4 +1,4 @@
-import { cls } from "@/libs/server/utils";
+import { cls } from "@/libs/client/utils";
 import Link from "next/link";
 
 interface FloatingButtonProps {
