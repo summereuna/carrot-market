@@ -34,8 +34,14 @@ const LiveDetail: NextPage = () => {
   const { user } = useUser();
   const router = useRouter();
 
+  const useSWRConfigurationOption = {
+    //useSWR이 서버에서 얼마나 자주 새로고침 될지 명시
+    refreshInterval: 1000, //1초
+  };
+
   const { data, mutate: boundMutate } = useSWR<StreamResponse>(
-    router.query.id ? `/api/streams/${router.query.id}` : null
+    router.query.id ? `/api/streams/${router.query.id}` : null,
+    useSWRConfigurationOption
   );
   //console.log(data);
   const [sendMessage, { data: sendMessageData, loading }] = useMutation(
@@ -46,6 +52,31 @@ const LiveDetail: NextPage = () => {
   const onValid = (validMessageForm: MessageForm) => {
     if (loading) return;
     reset();
+
+    //사용자에게 리얼타임 같은 경험 제공 위해
+    //데이터 페치 대신 swr 캐시를 mutate 해서 사용자에게 바로 보여주기
+    boundMutate(
+      (prev) =>
+        prev &&
+        ({
+          ...prev,
+          stream: {
+            ...prev.stream,
+            messages: [
+              ...prev.stream.messages,
+              {
+                id: Date.now(),
+                message: validMessageForm.message,
+                created: Date.now(),
+                user: { ...user },
+              },
+            ],
+          },
+        } as any),
+      false
+    );
+
+    //찐 데이터 백엔드로 요청 보내기
     sendMessage(validMessageForm);
   };
 
@@ -55,13 +86,15 @@ const LiveDetail: NextPage = () => {
     scrollRef?.current?.scrollIntoView();
   });
 
-  useEffect(() => {
-    //메시지 보내고 나면
-    // /api/streams/${router.query.id} 페치
-    if (sendMessageData && sendMessageData.ok) {
-      boundMutate(sendMessageData);
-    }
-  }, [sendMessageData, boundMutate]);
+  // useEffect(() => {
+  //   //메시지 보내고 나면
+  //   // /api/streams/${router.query.id} 페치
+  //   if (sendMessageData && sendMessageData.ok) {
+  //     //데이터 페치
+  //     boundMutate(sendMessageData);
+  //   }
+  // }, [sendMessageData, boundMutate]);
+
   return (
     <Layout canGoBack>
       {data?.ok ? (
@@ -124,3 +157,21 @@ const LiveDetail: NextPage = () => {
 };
 
 export default LiveDetail;
+
+/*
+NextJS의 Serverless 환경,
+즉 NextJS와 api router만 사용해서는 실시간(real time)을 만들 수 없다.
+
+실제 WebSocket을 사용할 수 없는 이유는 서버가 없기 때문이다 ^^..
+실시간을 만들기 위해서는 서버가 필요하고, 그 서버가 클라이언트와 연결을 계속 유지해야 한다.
+
+따라서 NextJS 앱을 Serverless 환경에서 배포한다면, 
+api에 있는 함수들은 Serverless 환경에서 실행된다.
+이 함수들이 실행된 후에는 서버와 연결이 끊긴다.
+
+따라서 NextJS, pages, api router 만으로는 실시간을 만들 수 없다.
+위 처럼 가짜로 흉내를 낼 수는 있다.
+
+실시간 하는 것은 추후에... 서버를 연결하면 하자구... 
+실시간 + 서버리스를 구현하기 위해 Cloudflare과 Durable Objects를 사용...
+*/
