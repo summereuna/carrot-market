@@ -6,7 +6,7 @@ import { threeDigitDivision } from "@/libs/server/utils";
 import { Message as MessageModel, Stream } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
 
@@ -49,6 +49,12 @@ const LiveDetail: NextPage = () => {
     sendMessage(validMessageForm);
   };
 
+  //채팅창 스크롤 맨 밑 유지
+  const scrollRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    scrollRef?.current?.scrollIntoView();
+  });
+
   useEffect(() => {
     //메시지 보내고 나면
     // /api/streams/${router.query.id} 페치
@@ -77,7 +83,7 @@ const LiveDetail: NextPage = () => {
 
           {/* 채팅창: 보이는 화면 50에 고정*/}
           <h2 className="text-2xl font-semibold text-gray-900">라이브 채팅</h2>
-          <div className="py-10 pb-16 h-[50vh] overflow-y-scroll px-4 space-y-3">
+          <div className="py-4 pb-4 h-[50vh] overflow-y-scroll px-4 space-y-3">
             {data?.stream?.messages.map((message) => (
               <Message
                 key={message.id}
@@ -86,6 +92,7 @@ const LiveDetail: NextPage = () => {
                 me={message.user.id === user?.id ? true : false}
               />
             ))}
+            <div ref={scrollRef} />
           </div>
           {/*플로팅 채팅창 고정*/}
           <div className="bg-white fixed bottom-0 p-2 inset-x-0">
