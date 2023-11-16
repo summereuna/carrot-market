@@ -11,7 +11,7 @@ import { Stream } from "@prisma/client";
 
 interface CreateStreamForm {
   name: string;
-  price: string;
+  price: number;
   description: string;
 }
 

@@ -77,7 +77,10 @@ const Upload: NextPage = () => {
             required
           />
           <Input
-            register={register("price", { required: true })}
+            register={register("price", {
+              required: true,
+              valueAsNumber: true,
+            })}
             label="가격"
             name="price"
             kind="price"

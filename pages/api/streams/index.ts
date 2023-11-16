@@ -25,7 +25,7 @@ async function handler(
     const stream = await client.stream.create({
       data: {
         name,
-        price: +price,
+        price,
         description,
         user: { connect: { id: user?.id } },
       },

@@ -38,7 +38,7 @@ async function handler(
       // 데이터 넣기
       data: {
         name,
-        price: +price, //form 업로드하면 전부 string 되서 에러나니까 + number로 바꿔주기
+        price,
         description,
         image: "", //아직 구현 안함
         user: { connect: { id: user?.id } }, //현재 로그인한 세션 유저의 유저db와 연결
