@@ -8,7 +8,19 @@ async function handler(
   res: NextApiResponse<ResponseType>
 ) {
   if (req.method === "GET") {
-    const streams = await client.stream.findMany();
+    const {
+      query: { page, limit },
+    } = req;
+
+    const pageIndex = Number(page);
+    const pageLimit = Number(limit);
+
+    const streams = await client.stream.findMany({
+      select: { name: true, id: true /*나중에 비디오 넣어줘야 함 */ },
+      take: pageLimit,
+      skip: (pageIndex - 1) * pageLimit,
+      orderBy: { created: "asc" },
+    });
 
     return res.json({
       ok: true,
