@@ -17,13 +17,13 @@ async function handler(
     });
 
     //응답 json애 유저 데이터 담아서 보내기
-    res.json({ ok: true, profile });
+    return res.json({ ok: true, profile });
   }
 
   if (req.method === "POST") {
     const {
       session: { user },
-      body: { email, phone, name },
+      body: { email, phone, name, avatarUrl },
     } = req;
 
     const currentUser = await client.user.findUnique({
@@ -71,19 +71,34 @@ async function handler(
       res.json({ ok: true });
     }
 
-    //현재 이름 같으면 업데이트 막기
-    if (name && name === currentUser?.name) {
-      return res.json({ ok: false, error: "현재 사용 중인 이름입니다." });
-    }
-    //이름은 다른 사람이랑 중복되도 상관없으니 바로 업데이트
-    if (name) {
+    if (name && name !== currentUser?.name) {
+      const alreadyExistsName = Boolean(
+        await client.user.findUnique({
+          where: { name },
+          select: { id: true },
+        })
+      );
+      if (alreadyExistsName) {
+        return res.json({ ok: false, error: "이미 사용중인 이름입니다." });
+      }
       await client.user.update({
         where: { id: user?.id },
         data: {
           name,
         },
       });
+
       res.json({ ok: true });
+    }
+
+    if (avatarUrl) {
+      await client.user.update({
+        where: { id: user?.id },
+        data: {
+          avatar: avatarUrl,
+        },
+      });
+      return res.json({ ok: true });
     }
 
     res.json({ ok: false, error: "현재 사용중인 이메일/전화번호입니다." });

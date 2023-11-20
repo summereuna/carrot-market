@@ -6,6 +6,7 @@ import useMutation from "@/libs/client/useMutation";
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import fileUploader from "@/libs/client/fileUploader";
 
 interface EditProfileForm {
   name?: string;
@@ -22,7 +23,7 @@ interface EditProfileResponse {
 const EditProfile: NextPage = () => {
   const { user } = useUser();
 
-  const [editProfile, { data, loading, error }] =
+  const [editProfile, { data, loading }] =
     useMutation<EditProfileResponse>(`/api/users/me`);
 
   const {
@@ -40,9 +41,10 @@ const EditProfile: NextPage = () => {
     if (user?.name) setValue("name", user.name);
     if (user?.email) setValue("email", user.email);
     if (user?.phone) setValue("phone", user.phone);
+    if (user?.avatar) setAvatarPreview(user?.avatar);
   }, [user, setValue]);
 
-  const onValid = ({ name, email, phone, avatar }: EditProfileForm) => {
+  const onValid = async ({ name, email, phone, avatar }: EditProfileForm) => {
     if (loading) return;
     // 이메일/폰 모두 입력 안한 경우
     if (email === "" && phone === "" && name === "") {
@@ -51,41 +53,48 @@ const EditProfile: NextPage = () => {
       });
     }
 
-    //console.log({ email, phone });
-    editProfile({ email, phone, name });
+    //유저가 아바타 파일 선택한 경우
+    if (avatar && avatar.length > 0 && user) {
+      //클라우디너리로 파일 업로드
+      const avatarUrl = await fileUploader(avatar[0]);
+
+      editProfile({ email, phone, name, avatarUrl });
+    } else {
+      //console.log({ email, phone });
+      editProfile({ email, phone, name });
+    }
   };
 
   //editProfile로 뮤테이션한 data 지켜보고 data 변경될 때마다 바뀌기
   useEffect(() => {
-    if (data && !data.ok) {
+    if (data && !data.ok && data.error) {
       return setError("formErrors", {
         message: data.error,
       });
     }
   }, [data, setError]);
 
+  const [avatarPreview, setAvatarPreview] = useState("");
   const fileList = watch("avatar");
-
-  const [imagePreview, setImagePreview] = useState("");
 
   useEffect(() => {
     if (fileList && fileList.length > 0) {
       const avatar = fileList[0];
       //브라우저 메모리에 있는 파일 url 가져오기
       //(blob:http~~) blob이 붙은 이 url은 브라우저의 메모리에 존재함
-      const avatarUrl = URL.createObjectURL(avatar);
-      setImagePreview(avatarUrl);
+      setAvatarPreview(URL.createObjectURL(avatar));
     }
   }, [fileList]);
 
+  //console.log(user?.avatar);
   return (
     <Layout canGoBack title="프로필">
       <form onSubmit={handleSubmit(onValid)} className="py-5 px-4 space-y-4">
         <div className="flex items-center space-x-3">
-          {imagePreview ? (
+          {avatarPreview ? (
             <img
-              src={imagePreview}
-              alt="imagePreview"
+              src={avatarPreview}
+              alt="avatarPreview"
               className="w-14 h-14 rounded-full bg-slate-300"
             />
           ) : (

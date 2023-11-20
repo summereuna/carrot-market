@@ -26,7 +26,7 @@ const Profile: NextPage = () => {
       <div className="py-5 px-4">
         {/* 유저 정보 */}
         <Link href="/profile/edit">
-          <UserBox name={user?.name} size="large" />
+          <UserBox name={user?.name} avatar={user?.avatar} size="large" />
         </Link>
         {/*유저 활동 세부 정보 */}
         <div className="mt-10 flex justify-around">
