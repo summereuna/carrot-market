@@ -56,7 +56,8 @@ const EditProfile: NextPage = () => {
     //유저가 아바타 파일 선택한 경우
     if (avatar && avatar.length > 0 && user) {
       //클라우디너리로 파일 업로드
-      const avatarUrl = await fileUploader(avatar[0]);
+      const presetName = process.env.NEXT_PUBLIC_CLOUDINARY_AVATAR_PRESET_NAME;
+      const avatarUrl = await fileUploader(avatar[0], `${presetName}`);
 
       editProfile({ email, phone, name, avatarUrl });
     } else {

@@ -2,18 +2,19 @@ import Button from "@/components/button";
 import Input from "@/components/input";
 import Layout from "@/components/layout";
 import Textarea from "@/components/textarea";
+import fileUploader from "@/libs/client/fileUploader";
 import useMutation from "@/libs/client/useMutation";
 import { Product } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface UploadProductForm {
   name: string;
   price: number;
   description: string;
-  //image: string; //아직 구현 안함
+  productImage: FileList;
 }
 
 // products/upload 페이지에서 useMutation하면 응답 결과로 data.ok 반환받음
@@ -23,18 +24,43 @@ interface UploadProductMutationResult {
 }
 
 const Upload: NextPage = () => {
-  const { register, handleSubmit } = useForm<UploadProductForm>();
+  const { register, handleSubmit, watch } = useForm<UploadProductForm>();
 
   const [uploadProduct, { loading, data, error }] =
     useMutation<UploadProductMutationResult>("/api/products");
 
-  const onValid = (data: UploadProductForm) => {
+  const onValid = async ({
+    name,
+    price,
+    description,
+    productImage,
+  }: UploadProductForm) => {
     //로딩 중이면 멈춤
     if (loading) return;
 
     //로딩중 아니면 uploadProduct() 실행하여 데이터 받아서 뮤테이션 하기
     //console.log(data);
-    uploadProduct(data);
+
+    if (productImage && productImage.length > 0) {
+      //클라우디너리로 파일 업로드
+      const presetName = process.env.NEXT_PUBLIC_CLOUDINARY_PRODUCT_PRESET_NAME;
+      const productImageUrl = await fileUploader(
+        productImage[0],
+        `${presetName}`
+      );
+      uploadProduct({
+        name,
+        price,
+        description,
+        productImageUrl,
+      });
+    } else {
+      uploadProduct({
+        name,
+        price,
+        description,
+      });
+    }
   };
 
   const router = useRouter();
@@ -46,28 +72,51 @@ const Upload: NextPage = () => {
     }
   }, [data, router]);
 
+  const productImageFileList = watch("productImage");
+  const [productImagePreview, setProductImagePreview] = useState("");
+  useEffect(() => {
+    if (productImageFileList && productImageFileList.length > 0) {
+      const productImageFile = productImageFileList[0];
+      setProductImagePreview(URL.createObjectURL(productImageFile));
+    }
+  }, [productImageFileList]);
+
   return (
     <Layout canGoBack title="상품 업로드">
       <form onSubmit={handleSubmit(onValid)}>
         <div className="px-4 py-2 space-y-5">
-          <label className="flex items-center justify-center text-gray-600 hover:text-orange-500 border-2 border-dashed border-gray-300 w-full h-48 rounded-md mb-8 cursor-pointer hover:border-orange-500">
-            <svg
-              className="h-12 w-12"
-              stroke="currentColor"
-              fill="none"
-              viewBox="0 0 48 48"
-              aria-hidden="true"
-            >
-              <path
-                d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                strokeWidth={2}
-                strokeLinecap="round"
-                strokeLinejoin="round"
+          {productImagePreview ? (
+            <img
+              src={productImagePreview}
+              alt="preview"
+              className="text-gray-600 w-full h-48 object-contain rounded-md mb-8"
+            />
+          ) : (
+            <label className="flex items-center justify-center text-gray-600 hover:text-orange-500 border-2 border-dashed border-gray-300 w-full h-48 rounded-md mb-8 cursor-pointer hover:border-orange-500">
+              <svg
+                className="h-12 w-12"
+                stroke="currentColor"
+                fill="none"
+                viewBox="0 0 48 48"
+                aria-hidden="true"
+              >
+                <path
+                  d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              <input
+                {...register("productImage")}
+                id="productImage"
+                type="file"
+                className="hidden"
+                accept="image/*"
               />
-            </svg>
-            {/* label안에 input 넣고 hidden 하면 label 클릭 시 파일 선택 가능 */}
-            <input type="file" className="hidden" />
-          </label>
+            </label>
+          )}
+
           <Input
             register={register("name", { required: true })}
             label="제목"

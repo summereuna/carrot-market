@@ -29,7 +29,7 @@ async function handler(
     // products upload form의 데이터
     // req.session의 유저
     const {
-      body: { name, price, description, image },
+      body: { name, price, description, productImageUrl },
       session: { user },
     } = req;
 
@@ -40,7 +40,7 @@ async function handler(
         name,
         price,
         description,
-        image: "", //아직 구현 안함
+        image: productImageUrl,
         user: { connect: { id: user?.id } }, //현재 로그인한 세션 유저의 유저db와 연결
       },
     });

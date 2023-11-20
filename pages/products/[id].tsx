@@ -9,6 +9,7 @@ import type { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import useSWR, { useSWRConfig } from "swr";
+import { useEffect } from "react";
 
 //프리즈마 클라이언트의 Product 타입에는 연결된 user에 대한 타입이 없으므로 확장시켜주기
 interface ProductWithUser extends Product {
@@ -33,7 +34,6 @@ const ProductDetail: NextPage = () => {
   const { data, mutate: boundMutate } = useSWR<ProductDetailResponse>(
     router.query.id ? `/api/products/${router.query?.id}` : null
   );
-
   //Optimistic UI Update (백엔드로 보낸 요청이 작동할 거라는 것에 낙관적(optimistic)
   //기본적으로 백엔드에 요청을 보낼 때 백엔드 응답 기다리지 않고 일단 변경사항 반영 ㅇㅇㅇ
   //어차피 될거니까 ^^~~
@@ -67,17 +67,16 @@ const ProductDetail: NextPage = () => {
     <Layout canGoBack>
       <div className="px-4 py-10">
         <div className="mb-8">
-          {/*product-image
-          data?.product?.image
-          */}
-          <div className="h-96 bg-slate-300" />
-          {/*user-profile
-          data?.product?.user?.avatar
-          */}
+          <img
+            src={data?.product?.image}
+            alt="product_image"
+            className="h-96 bg-slate-300"
+          />
           <Link href={`/users/profiles/${data?.product?.userId}`}>
             <div className="py-3 border-t border-b">
               <UserBox
                 name={data?.product?.user?.name}
+                avatar={data?.product.user?.avatar}
                 size="small"
                 time={`${data?.product?.created}시간 전`}
               />
