@@ -34,6 +34,7 @@ const Home: NextPage = () => {
           <Item
             productName={product.name}
             productInfo={product.description}
+            productImage={product.image}
             price={product.price}
             hearts={product._count.wishes}
             comments={0}

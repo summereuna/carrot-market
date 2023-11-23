@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 interface UserProps {
   name?: string;
   avatar?: string;
@@ -11,10 +13,12 @@ export default function UserBox({ name, avatar, time, size }: UserProps) {
       {size === "large" ? (
         <>
           {avatar ? (
-            <img
+            <Image
               src={avatar}
-              alt="avatarPreview"
-              className="w-14 h-14 rounded-full bg-slate-300"
+              alt="avatar-preview"
+              width={56}
+              height={56}
+              className="w-14 h-14 rounded-full bg-slate-300 object-cover"
             />
           ) : (
             <div className="w-16 h-16 bg-slate-300 rounded-full" />
@@ -27,7 +31,13 @@ export default function UserBox({ name, avatar, time, size }: UserProps) {
       ) : null}
       {size === "small" ? (
         <>
-          <div className="w-10 h-10 rounded-full bg-slate-300" />
+          <Image
+            src={avatar}
+            alt="avatar-preview"
+            width={40}
+            height={40}
+            className="w-10 h-10 rounded-full bg-slate-300 object-cover"
+          />
           <div className="flex flex-col">
             <span className="text-sm font-medium text-gray-700">{name}</span>
             <span className="text-xs font-medium text-gray-500">{time}</span>

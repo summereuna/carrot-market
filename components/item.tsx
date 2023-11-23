@@ -1,10 +1,12 @@
 import { threeDigitDivision } from "@/libs/client/utils";
+import Image from "next/image";
 import Link from "next/link";
 
 interface ItemProps {
   productName: string;
   productInfo?: string;
   price: number;
+  productImage: string;
   hearts: number;
   comments: number;
   id: number;
@@ -13,6 +15,7 @@ interface ItemProps {
 export default function Item({
   productName,
   productInfo,
+  productImage,
   price,
   hearts,
   comments,
@@ -22,7 +25,13 @@ export default function Item({
     <Link href={`/products/${id}`}>
       <div className="px-4 flex justify-between pt-4 cursor-pointer">
         <div className="flex space-x-4">
-          <div className="w-20 h-20 bg-slate-300 rounded-md" />
+          <Image
+            src={productImage}
+            alt="product-image"
+            width={80}
+            height={80}
+            className="w-20 h-20 bg-slate-300 rounded-md object-fill"
+          />
           <div className="pt-2 flex flex-col">
             <h3 className="text-sm font-medium text-gray-900">{productName}</h3>
             <span className="text-xs text-gray-500">{productInfo}</span>

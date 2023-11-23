@@ -6,6 +6,7 @@ import fileUploader from "@/libs/client/fileUploader";
 import useMutation from "@/libs/client/useMutation";
 import { Product } from "@prisma/client";
 import type { NextPage } from "next";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -15,6 +16,7 @@ interface UploadProductForm {
   price: number;
   description: string;
   productImage: FileList;
+  formErrors?: string;
 }
 
 // products/upload 페이지에서 useMutation하면 응답 결과로 data.ok 반환받음
@@ -24,7 +26,14 @@ interface UploadProductMutationResult {
 }
 
 const Upload: NextPage = () => {
-  const { register, handleSubmit, watch } = useForm<UploadProductForm>();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setError,
+    clearErrors,
+    formState: { errors },
+  } = useForm<UploadProductForm>();
 
   const [uploadProduct, { loading, data, error }] =
     useMutation<UploadProductMutationResult>("/api/products");
@@ -55,10 +64,8 @@ const Upload: NextPage = () => {
         productImageUrl,
       });
     } else {
-      uploadProduct({
-        name,
-        price,
-        description,
+      return setError("formErrors", {
+        message: "상품의 사진을 업로드하세요",
       });
     }
   };
@@ -86,11 +93,14 @@ const Upload: NextPage = () => {
       <form onSubmit={handleSubmit(onValid)}>
         <div className="px-4 py-2 space-y-5">
           {productImagePreview ? (
-            <img
-              src={productImagePreview}
-              alt="preview"
-              className="text-gray-600 w-full h-48 object-contain rounded-md mb-8"
-            />
+            <div className="relative -z-10 w-full h-48 ">
+              <Image
+                src={productImagePreview}
+                alt="preview"
+                fill={true}
+                className="text-gray-600 rounded-md mb-8 object-contain"
+              />
+            </div>
           ) : (
             <label className="flex items-center justify-center text-gray-600 hover:text-orange-500 border-2 border-dashed border-gray-300 w-full h-48 rounded-md mb-8 cursor-pointer hover:border-orange-500">
               <svg
@@ -116,7 +126,6 @@ const Upload: NextPage = () => {
               />
             </label>
           )}
-
           <Input
             register={register("name", { required: true })}
             label="제목"
@@ -143,7 +152,16 @@ const Upload: NextPage = () => {
             placeholder="올릴 게시글 내용을 작성해 주세요.&#10;(판매 금지 물품은 게시가 제한될 수 있어요.)&#10;신뢰할수 있는 거래를 위해 자세히 적어주세요."
             required
           />
-          <Button loading={loading} text="작성 완료" />
+          {errors.formErrors ? (
+            <span className="my-2 text-red-500 font-medium block">
+              {errors.formErrors.message}
+            </span>
+          ) : null}
+          <Button
+            loading={loading}
+            text="작성 완료"
+            onClick={() => clearErrors()}
+          />
         </div>
       </form>
     </Layout>

@@ -10,6 +10,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import useSWR, { useSWRConfig } from "swr";
 import { useEffect } from "react";
+import Image from "next/image";
 
 //프리즈마 클라이언트의 Product 타입에는 연결된 user에 대한 타입이 없으므로 확장시켜주기
 interface ProductWithUser extends Product {
@@ -67,11 +68,14 @@ const ProductDetail: NextPage = () => {
     <Layout canGoBack>
       <div className="px-4 py-10">
         <div className="mb-8">
-          <img
-            src={data?.product?.image}
-            alt="product_image"
-            className="h-96 bg-slate-300"
-          />
+          <div className="relative pb-[348px] -z-10">
+            <Image
+              src={data?.product?.image}
+              alt="product-image"
+              fill={true}
+              className="bg-slate-100 absolute object-scale-down"
+            />
+          </div>
           <Link href={`/users/profiles/${data?.product?.userId}`}>
             <div className="py-3 border-t border-b">
               <UserBox

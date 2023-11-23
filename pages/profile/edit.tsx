@@ -7,6 +7,7 @@ import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import fileUploader from "@/libs/client/fileUploader";
+import Image from "next/image";
 
 interface EditProfileForm {
   name?: string;
@@ -93,10 +94,12 @@ const EditProfile: NextPage = () => {
       <form onSubmit={handleSubmit(onValid)} className="py-5 px-4 space-y-4">
         <div className="flex items-center space-x-3">
           {avatarPreview ? (
-            <img
+            <Image
               src={avatarPreview}
-              alt="avatarPreview"
-              className="w-14 h-14 rounded-full bg-slate-300"
+              alt="avatar-preview"
+              width={56}
+              height={56}
+              className="w-14 h-14 rounded-full bg-slate-300 object-cover"
             />
           ) : (
             <div className="w-14 h-14 rounded-full bg-slate-300" />
