@@ -47,7 +47,7 @@ export default function Layout({
         ) : null}
       </div>
       {/*컨텐츠*/}
-      <div className={cls("pt-14", hasTabBar ? "pb-20" : "")}>{children}</div>
+      <div className={cls("pt-12", hasTabBar ? "pb-20" : "")}>{children}</div>
       {/*하단 탭*/}
       {/*모바일 사이즈로 일단 작업하기 위해 max-w-xl 줘서 fixed된 바 크기 조정*/}
       {hasTabBar ? (

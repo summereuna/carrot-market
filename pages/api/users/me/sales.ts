@@ -20,6 +20,7 @@ async function handler(
         },
       },
     },
+    orderBy: { created: "desc" },
   });
 
   res.json({ ok: true, sales });

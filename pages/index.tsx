@@ -37,7 +37,6 @@ const Home: NextPage = () => {
             productImage={product.image}
             price={product.price}
             hearts={product._count.wishes}
-            comments={0}
             id={product.id}
             key={product.id}
           />

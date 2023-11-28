@@ -23,6 +23,7 @@ interface ProductDetailResponse {
   isWished: boolean;
   relatedProducts: Product[];
 }
+
 interface CreateChatRoomResponse {
   ok: boolean;
   chatRoom: ChatRoom;

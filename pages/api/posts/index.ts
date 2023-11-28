@@ -39,6 +39,7 @@ async function handler(
           lte: parsedLongitudeNumber + 0.005,
         },
       },
+      orderBy: { created: "desc" },
     });
 
     res.json({

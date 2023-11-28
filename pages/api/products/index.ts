@@ -17,6 +17,7 @@ async function handler(
           select: { wishes: true },
         },
       },
+      orderBy: { created: "desc" },
     });
 
     res.json({
