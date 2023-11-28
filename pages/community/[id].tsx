@@ -122,6 +122,7 @@ const CommunityPostDetail: NextPage = () => {
               name={data?.post?.user.name}
               size="small"
               time={data?.post?.created.toString()}
+              avatar={data?.post?.user.avatar}
             />
           </div>
         </Link>
@@ -184,6 +185,7 @@ const CommunityPostDetail: NextPage = () => {
               name={answer.user.name}
               time={answer.updated.toString()}
               comment={answer.answer}
+              avatar={answer.user.avatar}
             />
           ))}
         </div>

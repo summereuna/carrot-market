@@ -26,6 +26,10 @@ interface UploadProductMutationResult {
 }
 
 const Upload: NextPage = () => {
+  const router = useRouter();
+
+  const [addSaleRecord] = useMutation(`/api/products/${router.query?.id}/sale`);
+
   const {
     register,
     handleSubmit,
@@ -63,14 +67,15 @@ const Upload: NextPage = () => {
         description,
         productImageUrl,
       });
+
+      //sale
+      addSaleRecord({}); //빈 객체 보내서 body가 빈 post 요청 보내기
     } else {
       return setError("formErrors", {
         message: "상품의 사진을 업로드하세요",
       });
     }
   };
-
-  const router = useRouter();
 
   useEffect(() => {
     if (data?.ok) {

@@ -21,15 +21,17 @@ export default function ProductList({ kind }: ProductListProps) {
   const { data } = useSWR<ProductListResponse>(`/api/users/me/${kind}`);
   //객체 프로퍼티
   //object.propertyName === object["propertyName"]
+  console.log(data);
   return data ? (
     <>
       {data[kind].map((record) => (
         <Item
           productName={record.product.name}
           productInfo={record.product.description}
+          productImage={record.product.image}
           price={record.product.price}
           hearts={record.product._count.wishes}
-          comments={"00"}
+          comments={"0"}
           id={record.id}
           key={record.id}
         />
