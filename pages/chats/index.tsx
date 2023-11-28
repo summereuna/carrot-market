@@ -1,31 +1,38 @@
+import ChatRoom from "@/components/chatRoom";
 import Layout from "@/components/layout";
-import User from "@/components/user-box";
+import useUser from "@/libs/client/useUser";
 import type { NextPage } from "next";
-import Link from "next/link";
+import Head from "next/head";
+import useSWR from "swr";
 
 const Chats: NextPage = () => {
+  const user = useUser();
+  const { data } = useSWR(`api/chats`);
+  console.log(data?.chats);
+  console.log(user);
   return (
     <Layout title="채팅" hasTabBar>
+      <Head>
+        <title>채팅</title>
+      </Head>
       <div className="divide-y-[1px] ">
-        {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, i) => (
-          <div key={i}>
-            <Link href="/chats/userId">
-              <div className="cursor-pointer px-4 py-3 flex space-x-3 items-center">
-                <div>
-                  <div className="w-12 h-12 rounded-full bg-slate-300" />
-                </div>
-                <div className="flex flex-col">
-                  <div className="space-x-2">
-                    <span className="font-medium text-gray-700">당근케익</span>
-                    <span className="text-xs text-gray-500">오전 12:50</span>
-                  </div>
-                  <span className="text-sm text-gray-500">
-                    오후 7시 이후 역 앞에서 가능하신가요?
-                  </span>
-                </div>
-              </div>
-            </Link>
-          </div>
+        {data?.chats?.map((chatRoom) => (
+          <ChatRoom
+            key={chatRoom.id}
+            roomId={chatRoom.id}
+            updated={chatRoom.updated}
+            otherUserName={
+              user?.user?.id === chatRoom.user.id
+                ? chatRoom.product.user.name
+                : chatRoom.user.name
+            }
+            otherUserAvatarUrl={
+              user?.user?.id === chatRoom.user.id
+                ? chatRoom.product.user.avatar
+                : chatRoom.user.avatar
+            }
+            lastChat={JSON.stringify(chatRoom.chats.at(-1).chat)}
+          />
         ))}
       </div>
     </Layout>

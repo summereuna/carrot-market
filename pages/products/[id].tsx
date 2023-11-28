@@ -4,7 +4,7 @@ import UserBox from "@/components/user-box";
 import useUser from "@/libs/client/useUser";
 import useMutation from "@/libs/client/useMutation";
 import { cls, threeDigitDivision } from "@/libs/client/utils";
-import { Product, User } from "@prisma/client";
+import { ChatRoom, Product, User } from "@prisma/client";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -22,6 +22,10 @@ interface ProductDetailResponse {
   product: ProductWithUser;
   isWished: boolean;
   relatedProducts: Product[];
+}
+interface CreateChatRoomResponse {
+  ok: boolean;
+  chatRoom: ChatRoom;
 }
 
 const ProductDetail: NextPage = () => {
@@ -60,6 +64,29 @@ const ProductDetail: NextPage = () => {
 
     //그래서 이렇게 하면 api를 기다릴 필요 없이 아주 빠른 반응형 UI를 얻을 수 있음
   };
+
+  //채팅룸 생성
+  const [createChatRoom, { data: chatRoomData }] =
+    useMutation<CreateChatRoomResponse>(`/api/chats`);
+
+  const onChatClick = () => {
+    const wantToChatWithSeller = confirm("판매자와 채팅하시겠습니까?");
+
+    if (wantToChatWithSeller) {
+      const chatRoomInfo = {
+        productId: router.query.id,
+      };
+
+      console.log(chatRoomInfo);
+      createChatRoom(chatRoomInfo);
+    }
+  };
+
+  useEffect(() => {
+    if (chatRoomData && chatRoomData.ok) {
+      router.push(`/chats/${chatRoomData?.chatRoom?.id}`);
+    }
+  });
 
   //? data 객체 있으면 데이터 출력하거나 로딩중임을 표시하는게 좋음
   //1초 이상 걸리는 작업에는 로딩 중임을 표시하는게 더 좋음
@@ -102,7 +129,7 @@ const ProductDetail: NextPage = () => {
             </p>
             <div className="flex items-center justify-between space-x-2">
               {/*direct-message btn*/}
-              <Button text="채팅하기" large />
+              <Button text="채팅하기" large onClick={onChatClick} />
               {/*add to like-list btn*/}
               <button
                 onClick={onWishClick}

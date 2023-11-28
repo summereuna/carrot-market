@@ -123,6 +123,9 @@ const LiveDetail: NextPage = () => {
                 message={message.message}
                 time={message.created.toString()}
                 me={message.user.id === user?.id ? true : false}
+                avatarUrl={
+                  message.user.id !== user?.id ? message.user.avatar : null
+                }
               />
             ))}
             <div ref={scrollRef} />

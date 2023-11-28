@@ -126,7 +126,7 @@ const Profile: NextPage = () => {
                     alt="avatar-preview"
                     width={40}
                     height={40}
-                    className="w-10 h-10 rounded-full bg-slate-300 object-cover"
+                    className="w-12 h-12 rounded-full bg-slate-300 object-cover"
                   />
                 ) : (
                   <div className="w-12 h-12 bg-slate-300 rounded-full" />

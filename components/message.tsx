@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 interface MessageProps {
   message: string;
   time: string;
@@ -16,7 +18,17 @@ export default function Message({
       {!me ? (
         <div className="flex items-start space-x-2 w-[90%]">
           <div>
-            <div className="w-8 h-8 rounded-full bg-slate-300" />
+            {avatarUrl ? (
+              <Image
+                src={avatarUrl}
+                alt="avatar-preview"
+                width={40}
+                height={40}
+                className="w-8 h-8 rounded-full bg-slate-300 object-cover"
+              />
+            ) : (
+              <div className="w-8 h-8 rounded-full bg-slate-300" />
+            )}
           </div>
           <div className="flex space-x-2 items-end">
             <div className="text-gray-700 bg-gray-200 rounded-xl p-3 text-sm">

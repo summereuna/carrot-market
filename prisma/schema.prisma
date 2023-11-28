@@ -31,6 +31,8 @@ model User {
   purchases       Purchase[]
   streams         Stream[]
   messages        Message[]
+  chats           Chat[]
+  chatRooms       ChatRoom[]
 }
 
 model Token {
@@ -64,6 +66,7 @@ model Product {
   wishes      Wish[]
   sales       Sale[]
   purchases   Purchase[]
+  chatRooms   ChatRoom[]
 
   @@index([userId])
 }
@@ -187,4 +190,35 @@ model Message {
   streamId Int
 
   @@index([userId, streamId])
+}
+
+model ChatRoom {
+  id        Int      @id @default(autoincrement())
+  created   DateTime @default(now())
+  updated   DateTime @updatedAt
+  //채팅방 안에 채팅 메시지
+  chats     Chat[]
+  //채팅방이 연결되는 제품
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int
+  //채팅방 사용 중인 사람들 다대다 many to many
+  //users     User[]
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+
+  @@index([productId, userId])
+}
+
+model Chat {
+  id         Int      @id @default(autoincrement())
+  created    DateTime @default(now())
+  chat       String
+  //누가 썼냐
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     Int
+  //어느 룸에다 썼냐
+  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
+  chatRoomId Int
+
+  @@index([userId, chatRoomId])
 }
