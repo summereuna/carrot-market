@@ -11,3 +11,10 @@ export function cls(...classname: string[]) {
 export function threeDigitDivision(price: number | undefined) {
   return price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
+
+/** UTC 시간 한국 시간으로 표시하는 함수
+ */
+export function utcToKoreanTime(utcDateAndTimeString: Date | undefined) {
+  const utcDate = new Date(`${utcDateAndTimeString}`);
+  return utcDate.toLocaleString("kst").slice(0, -3);
+}
