@@ -124,7 +124,7 @@ const LiveDetail: NextPage = () => {
                 time={message.created.toString()}
                 me={message.user.id === user?.id ? true : false}
                 avatarUrl={
-                  message.user.id !== user?.id ? message.user.avatar : null
+                  message.user.id !== user?.id ? message.user.avatar : undefined
                 }
               />
             ))}

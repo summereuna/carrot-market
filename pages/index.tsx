@@ -5,7 +5,6 @@ import useUser from "@/libs/client/useUser";
 import { Product } from "@prisma/client";
 import type { NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
 import useSWR from "swr";
 
 export interface ProductWithCountWishes extends Product {
@@ -24,6 +23,7 @@ const Home: NextPage = () => {
 
   const { data } = useSWR<ProductsResponse>("/api/products");
   console.log(data?.products);
+
   return (
     <Layout title="홈" hasTabBar>
       <Head>
@@ -33,7 +33,7 @@ const Home: NextPage = () => {
         {data?.products?.map((product) => (
           <Item
             productName={product.name}
-            productInfo={product.description}
+            productCreated={product.created}
             productImage={product.image}
             price={product.price}
             hearts={product._count.wishes}

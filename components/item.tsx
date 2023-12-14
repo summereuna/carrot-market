@@ -4,7 +4,7 @@ import Link from "next/link";
 
 interface ItemProps {
   productName: string;
-  productInfo?: string;
+  productCreated: Date;
   price: number;
   productImage: string;
   hearts: number;
@@ -13,8 +13,8 @@ interface ItemProps {
 
 export default function Item({
   productName,
-  productInfo,
   productImage,
+  productCreated,
   price,
   hearts,
   id,
@@ -22,26 +22,26 @@ export default function Item({
   return (
     <Link href={`/products/${id}`}>
       <div className="px-4 flex justify-between pt-4">
-        <div className="flex flex-col w-full">
-          <div className="flex space-x-4 cursor-pointer">
+        <div className="flex justify-between w-full">
+          <div className="flex space-x-5">
             <Image
               src={productImage}
               alt="product-image"
-              width={80}
-              height={80}
-              className="w-20 h-20 bg-slate-300 rounded-md object-fill"
+              width={40}
+              height={40}
+              className="w-20 h-w-20 bg-slate-300 rounded-md object-fill border-[1px]"
             />
-            <div className="pt-2 flex flex-col">
+            <div className="pt-2 flex flex-col space-y-1">
               <h3 className="text-sm font-medium text-gray-900">
                 {productName}
               </h3>
-              <span className="text-xs text-gray-500">{productInfo}</span>
+              <span className="text-xs text-gray-500">{productCreated}</span>
               <span className="font-medium mt-1 text-gray-900">
-                ￦{threeDigitDivision(price)}
+                {threeDigitDivision(price)}원
               </span>
             </div>
           </div>
-          <div className="flex items-end justify-end space-x-2">
+          <div className="flex items-end justify-end">
             <div className="flex space-x-0.5 items-center text-sm text-gray-600">
               <svg
                 className="w-4 h-4"

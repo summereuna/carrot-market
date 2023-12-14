@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-interface ChatRoomProps {
+interface ChattingRoomProps {
   key: number;
   roomId: number;
   updated: Date;
@@ -10,13 +10,13 @@ interface ChatRoomProps {
   lastChat: string;
 }
 
-export default function ChatRoom({
+export default function ChattingRoom({
   roomId,
   updated,
   otherUserName,
   otherUserAvatarUrl,
   lastChat,
-}: ChatRoomProps) {
+}: ChattingRoomProps) {
   return (
     <Link href={`/chats/${roomId}`}>
       <div className="cursor-pointer px-4 py-3 flex space-x-3 items-center">

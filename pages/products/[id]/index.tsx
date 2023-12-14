@@ -1,7 +1,6 @@
 import Button from "@/components/button";
 import Layout from "@/components/layout";
 import UserBox from "@/components/user-box";
-import useUser from "@/libs/client/useUser";
 import useMutation from "@/libs/client/useMutation";
 import { cls, threeDigitDivision } from "@/libs/client/utils";
 import { ChatRoom, Product, User } from "@prisma/client";
@@ -40,6 +39,7 @@ const ProductDetail: NextPage = () => {
   const { data, mutate: boundMutate } = useSWR<ProductDetailResponse>(
     router.query.id ? `/api/products/${router.query?.id}` : null
   );
+
   //Optimistic UI Update (백엔드로 보낸 요청이 작동할 거라는 것에 낙관적(optimistic)
   //기본적으로 백엔드에 요청을 보낼 때 백엔드 응답 기다리지 않고 일단 변경사항 반영 ㅇㅇㅇ
   //어차피 될거니까 ^^~~
@@ -73,12 +73,12 @@ const ProductDetail: NextPage = () => {
   const onChatClick = () => {
     const wantToChatWithSeller = confirm("판매자와 채팅하시겠습니까?");
 
-    if (wantToChatWithSeller) {
+    if (wantToChatWithSeller && data) {
       const chatRoomInfo = {
         productId: router.query.id,
+        productUserId: data.product.userId,
       };
 
-      console.log(chatRoomInfo);
       createChatRoom(chatRoomInfo);
     }
   };
@@ -108,7 +108,7 @@ const ProductDetail: NextPage = () => {
             <div className="py-3 border-t border-b">
               <UserBox
                 name={data?.product?.user?.name}
-                avatar={data?.product.user?.avatar}
+                avatar={data?.product?.user?.avatar}
                 size="small"
                 time={`${data?.product?.created}시간 전`}
               />

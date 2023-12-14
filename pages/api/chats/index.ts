@@ -8,7 +8,11 @@ async function handler(
   res: NextApiResponse<ResponseType>
 ) {
   if (req.method === "GET") {
+    const {
+      session: { user },
+    } = req;
     const chats = await client.chatRoom.findMany({
+      where: { OR: [{ userId: user?.id }, { product: { userId: user?.id } }] },
       select: {
         id: true,
         updated: true,
@@ -18,7 +22,7 @@ async function handler(
           select: { user: { select: { name: true, avatar: true, id: true } } },
         },
       },
-      orderBy: { created: "asc" },
+      orderBy: { created: "desc" },
     });
 
     return res.json({
@@ -28,18 +32,29 @@ async function handler(
   }
   if (req.method === "POST") {
     const {
-      body: { productId },
+      body: { productId, productUserId },
       session: { user },
     } = req;
 
-    const chatRoom = await client.chatRoom.create({
-      data: {
-        product: { connect: { id: +productId } },
-        user: { connect: { id: user?.id } },
+    const alreadyExistsChatRoom = await client.chatRoom.findFirst({
+      where: {
+        userId: user?.id,
+        product: { userId: productUserId },
       },
     });
 
-    return res.json({ ok: true, chatRoom });
+    if (alreadyExistsChatRoom) {
+      return res.json({ ok: true, chatRoom: alreadyExistsChatRoom });
+    } else {
+      const chatRoom = await client.chatRoom.create({
+        data: {
+          product: { connect: { id: +productId } },
+          user: { connect: { id: user?.id } },
+        },
+      });
+
+      return res.json({ ok: true, chatRoom });
+    }
   }
 }
 

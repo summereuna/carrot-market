@@ -1,10 +1,10 @@
 import Image from "next/image";
 
 interface UserProps {
-  name?: string;
+  name: string;
   avatar?: string;
-  time?: string;
-  size?: "large" | "small";
+  time: string;
+  size: "large" | "small";
 }
 
 export default function UserBox({ name, avatar, time, size }: UserProps) {

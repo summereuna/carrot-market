@@ -16,6 +16,16 @@ async function handler(
       id: +id!.toString(),
     },
     include: {
+      product: {
+        select: {
+          name: true,
+          image: true,
+          price: true,
+          id: true,
+          reservation: { select: { date: true, id: true, userId: true } },
+          user: { select: { name: true } },
+        },
+      },
       chats: {
         select: {
           id: true,

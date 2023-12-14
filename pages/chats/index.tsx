@@ -1,13 +1,35 @@
-import ChatRoom from "@/components/chatRoom";
+import ChattingRoom from "@/components/chattingRoom";
 import Layout from "@/components/layout";
 import useUser from "@/libs/client/useUser";
+import { Chat, ChatRoom } from "@prisma/client";
 import type { NextPage } from "next";
 import Head from "next/head";
 import useSWR from "swr";
 
+interface PurchaserInfo {
+  name: string;
+  avatar?: string;
+  id: number;
+}
+
+interface SellerInfo {
+  user: { name: string; avatar?: string; id: number };
+}
+
+interface ChatRoomWithUsersInfoAndChats extends ChatRoom {
+  user: PurchaserInfo;
+  product: SellerInfo;
+  chats: Chat[];
+}
+
+interface ChatRoomResponse {
+  data: boolean;
+  chats: ChatRoomWithUsersInfoAndChats[];
+}
+
 const Chats: NextPage = () => {
   const user = useUser();
-  const { data } = useSWR(`api/chats`);
+  const { data } = useSWR<ChatRoomResponse>(`api/chats`);
   console.log(data?.chats);
   console.log(user);
   return (
@@ -15,9 +37,9 @@ const Chats: NextPage = () => {
       <Head>
         <title>채팅</title>
       </Head>
-      <div className="divide-y-[1px] ">
+      <div className="flex flex-col pb-3 divide-y">
         {data?.chats?.map((chatRoom) => (
-          <ChatRoom
+          <ChattingRoom
             key={chatRoom.id}
             roomId={chatRoom.id}
             updated={chatRoom.updated}
@@ -27,11 +49,15 @@ const Chats: NextPage = () => {
                 : chatRoom.user.name
             }
             otherUserAvatarUrl={
-              user?.user?.id === chatRoom.user.id
+              user?.user?.id === chatRoom.userId
                 ? chatRoom.product.user.avatar
                 : chatRoom.user.avatar
             }
-            lastChat={JSON.stringify(chatRoom.chats.at(-1).chat)}
+            lastChat={
+              chatRoom.chats.length > 0
+                ? JSON.stringify(chatRoom?.chats?.at(-1)?.chat)
+                : `🥕 채팅을 시작해 보세요!`
+            }
           />
         ))}
       </div>

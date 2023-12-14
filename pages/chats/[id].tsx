@@ -1,3 +1,4 @@
+import ChatProductInfo from "@/components/chatProductInfo";
 import Layout from "@/components/layout";
 import Message from "@/components/message";
 import useMutation from "@/libs/client/useMutation";
@@ -5,17 +6,37 @@ import useUser from "@/libs/client/useUser";
 import { ChatRoom } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
+import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
+
+interface productOwner {
+  name: string;
+}
+interface Reservation {
+  date: Date;
+  id: number;
+  userId: number;
+}
+
+interface productWthProductOwner {
+  name: string;
+  image: string;
+  price: number;
+  id: number;
+  reservation: Reservation;
+  user: productOwner;
+}
 
 interface chatMessage {
   id: number;
   chat: string;
-  created: Date;
+  created: string; //Date;
   user: { avatar?: string; id: number };
 }
 interface chatRoomWithChatMessage extends ChatRoom {
   chats: chatMessage[];
+  product: productWthProductOwner;
 }
 
 interface ChatRoomResponse {
@@ -26,10 +47,14 @@ interface ChatForm {
   chat: string;
 }
 
+interface CreateReservationResponse {
+  ok: boolean;
+  chatRoom: ChatRoom;
+}
+
 const ChatDetail: NextPage = () => {
   const { user } = useUser();
   const router = useRouter();
-
   const useSWRConfigurationOption = {
     //useSWR이 서버에서 얼마나 자주 새로고침 될지 명시
     refreshInterval: 1000, //1초
@@ -57,19 +82,49 @@ const ChatDetail: NextPage = () => {
   };
   console.log(data);
 
-  return (
-    <Layout canGoBack title="유저 이름">
-      <div className="px-4 py-3 space-y-3">
-        {data?.chats?.chats.map((chat) => (
-          <Message
-            key={chat.id}
-            message={chat.chat}
-            time={chat.created.toString()}
-            me={chat.user.id === user?.id ? true : false}
-            avatarUrl={chat.user.id !== user?.id ? chat.user.avatar : null}
-          />
-        ))}
+  const handleReservationToggleClick = () => {
+    router.push(`/products/${data?.chats?.product?.id}/reservation`);
+  };
 
+  //채팅창 스크롤 맨 밑 유지
+  const scrollRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    scrollRef?.current?.scrollIntoView();
+  });
+
+  return (
+    <Layout canGoBack title={data?.chats?.product?.user?.name}>
+      <div className="border-b-[1px] pb-3">
+        <ChatProductInfo
+          productName={data?.chats?.product?.name}
+          productImage={data?.chats?.product?.image}
+          price={data?.chats?.product?.price}
+          id={data?.chats?.product?.id}
+          isSoldOut={data?.chats?.product?.reservation ? true : false}
+          onReservation={handleReservationToggleClick}
+        />
+      </div>
+      <div className="px-4 py-3 space-y-3 mb-10">
+        {(data?.chats?.chats?.length as number) > 0 &&
+          data?.chats?.chats.map((chat) => (
+            <Message
+              key={chat.id}
+              message={chat.chat}
+              time={chat.created}
+              me={chat.user.id === user?.id ? true : false}
+              avatarUrl={
+                chat.user.id !== user?.id ? chat.user.avatar : undefined
+              }
+            />
+          ))}
+        {data?.chats?.chats?.length === 0 && (
+          <div className="flex flex-col text-center mt-40 text-sm text-gray-400">
+            <p>[거래꿀팁] 당근마켓 채팅이 가장 편하고 안전해요. 🥕</p>
+            <p>카카오톡ID 등으로 대화를 유도하는 경우,</p>
+            <p>피해가 있을 수 있으니 주의하세요!</p>
+          </div>
+        )}
+        <div ref={scrollRef} />
         {/*플로팅 채팅창 고정*/}
         <div className="bg-white fixed bottom-0 p-2 inset-x-0">
           <form
