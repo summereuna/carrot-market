@@ -1,4 +1,4 @@
-import { threeDigitDivision } from "@/libs/client/utils";
+import { getTimeInterval } from "@/libs/client/utils";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -35,9 +35,11 @@ export default function Item({
               <h3 className="text-sm font-medium text-gray-900">
                 {productName}
               </h3>
-              <span className="text-xs text-gray-500">{productCreated}</span>
+              <span className="text-xs text-gray-500">
+                {getTimeInterval(productCreated)}
+              </span>
               <span className="font-medium mt-1 text-gray-900">
-                {threeDigitDivision(price)}원
+                {price?.toLocaleString()}원
               </span>
             </div>
           </div>

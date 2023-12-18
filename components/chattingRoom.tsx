@@ -1,3 +1,4 @@
+import { getTimeInterval } from "@/libs/client/utils";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -36,7 +37,9 @@ export default function ChattingRoom({
         <div className="flex flex-col">
           <div className="space-x-2">
             <span className="font-medium text-gray-700">{otherUserName}</span>
-            <span className="text-xs text-gray-500">{updated.toString()}</span>
+            <span className="text-xs text-gray-500">
+              {getTimeInterval(updated)}
+            </span>
           </div>
           <span className="text-sm text-gray-500">{lastChat}</span>
         </div>

@@ -1,11 +1,12 @@
+import { getTimeInterval } from "@/libs/client/utils";
 import Image from "next/image";
 
 interface CommentProps {
   comment: string;
-  name?: string;
-  time?: string;
+  name: string;
+  time: string;
   avatar?: string;
-  key?: number;
+  key: number;
 }
 
 export default function Comment({ comment, name, time, avatar }: CommentProps) {
@@ -26,7 +27,9 @@ export default function Comment({ comment, name, time, avatar }: CommentProps) {
       </div>
       <div>
         <span className="text-sm block font-medium text-gray-700">{name}</span>
-        <span className="text-xs block text-gray-500">{time}</span>
+        <span className="text-xs block text-gray-500">
+          {getTimeInterval(time)}
+        </span>
         <p className="text-gray-700">{comment}</p>
       </div>
     </div>

@@ -22,7 +22,7 @@ const Home: NextPage = () => {
   //console.log(user);
 
   const { data } = useSWR<ProductsResponse>("/api/products");
-  console.log(data?.products);
+  // console.log(data?.products);
 
   return (
     <Layout title="홈" hasTabBar>

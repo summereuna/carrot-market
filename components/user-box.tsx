@@ -1,3 +1,4 @@
+import { getTimeInterval } from "@/libs/client/utils";
 import Image from "next/image";
 
 interface UserProps {
@@ -40,7 +41,9 @@ export default function UserBox({ name, avatar, time, size }: UserProps) {
           />
           <div className="flex flex-col">
             <span className="text-sm font-medium text-gray-700">{name}</span>
-            <span className="text-xs font-medium text-gray-500">{time}</span>
+            <span className="text-xs font-medium text-gray-500">
+              {getTimeInterval(time)}
+            </span>
           </div>
         </>
       ) : null}

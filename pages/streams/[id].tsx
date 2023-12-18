@@ -2,7 +2,6 @@ import Layout from "@/components/layout";
 import Message from "@/components/message";
 import useUser from "@/libs/client/useUser";
 import useMutation from "@/libs/client/useMutation";
-import { threeDigitDivision } from "@/libs/client/utils";
 import { Message as MessageModel, Stream } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
@@ -108,7 +107,7 @@ const LiveDetail: NextPage = () => {
             <span className="text-2xl block mt-3 text-gray-900">
               ₩
               {data?.stream?.price
-                ? threeDigitDivision(data?.stream?.price)
+                ? data?.stream?.price.toLocaleString()
                 : null}
             </span>
             <p className=" my-6 text-gray-700">{data?.stream?.description}</p>

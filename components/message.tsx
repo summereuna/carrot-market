@@ -1,3 +1,4 @@
+import { getMessageTime } from "@/libs/client/utils";
 import Image from "next/image";
 
 interface MessageProps {
@@ -34,7 +35,9 @@ export default function Message({
             <div className="text-gray-700 bg-gray-200 rounded-xl p-3 text-sm">
               <p>{message}</p>
             </div>
-            <span className="text-xs text-gray-400">{time}</span>
+            <span className="text-xs text-gray-400">
+              {getMessageTime(time)}
+            </span>
           </div>
         </div>
       ) : (
@@ -43,7 +46,9 @@ export default function Message({
             <div className="bg-orange-500 text-yellow-50 rounded-xl p-3 text-sm">
               <p>{message}</p>
             </div>
-            <span className="text-xs text-gray-400">{time}</span>
+            <span className="text-xs text-gray-400">
+              {getMessageTime(time)}
+            </span>
           </div>
         </div>
       )}

@@ -1,4 +1,4 @@
-import { cls, threeDigitDivision } from "@/libs/client/utils";
+import { cls } from "@/libs/client/utils";
 import Image from "next/image";
 import Link from "next/link";
 import SmButton from "./smButton";
@@ -47,7 +47,7 @@ export default function ChatProductInfo({
                 <h3 className="text-sm text-gray-900">{productName}</h3>
               </div>
               <span className="text-sm font-medium text-gray-900">
-                ￦{threeDigitDivision(price)}
+                ￦ {price?.toLocaleString()}
               </span>
             </div>
           </div>

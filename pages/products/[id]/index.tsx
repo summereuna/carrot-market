@@ -2,7 +2,7 @@ import Button from "@/components/button";
 import Layout from "@/components/layout";
 import UserBox from "@/components/user-box";
 import useMutation from "@/libs/client/useMutation";
-import { cls, threeDigitDivision } from "@/libs/client/utils";
+import { cls } from "@/libs/client/utils";
 import { ChatRoom, Product, User } from "@prisma/client";
 import type { NextPage } from "next";
 import Link from "next/link";
@@ -110,7 +110,7 @@ const ProductDetail: NextPage = () => {
                 name={data?.product?.user?.name}
                 avatar={data?.product?.user?.avatar}
                 size="small"
-                time={`${data?.product?.created}시간 전`}
+                time={`${data?.product?.created}`}
               />
             </div>
           </Link>
@@ -122,7 +122,7 @@ const ProductDetail: NextPage = () => {
             <span className="mt-3 block text-3xl text-gray-900">
               ₩
               {data?.product?.price
-                ? threeDigitDivision(data.product.price)
+                ? data?.product?.price.toLocaleString()
                 : null}
             </span>
             <p className="text-base my-6 text-gray-700">
@@ -183,10 +183,17 @@ const ProductDetail: NextPage = () => {
             {data?.relatedProducts?.map((product) => (
               <div key={product?.id}>
                 <Link href={`/products/${product?.id}`}>
-                  <div className="mb-4 h-56 max-w-full bg-slate-300" />
+                  <div className="mb-4 h-56 max-w-full bg-slate-100 relative rounded-md border-[1px]">
+                    <Image
+                      src={product?.image}
+                      alt="product-image"
+                      fill={true}
+                      className="absolute object-cover rounded-md"
+                    />
+                  </div>
                   <h3 className="text-gray-700 -mb-1">{product?.name}</h3>
                   <span className="text-sm font-medium text-gray-900">
-                    ₩ {threeDigitDivision(product?.price)}
+                    ₩ {product?.price.toLocaleString()}
                   </span>
                 </Link>
               </div>
