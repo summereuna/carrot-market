@@ -86,6 +86,10 @@ const ChatDetail: NextPage = () => {
     router.push(`/products/${data?.chats?.product?.id}/reservation`);
   };
 
+  const handleWriteReviewClick = () => {
+    router.push(`/products/${data?.chats?.product?.id}/review`);
+  };
+
   //채팅창 스크롤 맨 밑 유지
   const scrollRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -96,12 +100,14 @@ const ChatDetail: NextPage = () => {
     <Layout canGoBack title={data?.chats?.product?.user?.name}>
       <div className="border-b-[1px] pb-3">
         <ChatProductInfo
+          key={data?.chats?.product?.id}
           productName={data?.chats?.product?.name}
           productImage={data?.chats?.product?.image}
           price={data?.chats?.product?.price}
           id={data?.chats?.product?.id}
           isSoldOut={data?.chats?.product?.reservation ? true : false}
           onReservation={handleReservationToggleClick}
+          writeReview={handleWriteReviewClick}
         />
       </div>
       <div className="px-4 py-3 space-y-3 mb-10">
