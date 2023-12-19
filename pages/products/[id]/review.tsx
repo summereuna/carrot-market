@@ -1,5 +1,5 @@
 import Button from "@/components/button";
-import Checkboxes from "@/components/checkBoxes";
+import Checkbox from "@/components/checkBox";
 import Layout from "@/components/layout";
 import Textarea from "@/components/textarea";
 import useMutation from "@/libs/client/useMutation";
@@ -12,9 +12,7 @@ import { useForm } from "react-hook-form";
 
 interface ReviewForm {
   reviewWrite: string;
-  badReviewsCheckBox: string[];
-  goodReviewsCheckBox: string[];
-  bestReviewsCheckBox: string[];
+  reviewCheckBox: string[];
   formErrors?: string;
 }
 
@@ -37,36 +35,22 @@ const Review: NextPage = () => {
     setError,
     clearErrors,
     reset,
-    control,
     formState: { errors },
   } = useForm<ReviewForm>({
     defaultValues: {
       reviewWrite: "",
-      badReviewsCheckBox: [],
-      goodReviewsCheckBox: [],
-      bestReviewsCheckBox: [],
+      reviewCheckBox: [],
     },
   });
 
-  const onValidSubmit = async ({
-    reviewWrite,
-    badReviewsCheckBox,
-    goodReviewsCheckBox,
-    bestReviewsCheckBox,
-  }: ReviewForm) => {
+  const onValidSubmit = async ({ reviewWrite, reviewCheckBox }: ReviewForm) => {
     //로딩 중이면 멈춤
     if (loading) return;
 
     //로딩중 아니면 uploadProduct() 실행하여 데이터 받아서 뮤테이션 하기
-    if (reviewWrite && badReviewsCheckBox.length > 0) {
-      console.log(reviewWrite, badReviewsCheckBox);
-      // sendReview({ reviewWrite, badReviewsCheckBox });
-    } else if (reviewWrite && goodReviewsCheckBox.length > 0) {
-      console.log(reviewWrite, goodReviewsCheckBox);
-      // sendReview({ reviewWrite, goodReviewsCheckBox });
-    } else if (reviewWrite && bestReviewsCheckBox.length > 0) {
-      console.log(reviewWrite, bestReviewsCheckBox);
-      // sendReview({ reviewWrite, bestReviewsCheckBox });
+    if (reviewWrite && reviewCheckBox.length > 0) {
+      console.log(reviewWrite, reviewCheckBox);
+      // sendReview({ reviewWrite, reviewCheckBox });
     } else {
       return setError("formErrors", {
         message: "하나 이상 체크하세요.",
@@ -97,9 +81,7 @@ const Review: NextPage = () => {
   useEffect(() => {
     reset((prevFormValues) => ({
       ...prevFormValues,
-      badReviewsCheckBox: [],
-      goodReviewsCheckBox: [],
-      bestReviewsCheckBox: [],
+      reviewCheckBox: [],
     }));
   }, [reviewKind, reset]);
 
@@ -116,13 +98,6 @@ const Review: NextPage = () => {
     <Layout canGoBack title="거래 후기 보내기">
       <form onSubmit={handleSubmit(onValidSubmit)}>
         <div className="px-4 py-2">
-          {/* <label
-            htmlFor="reservationDate"
-            className="block text-sm font-semibold text-gray-700"
-          >
-            거래 후기
-          </label> */}
-
           {/* 거래후기 작성 폼 */}
           <Textarea
             register={register("reviewWrite", {
@@ -138,7 +113,6 @@ const Review: NextPage = () => {
           />
 
           {/* 체크박스 */}
-
           <div className="flex flex-col items-center border-b py-7 space-y-5">
             <h3 className="text-lg font-semibold ">
               {}님 과의 거래가 어땠나요?
@@ -233,9 +207,9 @@ const Review: NextPage = () => {
 
           <section className="flex px-5 py-10">
             {reviewKind === "bad" && (
-              <div id="badReviewsCheckBox" className="space-y-3">
+              <div id="badReviewCheckBox" className="space-y-3">
                 <h3 className="text-lg font-semibold">어떤 점이 별로였나요?</h3>
-                <Checkboxes
+                <Checkbox
                   options={[
                     "시간약속을 안 지켜요",
                     "채팅 메시지를 읽고도 답이 없어요",
@@ -248,15 +222,14 @@ const Review: NextPage = () => {
                     "반말을 사용해요",
                     "불친절해요",
                   ]}
-                  control={control}
-                  name="badReviewsCheckBox"
+                  register={register("reviewCheckBox")}
                 />
               </div>
             )}
             {reviewKind === "good" && (
-              <div id="goodReviewsCheckBox" className="space-y-3">
+              <div id="goodReviewCheckBox" className="space-y-3">
                 <h3 className="text-lg font-semibold">어떤 점이 좋았나요?</h3>
-                <Checkboxes
+                <Checkbox
                   options={[
                     "상품상태가 설명한 것과 같아요",
                     "상품설명이 자세해요",
@@ -265,15 +238,14 @@ const Review: NextPage = () => {
                     "응답이 빨라요",
                     "친절하고 매너가 좋아요",
                   ]}
-                  control={control}
-                  name="goodReviewsCheckBox"
+                  register={register("reviewCheckBox")}
                 />
               </div>
             )}
             {reviewKind === "best" && (
-              <div id="bestReviewsCheckBox" className="space-y-3">
+              <div id="bestReviewCheckBox" className="space-y-3">
                 <h3 className="text-lg font-semibold">어떤 점이 최고였나요?</h3>
-                <Checkboxes
+                <Checkbox
                   options={[
                     "무료로 나눠주셨어요",
                     "상품상태가 설명한 것과 같아요",
@@ -283,49 +255,12 @@ const Review: NextPage = () => {
                     "응답이 빨라요",
                     "친절하고 매너가 좋아요",
                   ]}
-                  control={control}
-                  name="bestReviewsCheckBox"
+                  register={register("reviewCheckBox")}
                 />
               </div>
             )}
           </section>
-          {/* <section> */}
-          {/* <CheckBox
-              option="무료로 나눠주셨어요"
-              id="1"
-              register={register("reviewsCheckBox")}
-            />
-            <CheckBox
-              option="상품상태가 설명한 것과 같아요"
-              id="2"
-              register={register("reviewsCheckBox")}
-            />
-            <CheckBox
-              option="상품설명이 자세해요"
-              id="3"
-              register={register("reviewsCheckBox")}
-            />
-            <CheckBox
-              option="좋은 상품을 저렴하게 판매해요"
-              id="4"
-              register={register("reviewsCheckBox")}
-            />
-            <CheckBox
-              option="시간 약속을 잘 지켜요"
-              id="5"
-              register={register("reviewsCheckBox")}
-            />
-            <CheckBox
-              option="응답이 빨라요"
-              id="6"
-              register={register("reviewsCheckBox")}
-            />
-            <CheckBox
-              option="친절하고 매너가 좋아요"
-              id="7"
-              register={register("reviewsCheckBox")}
-            /> */}
-          {/* </section> */}
+
           {errors?.reviewWrite ? (
             <span className="my-2 text-red-500 font-medium block">
               {errors.reviewWrite?.message}
