@@ -68,8 +68,8 @@ model Product {
   sales       Sale[] //음 근데 이건 배열로 안해도 되는게 user랑 같음
   purchases   Purchase[]
   chatRooms   ChatRoom[]
-  //상품 당 예약은 없거나 한 건만 잡을 수 있으니까
-  reservation Reservation?
+  reservation Reservation? //상품 당 예약은 없거나 한 건만 잡을 수 있으니까
+  Review      Review? //상품 당 리뷰는 한 건뿐이거나 없거나
 
   @@index([userId])
 }
@@ -116,20 +116,6 @@ model Recommendation {
   postId  Int
 
   @@index([userId, postId])
-}
-
-model Review {
-  id           Int      @id @default(autoincrement())
-  created      DateTime @default(now())
-  updated      DateTime @updatedAt
-  review       String   @db.MediumText
-  createdBy    User     @relation(name: "writtenReviews", fields: [createdById], references: [id], onDelete: Cascade)
-  createdById  Int
-  createdFor   User     @relation(name: "receivedReviews", fields: [createdForId], references: [id], onDelete: Cascade)
-  createdForId Int
-  score        Int      @default(1)
-
-  @@index([createdById, createdForId])
 }
 
 model Sale {
@@ -240,4 +226,22 @@ model Reservation {
   productId Int     @unique
 
   @@index([userId, productId])
+}
+
+model Review {
+  id               Int      @id @default(autoincrement())
+  created          DateTime @default(now())
+  updated          DateTime @updatedAt
+  kind             String
+  review           String   @db.MediumText
+  reviewCheckBoxes String   @db.MediumText
+  score            Int
+  createdBy        User     @relation(name: "writtenReviews", fields: [createdById], references: [id], onDelete: Cascade)
+  createdById      Int
+  createdFor       User     @relation(name: "receivedReviews", fields: [createdForId], references: [id], onDelete: Cascade)
+  createdForId     Int
+  product          Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId        Int      @unique
+
+  @@index([createdById, createdForId, productId])
 }

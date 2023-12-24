@@ -6,13 +6,28 @@ import useMutation from "@/libs/client/useMutation";
 import { cls } from "@/libs/client/utils";
 import { Review } from "@prisma/client";
 import type { NextPage } from "next";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import useSWRImmutable from "swr/immutable";
 
+interface GetReservationProductInfoResponse {
+  ok: boolean;
+  productReservationInfo: {
+    image: string;
+    name: string;
+    userId: number;
+    user: { name: string };
+    reservation: { date: string; productId: number; userId: number };
+  };
+}
 interface ReviewForm {
+  reviewKind: string;
   reviewWrite: string;
-  reviewCheckBox: string[];
+  checkBoxes: string[];
+  score: number;
+  createdForId: number;
   formErrors?: string;
 }
 
@@ -23,6 +38,18 @@ interface ReviewDataMutationResponse {
 
 const Review: NextPage = () => {
   const router = useRouter();
+
+  // const useSWRConfigurationOption = {
+  //   //useSWR이 서버에서 얼마나 자주 새로고침 될지 명시
+  //   refreshInterval: 1000, //1초
+  // };
+
+  const { data: productReservationInfoData, mutate: boundMutate } =
+    useSWRImmutable<GetReservationProductInfoResponse>(
+      router.query.id ? `/api/products/${router.query.id}/review` : null
+      // useSWRConfigurationOption
+    );
+  console.log(productReservationInfoData);
 
   const [sendReview, { loading, data: makeReviewData, error }] =
     useMutation<ReviewDataMutationResponse>(
@@ -39,18 +66,45 @@ const Review: NextPage = () => {
   } = useForm<ReviewForm>({
     defaultValues: {
       reviewWrite: "",
-      reviewCheckBox: [],
+      checkBoxes: [],
     },
   });
 
-  const onValidSubmit = async ({ reviewWrite, reviewCheckBox }: ReviewForm) => {
+  const onValidSubmit = async ({ reviewWrite, checkBoxes }: ReviewForm) => {
     //로딩 중이면 멈춤
     if (loading) return;
 
     //로딩중 아니면 uploadProduct() 실행하여 데이터 받아서 뮤테이션 하기
-    if (reviewWrite && reviewCheckBox.length > 0) {
-      console.log(reviewWrite, reviewCheckBox);
-      // sendReview({ reviewWrite, reviewCheckBox });
+    if (
+      productReservationInfoData &&
+      reviewKind &&
+      reviewWrite &&
+      checkBoxes &&
+      checkBoxes.length > 0
+    ) {
+      const getReviewScore = () => {
+        switch (reviewKind) {
+          case "best":
+            return 5;
+          case "good":
+            return checkBoxes.length > 3 ? 4 : 3;
+          case "bad":
+            return checkBoxes.length > 3 ? 1 : 2;
+          default:
+            3;
+            break;
+        }
+      };
+      const sellerId = productReservationInfoData.productReservationInfo.userId;
+      //const parsedCheckBoxes = JSON.parse(stringifiedCheckBoxes);
+      //나중에 열때 팔즈 해서 열기 > 이건 나중에 페이지 따로 만들어야 함
+      sendReview({
+        kind: reviewKind,
+        review: reviewWrite,
+        reviewCheckBoxes: JSON.stringify(checkBoxes),
+        score: getReviewScore(),
+        createdForId: sellerId,
+      });
     } else {
       return setError("formErrors", {
         message: "하나 이상 체크하세요.",
@@ -81,7 +135,7 @@ const Review: NextPage = () => {
   useEffect(() => {
     reset((prevFormValues) => ({
       ...prevFormValues,
-      reviewCheckBox: [],
+      checkBoxes: [],
     }));
   }, [reviewKind, reset]);
 
@@ -96,34 +150,41 @@ const Review: NextPage = () => {
 
   return (
     <Layout canGoBack title="거래 후기 보내기">
+      <div className="flex space-x-4 px-4 py-4 bg-gray-200">
+        <Image
+          src={productReservationInfoData?.productReservationInfo?.image}
+          alt="product-image"
+          width={40}
+          height={40}
+          className="w-16 h-16 bg-slate-300 rounded-md object-fill border-[1px]"
+        />
+        <div className="pt-2 flex flex-col space-y-1">
+          <span className="text-sm font-medium mr-2 text-gray-500">
+            거래한 물건
+          </span>
+          <span className="text-sm text-gray-900">
+            {productReservationInfoData?.productReservationInfo?.name}
+          </span>
+        </div>
+      </div>
       <form onSubmit={handleSubmit(onValidSubmit)}>
         <div className="px-4 py-2">
-          {/* 거래후기 작성 폼 */}
-          <Textarea
-            register={register("reviewWrite", {
-              required: true,
-              minLength: {
-                value: 5,
-                message: "거래 후기를 다섯 글자 이상 입력해주세요.",
-              },
-            })}
-            name="review_write"
-            required
-            placeholder="이웃과 거래한 후기를 작성해 주세요. (5글자 이상 입력하기)"
-          />
-
           {/* 체크박스 */}
           <div className="flex flex-col items-center border-b py-7 space-y-5">
             <h3 className="text-lg font-semibold ">
-              {}님 과의 거래가 어땠나요?
+              {productReservationInfoData?.productReservationInfo?.user?.name}님
+              과의 거래가 어땠나요?
             </h3>
+            <span className="text-sm text-gray-500">
+              거래선호도는 상대방이 알 수 없어요.
+            </span>
             <div className="flex justify-between w-full px-5 font-semibold">
               <div
                 id="bad"
                 onClick={reviewKindHandler}
                 className={cls(
                   "flex flex-col items-center justify-center w-24 h-24 rounded-3xl space-y-1 transition-colors",
-                  reviewKind === "bad" ? "text-gray-900" : " text-gray-500"
+                  reviewKind === "bad" ? "text-gray-900" : " text-gray-400"
                 )}
               >
                 <div
@@ -151,7 +212,7 @@ const Review: NextPage = () => {
                 onClick={reviewKindHandler}
                 className={cls(
                   "flex flex-col items-center justify-center w-24 h-24 rounded-3xl space-y-1 transition-colors",
-                  reviewKind === "good" ? "text-green-500" : " text-gray-500"
+                  reviewKind === "good" ? "text-green-500" : " text-stone-600"
                 )}
               >
                 <div
@@ -207,7 +268,7 @@ const Review: NextPage = () => {
 
           <section className="flex px-5 py-10">
             {reviewKind === "bad" && (
-              <div id="badReviewCheckBox" className="space-y-3">
+              <div id="badcheckBoxes" className="space-y-3">
                 <h3 className="text-lg font-semibold">어떤 점이 별로였나요?</h3>
                 <Checkbox
                   options={[
@@ -222,12 +283,12 @@ const Review: NextPage = () => {
                     "반말을 사용해요",
                     "불친절해요",
                   ]}
-                  register={register("reviewCheckBox")}
+                  register={register("checkBoxes")}
                 />
               </div>
             )}
             {reviewKind === "good" && (
-              <div id="goodReviewCheckBox" className="space-y-3">
+              <div id="goodcheckBoxes" className="space-y-3">
                 <h3 className="text-lg font-semibold">어떤 점이 좋았나요?</h3>
                 <Checkbox
                   options={[
@@ -238,12 +299,12 @@ const Review: NextPage = () => {
                     "응답이 빨라요",
                     "친절하고 매너가 좋아요",
                   ]}
-                  register={register("reviewCheckBox")}
+                  register={register("checkBoxes")}
                 />
               </div>
             )}
             {reviewKind === "best" && (
-              <div id="bestReviewCheckBox" className="space-y-3">
+              <div id="bestcheckBoxes" className="space-y-3">
                 <h3 className="text-lg font-semibold">어떤 점이 최고였나요?</h3>
                 <Checkbox
                   options={[
@@ -255,28 +316,76 @@ const Review: NextPage = () => {
                     "응답이 빨라요",
                     "친절하고 매너가 좋아요",
                   ]}
-                  register={register("reviewCheckBox")}
+                  register={register("checkBoxes")}
                 />
               </div>
             )}
           </section>
 
-          {errors?.reviewWrite ? (
-            <span className="my-2 text-red-500 font-medium block">
-              {errors.reviewWrite?.message}
-            </span>
-          ) : null}
+          {/* 거래후기 작성 폼 */}
+          <div className="space-y-3">
+            {reviewKind !== "bad" && (
+              <>
+                <h3 className="text-lg font-semibold">
+                  따뜻한 거래 경험을 알려주세요!
+                </h3>
+                <span className="text-gray-500 text-sm">
+                  남겨주신 거래 후기는 상대방의 프로필에 공개돼요.
+                </span>
+                <Textarea
+                  register={register("reviewWrite", {
+                    required: true,
+                    minLength: {
+                      value: 5,
+                      message: "거래 후기를 다섯 글자 이상 입력해주세요.",
+                    },
+                  })}
+                  name="review_write"
+                  required
+                  placeholder="이웃과 거래한 후기를 작성해 주세요. (5글자 이상 입력하기)"
+                />
+              </>
+            )}
+            {reviewKind === "bad" && (
+              <>
+                <h3 className="text-lg font-semibold">
+                  아쉬웠던 점을 당근마켓 팀에 알려주세요.
+                </h3>
+                <span className="text-gray-500 text-sm">
+                  상대방에게 전달되지 않으니 안심하세요.
+                </span>
+                <Textarea
+                  register={register("reviewWrite", {
+                    required: true,
+                    minLength: {
+                      value: 5,
+                      message: "거래 후기를 다섯 글자 이상 입력해주세요.",
+                    },
+                  })}
+                  name="review_write_bad"
+                  required
+                  placeholder="이웃과 거래한 후기를 작성해 주세요. (5글자 이상 입력하기)"
+                />
+              </>
+            )}
+            {errors?.reviewWrite ? (
+              <span className="my-2 text-red-500 font-medium block">
+                {errors.reviewWrite?.message}
+              </span>
+            ) : null}
 
-          {errors.formErrors ? (
-            <span className="my-2 text-red-500 font-medium block">
-              {errors.formErrors.message}
-            </span>
-          ) : null}
-          <Button
-            loading={loading}
-            text={"후기 보내기"}
-            onClick={() => clearErrors()}
-          />
+            {errors.formErrors ? (
+              <span className="my-2 text-red-500 font-medium block">
+                {errors.formErrors.message}
+              </span>
+            ) : null}
+            <Button
+              loading={loading}
+              text={"후기 보내기"}
+              onClick={() => clearErrors()}
+            />
+          </div>
+
           {/* <Button
             loading={loading}
             text="예약 취소"
