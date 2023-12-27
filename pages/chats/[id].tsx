@@ -3,6 +3,7 @@ import Layout from "@/components/layout";
 import Message from "@/components/message";
 import useMutation from "@/libs/client/useMutation";
 import useUser from "@/libs/client/useUser";
+import { divideDate } from "@/libs/client/utils";
 import { ChatRoom } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
@@ -28,13 +29,13 @@ interface productWthProductOwner {
   user: productOwner;
 }
 
-interface chatMessage {
+export interface chatMessage {
   id: number;
   chat: string;
   created: string; //Date;
   user: { avatar?: string; id: number };
 }
-interface chatRoomWithChatMessage extends ChatRoom {
+export interface chatRoomWithChatMessage extends ChatRoom {
   chats: chatMessage[];
   product: productWthProductOwner;
 }
@@ -80,7 +81,6 @@ const ChatDetail: NextPage = () => {
 
     sendChat(validChatForm);
   };
-  console.log(data);
 
   const handleReservationToggleClick = () => {
     router.push(`/products/${data?.chats?.product?.id}/reservation`);
@@ -110,19 +110,48 @@ const ChatDetail: NextPage = () => {
           writeReview={handleWriteReviewClick}
         />
       </div>
-      <div className="px-4 py-3 space-y-3 mb-10">
+      <div className="px-4 py-3 space-y-3 mb-12">
         {(data?.chats?.chats?.length as number) > 0 &&
-          data?.chats?.chats.map((chat) => (
-            <Message
-              key={chat.id}
-              message={chat.chat}
-              time={chat.created}
-              me={chat.user.id === user?.id ? true : false}
-              avatarUrl={
-                chat.user.id !== user?.id ? chat.user.avatar : undefined
-              }
-            />
-          ))}
+          Object.entries(divideDate(data?.chats?.chats)).map(
+            ([formattedChatCreateDate, chats]) => (
+              <div
+                key={formattedChatCreateDate}
+                className="flex flex-col space-y-3 text-center"
+              >
+                <div className="text-center relative">
+                  <span className="text-sm text-gray-400 bg-white px-2 inline-block relative z-10">
+                    {formattedChatCreateDate}
+                  </span>
+                  <div className="absolute top-1/2 left-0 right-0 border-b transform -translate-y-1/2"></div>
+                </div>
+                <div className="space-y-3 flex flex-col">
+                  {chats.map((chat) => (
+                    <Message
+                      key={chat.id}
+                      message={chat.chat}
+                      time={chat.created}
+                      me={chat.user.id === user?.id ? true : false}
+                      avatarUrl={
+                        chat.user.id !== user?.id ? chat.user.avatar : undefined
+                      }
+                    />
+                  ))}
+                </div>
+              </div>
+            )
+          )}
+
+        {/* data?.chats?.chats.map((chat) => (
+            <Message 
+             key={chat.id}
+             message={chat.chat}
+             time={chat.created}
+             me={chat.user.id === user?.id ? true : false}
+             avatarUrl={
+               chat.user.id !== user?.id ? chat.user.avatar : undefined
+             }
+           />
+         ))}*/}
         {data?.chats?.chats?.length === 0 && (
           <div className="flex flex-col text-center mt-40 text-sm text-gray-400">
             <p>[거래꿀팁] 당근마켓 채팅이 가장 편하고 안전해요. 🥕</p>
@@ -132,7 +161,7 @@ const ChatDetail: NextPage = () => {
         )}
         <div ref={scrollRef} />
         {/*플로팅 채팅창 고정*/}
-        <div className="bg-white fixed bottom-0 p-2 inset-x-0">
+        <div className="bg-gray-100 fixed bottom-0 p-2 inset-x-0">
           <form
             onSubmit={handleSubmit(onValid)}
             className="relative flex max-w-md items-center w-full mx-auto"

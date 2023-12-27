@@ -18,7 +18,7 @@ export default function Message({
     <>
       {!me ? (
         <div className="flex items-start space-x-2 w-[90%]">
-          <div>
+          <div className="flex-shrink-0">
             {avatarUrl ? (
               <Image
                 src={avatarUrl}
@@ -28,14 +28,14 @@ export default function Message({
                 className="w-8 h-8 rounded-full bg-slate-300 object-cover"
               />
             ) : (
-              <div className="w-8 h-8 rounded-full bg-slate-300" />
+              <div className="w-8 h-8 rounded-full bg-slate-300 flex-shrink-0" />
             )}
           </div>
           <div className="flex space-x-2 items-end">
-            <div className="text-gray-700 bg-gray-200 rounded-xl p-3 text-sm">
+            <div className="text-gray-700 bg-gray-100 rounded-xl p-3 text-sm text-left">
               <p>{message}</p>
             </div>
-            <span className="text-xs text-gray-400">
+            <span className="text-xs text-gray-400 text-left flex-shrink-0">
               {getMessageTime(time)}
             </span>
           </div>
@@ -43,10 +43,10 @@ export default function Message({
       ) : (
         <div className="flex justify-end">
           <div className="w-[90%] flex flex-row-reverse space-x-2 space-x-reverse items-end">
-            <div className="bg-orange-500 text-yellow-50 rounded-xl p-3 text-sm">
+            <div className="bg-orange-500 text-yellow-50 rounded-xl p-3 text-sm text-left">
               <p>{message}</p>
             </div>
-            <span className="text-xs text-gray-400">
+            <span className="text-xs text-gray-400 text-right flex-shrink-0">
               {getMessageTime(time)}
             </span>
           </div>

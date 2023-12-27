@@ -55,7 +55,7 @@ const Chats: NextPage = () => {
             }
             lastChat={
               chatRoom.chats.length > 0
-                ? JSON.stringify(chatRoom?.chats?.at(-1)?.chat)
+                ? chatRoom?.chats?.at(-1)?.chat
                 : `🥕 채팅을 시작해 보세요!`
             }
           />

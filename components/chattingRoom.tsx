@@ -21,7 +21,7 @@ export default function ChattingRoom({
   return (
     <Link href={`/chats/${roomId}`}>
       <div className="cursor-pointer px-4 py-3 flex space-x-3 items-center">
-        <div>
+        <div className="flex-shrink-0">
           {otherUserAvatarUrl ? (
             <Image
               src={otherUserAvatarUrl}
