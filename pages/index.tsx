@@ -7,13 +7,15 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import useSWR from "swr";
 
-export interface ProductWithCountWishes extends Product {
+export interface ProductWithCountWishesAndStateChecks extends Product {
   _count: { wishes: number };
+  reservation?: { id: number };
+  review?: { id: number };
 }
 
 interface ProductsResponse {
   ok: boolean;
-  products: ProductWithCountWishes[];
+  products: ProductWithCountWishesAndStateChecks[];
 }
 
 //상품 리스트
@@ -22,7 +24,7 @@ const Home: NextPage = () => {
   //console.log(user);
 
   const { data } = useSWR<ProductsResponse>("/api/products");
-  // console.log(data?.products);
+  console.log(data?.products);
 
   return (
     <Layout title="홈" hasTabBar>
@@ -39,6 +41,8 @@ const Home: NextPage = () => {
             hearts={product._count.wishes}
             id={product.id}
             key={product.id}
+            productReservation={product?.reservation?.id ? true : false}
+            productReview={product?.review?.id ? true : false}
           />
         ))}
       </div>

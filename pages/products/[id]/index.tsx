@@ -12,13 +12,15 @@ import { useEffect } from "react";
 import Image from "next/image";
 
 //프리즈마 클라이언트의 Product 타입에는 연결된 user에 대한 타입이 없으므로 확장시켜주기
-interface ProductWithUser extends Product {
+interface ProductWithUserAndStateCheck extends Product {
   user: User;
+  reservation: { id: number };
+  review: { id: number };
 }
 
 interface ProductDetailResponse {
   ok: boolean;
-  product: ProductWithUser;
+  product: ProductWithUserAndStateCheck;
   isWished: boolean;
   relatedProducts: Product[];
 }
@@ -39,6 +41,7 @@ const ProductDetail: NextPage = () => {
   const { data, mutate: boundMutate } = useSWR<ProductDetailResponse>(
     router.query.id ? `/api/products/${router.query?.id}` : null
   );
+  console.log(data);
 
   //Optimistic UI Update (백엔드로 보낸 요청이 작동할 거라는 것에 낙관적(optimistic)
   //기본적으로 백엔드에 요청을 보낼 때 백엔드 응답 기다리지 않고 일단 변경사항 반영 ㅇㅇㅇ
@@ -94,7 +97,7 @@ const ProductDetail: NextPage = () => {
   //일단 ?로 만들고 나중에 필요하면 스켈레톤 넣기
   return (
     <Layout canGoBack>
-      <div className="px-4 py-10">
+      <div className="px-4">
         <div className="mb-8">
           <div className="relative pb-[348px] -z-10">
             <Image
@@ -115,75 +118,37 @@ const ProductDetail: NextPage = () => {
             </div>
           </Link>
           {/*product-info*/}
-          <div className="mt-10">
-            <h1 className="text-3xl font-bold text-gray-900">
-              {data?.product?.name}
-            </h1>
-            <span className="mt-3 block text-3xl text-gray-900">
-              ₩
-              {data?.product?.price
-                ? data?.product?.price.toLocaleString()
-                : null}
-            </span>
-            <p className="text-base my-6 text-gray-700">
+          <div className="mt-5 space-y-5">
+            <div>
+              {data?.product?.reservation && (
+                <span className="bg-emerald-500 rounded-md px-2 py-1 text-xs text-white font-medium">
+                  예약중
+                </span>
+              )}
+              {data?.product?.review && (
+                <span className="bg-gray-700 rounded-md px-2 py-1 text-xs text-white font-medium">
+                  거래완료
+                </span>
+              )}
+              <h1 className="text-xl font-bold text-gray-900">
+                {data?.product?.name}
+              </h1>
+            </div>
+
+            <p className="text-base text-gray-700">
               {data?.product?.description}
             </p>
-            <div className="flex items-center justify-between space-x-2">
-              {/*direct-message btn*/}
-              <Button text="채팅하기" large onClick={onChatClick} />
-              {/*add to like-list btn*/}
-              <button
-                onClick={onWishClick}
-                className={cls(
-                  "p-3 flex items-center justify-center rounded-md focus:outline-none focus:ring-2 focus:ring-gray-200",
-                  data?.isWished
-                    ? "text-red-400 hover:text-gray-500"
-                    : "text-gray-400 hover:text-red-500"
-                )}
-              >
-                {data?.isWished ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                ) : (
-                  <svg
-                    className="h-6 w-6 "
-                    xmlns="http://www.w3.org/3000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                    />
-                  </svg>
-                )}
-              </button>
-            </div>
           </div>
         </div>
 
         {/*recommend items*/}
-        <div className="mt-5">
-          <h2 className="text-2xl font-bold text-gray-900">비슷한 상품</h2>
+        <div className="mt-5 mb-16 py-6 border-t-[1px]">
+          <h2 className="text-xl font-bold text-gray-900">비슷한 상품</h2>
           <div className="mt-6 grid grid-cols-2 gap-4">
             {data?.relatedProducts?.map((product) => (
               <div key={product?.id}>
                 <Link href={`/products/${product?.id}`}>
-                  <div className="mb-4 h-56 max-w-full bg-slate-100 relative rounded-md border-[1px]">
+                  <div className="mb-2 h-48 max-w-full bg-slate-100 relative rounded-md border-[1px]">
                     <Image
                       src={product?.image}
                       alt="product-image"
@@ -191,9 +156,11 @@ const ProductDetail: NextPage = () => {
                       className="absolute object-cover rounded-md"
                     />
                   </div>
-                  <h3 className="text-gray-700 -mb-1">{product?.name}</h3>
-                  <span className="text-sm font-medium text-gray-900">
-                    ₩ {product?.price.toLocaleString()}
+                  <h3 className="text-sm text-gray-700 -mb-1">
+                    {product?.name}
+                  </h3>
+                  <span className="text-sm font-semibold text-gray-900">
+                    {product?.price.toLocaleString()}원
                   </span>
                 </Link>
               </div>
@@ -201,6 +168,64 @@ const ProductDetail: NextPage = () => {
           </div>
         </div>
       </div>
+      {/*네비게이션 바
+      모바일 사이즈로 일단 작업하기 위해 max-w-xl 줘서 fixed된 바 크기 조정*/}
+      <nav className="bg-white max-w-xl text-gray-700 border-t fixed bottom-0 w-full px-2 py-3 grid grid-cols-2">
+        {/*add to like-list btn*/}
+        <div className="flex items-center space-x-3">
+          <button
+            onClick={onWishClick}
+            className={cls(
+              "px-3 py-2 flex items-center justify-center focus:outline-none border-r-[1px]",
+              data?.isWished
+                ? "text-red-400 hover:text-gray-500"
+                : "text-gray-400 hover:text-red-500"
+            )}
+          >
+            {data?.isWished ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            ) : (
+              <svg
+                className="h-6 w-6 "
+                xmlns="http://www.w3.org/3000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                />
+              </svg>
+            )}
+          </button>
+          <span className="text-xl font-semibold text-gray-900">
+            {data?.product?.price ? data?.product?.price.toLocaleString() : "0"}
+            원
+          </span>
+        </div>
+
+        {/*direct-message btn*/}
+        {!data?.product?.review ? (
+          <Button text="채팅하기" large onClick={onChatClick} />
+        ) : (
+          <Button text="채팅하기" large onClick={onChatClick} disabled />
+        )}
+      </nav>
     </Layout>
   );
 };

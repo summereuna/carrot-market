@@ -69,7 +69,7 @@ model Product {
   purchases   Purchase[]
   chatRooms   ChatRoom[]
   reservation Reservation? //상품 당 예약은 없거나 한 건만 잡을 수 있으니까
-  Review      Review? //상품 당 리뷰는 한 건뿐이거나 없거나
+  review      Review? //상품 당 리뷰는 한 건뿐이거나 없거나
 
   @@index([userId])
 }

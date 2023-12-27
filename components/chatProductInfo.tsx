@@ -39,7 +39,7 @@ export default function ChatProductInfo({
                 <span
                   className={cls(
                     "text-sm font-medium mr-2",
-                    isSoldOut ? "text-green-500" : "text-red-500"
+                    isSoldOut ? "text-emerald-500" : "text-red-500"
                   )}
                 >
                   {isSoldOut ? "예약중" : "판매중"}

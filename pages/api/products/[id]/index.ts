@@ -30,7 +30,11 @@ async function handler(
       //include: { user: true },
 
       //필요한 유저 데이터만 요청
-      include: { user: { select: { id: true, name: true, avatar: true } } },
+      include: {
+        reservation: { select: { id: true } },
+        review: { select: { id: true } },
+        user: { select: { id: true, name: true, avatar: true } },
+      },
     });
 
     // 비슷한 상품 추천

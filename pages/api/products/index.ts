@@ -16,6 +16,8 @@ async function handler(
         _count: {
           select: { wishes: true },
         },
+        reservation: { select: { id: true } },
+        review: { select: { id: true } },
       },
       orderBy: { created: "desc" },
     });

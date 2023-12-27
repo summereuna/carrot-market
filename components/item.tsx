@@ -9,6 +9,8 @@ interface ItemProps {
   productImage: string;
   hearts: number;
   id: number;
+  productReservation: boolean;
+  productReview: boolean;
 }
 
 export default function Item({
@@ -18,6 +20,8 @@ export default function Item({
   price,
   hearts,
   id,
+  productReservation,
+  productReview,
 }: ItemProps) {
   return (
     <Link href={`/products/${id}`}>
@@ -38,9 +42,21 @@ export default function Item({
               <span className="text-xs text-gray-500">
                 {getTimeInterval(productCreated)}
               </span>
-              <span className="font-medium mt-1 text-gray-900">
-                {price?.toLocaleString()}원
-              </span>
+              <div className="flex space-x-1 items-center">
+                {productReservation && (
+                  <span className="bg-emerald-500 rounded-md px-2 py-1 text-xs text-white font-medium">
+                    예약중
+                  </span>
+                )}
+                {productReview && (
+                  <span className="bg-gray-700 rounded-md px-2 py-1 text-xs text-white font-medium">
+                    거래완료
+                  </span>
+                )}
+                <span className="font-medium text-gray-900">
+                  {price?.toLocaleString()}원
+                </span>
+              </div>
             </div>
           </div>
           <div className="flex items-end justify-end">
