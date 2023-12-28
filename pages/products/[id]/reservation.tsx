@@ -1,7 +1,8 @@
 import Button from "@/components/button";
 import Layout from "@/components/layout";
 import useMutation from "@/libs/client/useMutation";
-import { utcToKoreanTime } from "@/libs/client/utils";
+import useUser from "@/libs/client/useUser";
+import { getReservationTime, utcToKoreanTime } from "@/libs/client/utils";
 import { ChatRoom, Product, Reservation } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
@@ -11,11 +12,17 @@ import useSWR from "swr";
 
 interface GetReservationResponse {
   ok: boolean;
-  productReservation?: { reservation: Reservation };
+  productReservation?: {
+    reservation: Reservation;
+  };
+  chatRoom: { id: number };
 }
 
 interface MakeReservationForm {
   date: Date;
+  chat: String;
+  isReservedAlarm: Boolean;
+  chatRoomId: number;
   formErrors?: string;
 }
 
@@ -26,6 +33,7 @@ interface MakeReservationMutationResponse {
 }
 
 const Reservation: NextPage = () => {
+  const { user } = useUser();
   const router = useRouter();
 
   const useSWRConfigurationOption = {
@@ -33,11 +41,11 @@ const Reservation: NextPage = () => {
     refreshInterval: 1000, //1초
   };
 
-  const { data: productReservationData, mutate: boundMutate } =
-    useSWR<GetReservationResponse>(
-      router.query.id ? `/api/products/${router.query.id}/reservation` : null,
-      useSWRConfigurationOption
-    );
+  const { data: productReservationData } = useSWR<GetReservationResponse>(
+    router.query.id ? `/api/products/${router.query.id}/reservation` : null,
+    useSWRConfigurationOption
+  );
+  const reserveProductChatRoomId = productReservationData?.chatRoom?.id;
 
   const {
     register,
@@ -47,7 +55,7 @@ const Reservation: NextPage = () => {
     formState: { errors },
   } = useForm<MakeReservationForm>();
 
-  const [makeReservation, { loading, data: makeReservationData, error }] =
+  const [makeReservation, { data: makeReservationData, error, loading }] =
     useMutation<MakeReservationMutationResponse>(
       `/api/products/${router.query?.id}/reservation`
     );
@@ -57,9 +65,16 @@ const Reservation: NextPage = () => {
     if (loading) return;
 
     //로딩중 아니면 uploadProduct() 실행하여 데이터 받아서 뮤테이션 하기
-    if (date) {
+    if (date && reserveProductChatRoomId) {
+      const alarmChat = `${user?.name}님이 ${getReservationTime(
+        date
+      )}에 약속을 만들었어요. 약속은 꼭 지켜주세요!`;
+
       makeReservation({
         date,
+        chat: alarmChat,
+        isReservedAlarm: true,
+        chatRoomId: reserveProductChatRoomId,
       });
     } else {
       return setError("formErrors", {
@@ -68,24 +83,16 @@ const Reservation: NextPage = () => {
     }
   };
 
-  // const [
-  //   cancelReservation,
-  //   { loading: cancelLoading, data: cancelData, error: cancelError },
-  // ] = useMutation<MakeReservationMutationResponse>(
-  //   `/api/products/${router.query?.id}/reservation`
-  // );
   const onCancelReservation = () => {
     const confirmCancelReservation = confirm("정말 예약을 취소하시겠습니까?");
-    if (confirmCancelReservation) {
-      makeReservation({});
+    if (confirmCancelReservation && productReservationData?.chatRoom?.id) {
+      makeReservation({ chatRoomId: productReservationData?.chatRoom?.id });
     }
   };
 
   useEffect(() => {
     if (makeReservationData?.ok) {
-      console.log(makeReservationData);
-      router.push(`/chats`);
-      //예약 완료 시 채팅방으로 돌아가기
+      router.back();
     }
   }, [makeReservationData, router]);
 

@@ -8,7 +8,7 @@ interface ChattingRoomProps {
   updated: Date;
   otherUserName: string;
   otherUserAvatarUrl?: string;
-  lastChat: string;
+  lastChat?: string;
 }
 
 export default function ChattingRoom({

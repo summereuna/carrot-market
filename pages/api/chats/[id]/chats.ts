@@ -16,6 +16,7 @@ async function handler(
   const chats = await client.chat.create({
     data: {
       chat: body.chat,
+      isReservedAlarm: false,
       user: { connect: { id: user?.id } },
       chatRoom: { connect: { id: +id!.toString() } },
     },

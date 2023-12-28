@@ -43,7 +43,7 @@ export default function Item({
                 {getTimeInterval(productCreated)}
               </span>
               <div className="flex space-x-1 items-center">
-                {productReservation && (
+                {productReservation && !productReview && (
                   <span className="bg-emerald-500 rounded-md px-2 py-1 text-xs text-white font-medium">
                     예약중
                   </span>

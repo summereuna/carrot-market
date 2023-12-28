@@ -23,7 +23,7 @@ export default function Layout({
     <div>
       {/*네비게이션 바
       모바일 사이즈로 일단 작업하기 위해 max-w-xl 줘서 fixed된 바 크기 조정*/}
-      <div className="fixed max-w-xl top-0 flex items-center px-5 bg-white w-full text-lg font-medium text-gray-800 py-3 border-b justify-center h-12">
+      <div className="fixed max-w-xl top-0 flex items-center px-5 bg-white w-full text-lg font-medium text-gray-800 py-3 border-b justify-center h-12 z-20">
         {canGoBack ? (
           <button onClick={onClick} className="absolute left-4">
             <svg
@@ -51,7 +51,7 @@ export default function Layout({
       {/*하단 탭*/}
       {/*모바일 사이즈로 일단 작업하기 위해 max-w-xl 줘서 fixed된 바 크기 조정*/}
       {hasTabBar ? (
-        <nav className="bg-white max-w-xl text-gray-700 border-t fixed bottom-0 w-full px-10 py-3 flex justify-between text-xs">
+        <nav className="bg-white max-w-xl text-gray-700 border-t fixed bottom-0 w-full px-10 py-3 flex justify-between text-xs z-20">
           <Link href="/">
             <div
               className={cls(

@@ -8,7 +8,7 @@ async function handler(
   res: NextApiResponse<ResponseType>
 ) {
   const {
-    body: { date },
+    body: { date, chat, isReservedAlarm, chatRoomId },
     query: { id }, //프로덕트
     session: { user },
   } = req;
@@ -16,12 +16,21 @@ async function handler(
   if (req.method === "GET") {
     const productReservation = await client.product.findUnique({
       where: { id: +id!.toString() },
-      select: { reservation: true },
+      select: {
+        reservation: true,
+      },
     });
-
+    const chatRoom = await client.chatRoom.findFirst({
+      where: {
+        userId: user?.id,
+        productId: +id!.toString(),
+      },
+      select: { id: true },
+    });
     return res.json({
       ok: true,
       productReservation,
+      chatRoom,
     });
   }
 
@@ -46,13 +55,19 @@ async function handler(
         productId: +id!.toString(),
       },
     });
+    const alreadyExistsReservationChat = await client.chat.findFirst({
+      where: {
+        userId: user?.id,
+        chatRoomId: chatRoomId,
+        isReservedAlarm: true,
+      },
+    });
     //reservation 찾아서 확인했으니 reservation의 id도 가지고 있는 상태
-
     //존재하면 데이터 업데이트 혹은 삭제
     //존재하지 않으면 생성
-    if (alreadyExistsReservation) {
+    if (alreadyExistsReservation && alreadyExistsReservationChat) {
       //업데이트
-      if (date) {
+      if (date && chat) {
         const reservation = await client.reservation.update({
           where: { id: alreadyExistsReservation.id },
           data: {
@@ -60,9 +75,20 @@ async function handler(
           },
         });
 
+        const reservedChat = await client.chat.update({
+          where: { id: alreadyExistsReservationChat.id },
+          data: {
+            chat: chat,
+            isReservedAlarm: isReservedAlarm,
+            user: { connect: { id: user?.id } },
+            chatRoom: { connect: { id: chatRoomId } },
+          },
+        });
+
         return res.json({
           ok: true,
           reservation,
+          reservedChat,
         });
       } else {
         //삭제
@@ -70,6 +96,9 @@ async function handler(
         //delete()는 unique 필드로만 삭제가능함. id를 위에서 찾아놨으니 사용 가능
         await client.reservation.delete({
           where: { id: alreadyExistsReservation.id },
+        });
+        await client.chat.delete({
+          where: { id: alreadyExistsReservationChat.id },
         });
 
         return res.json({
@@ -93,9 +122,19 @@ async function handler(
         },
       });
 
+      const reservedChat = await client.chat.create({
+        data: {
+          chat: chat,
+          isReservedAlarm: isReservedAlarm,
+          user: { connect: { id: user?.id } },
+          chatRoom: { connect: { id: chatRoomId } },
+        },
+      });
+
       return res.json({
         ok: true,
         reservation,
+        reservedChat,
       });
     }
   }

@@ -4,7 +4,7 @@ import Message from "@/components/message";
 import useMutation from "@/libs/client/useMutation";
 import useUser from "@/libs/client/useUser";
 import { divideDate } from "@/libs/client/utils";
-import { ChatRoom } from "@prisma/client";
+import { Chat, ChatRoom } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useRef } from "react";
@@ -18,6 +18,8 @@ interface Reservation {
   date: Date;
   id: number;
   userId: number;
+  user: { name: string };
+  updated: Date;
 }
 
 interface productWthProductOwner {
@@ -29,10 +31,7 @@ interface productWthProductOwner {
   user: productOwner;
 }
 
-export interface chatMessage {
-  id: number;
-  chat: string;
-  created: string; //Date;
+export interface chatMessage extends Chat {
   user: { avatar?: string; id: number };
 }
 export interface chatRoomWithChatMessage extends ChatRoom {
@@ -66,20 +65,20 @@ const ChatDetail: NextPage = () => {
     useSWRConfigurationOption
   );
 
-  const [sendChat, { data: sendChatData, loading }] = useMutation(
+  const [sendChat, { data: sendChatData, loading }] = useMutation<ChatForm>(
     `/api/chats/${router.query.id}/chats`
   );
 
   const { register, handleSubmit, reset } = useForm<ChatForm>();
-  const onValid = (validChatForm: ChatForm) => {
-    // console.log(validChatForm);
+  const onValid = (chat: ChatForm) => {
+    // console.log(chat);
     if (loading) return;
     reset();
 
     //사용자에게 리얼타임 같은 경험 제공 위해, 데이터 패치 대신 캐시 mutate해서 사용자에게 바로 보여주기
     //boundMutate();
 
-    sendChat(validChatForm);
+    sendChat(chat);
   };
 
   const handleReservationToggleClick = () => {
@@ -89,7 +88,6 @@ const ChatDetail: NextPage = () => {
   const handleWriteReviewClick = () => {
     router.push(`/products/${data?.chats?.product?.id}/review`);
   };
-
   //채팅창 스크롤 맨 밑 유지
   const scrollRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -128,6 +126,7 @@ const ChatDetail: NextPage = () => {
                   {chats.map((chat) => (
                     <Message
                       key={chat.id}
+                      isReservedAlarm={chat.isReservedAlarm}
                       message={chat.chat}
                       time={chat.created}
                       me={chat.user.id === user?.id ? true : false}
@@ -161,7 +160,7 @@ const ChatDetail: NextPage = () => {
         )}
         <div ref={scrollRef} />
         {/*플로팅 채팅창 고정*/}
-        <div className="bg-gray-100 fixed bottom-0 p-2 inset-x-0">
+        <div className="bg-gray-100 fixed bottom-0 p-2 inset-x-0 z-20">
           <form
             onSubmit={handleSubmit(onValid)}
             className="relative flex max-w-md items-center w-full mx-auto"

@@ -6,6 +6,7 @@ interface MessageProps {
   time: string;
   me?: boolean;
   avatarUrl?: string;
+  isReservedAlarm: boolean;
 }
 
 export default function Message({
@@ -13,10 +14,11 @@ export default function Message({
   time,
   me,
   avatarUrl,
+  isReservedAlarm,
 }: MessageProps) {
   return (
     <>
-      {!me ? (
+      {!me && !isReservedAlarm && (
         <div className="flex items-start space-x-2 w-[90%]">
           <div className="flex-shrink-0">
             {avatarUrl ? (
@@ -40,7 +42,8 @@ export default function Message({
             </span>
           </div>
         </div>
-      ) : (
+      )}
+      {me && !isReservedAlarm && (
         <div className="flex justify-end">
           <div className="w-[90%] flex flex-row-reverse space-x-2 space-x-reverse items-end">
             <div className="bg-orange-500 text-yellow-50 rounded-xl p-3 text-sm text-left">
@@ -50,6 +53,11 @@ export default function Message({
               {getMessageTime(time)}
             </span>
           </div>
+        </div>
+      )}
+      {isReservedAlarm && (
+        <div className="py-3 flex">
+          <span className="text-sm text-gray-400 px-24">{message}</span>
         </div>
       )}
     </>

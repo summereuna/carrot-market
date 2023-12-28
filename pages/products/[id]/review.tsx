@@ -144,7 +144,7 @@ const Review: NextPage = () => {
       console.log(makeReviewData);
       reset();
       router.push(`/`);
-      //후기 작성 완료시 홈으로
+      //후기 작성 완료시 후기 작성 페이지 보여주기
     }
   }, [makeReviewData, router, reset]);
 

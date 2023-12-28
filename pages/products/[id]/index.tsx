@@ -120,7 +120,7 @@ const ProductDetail: NextPage = () => {
           {/*product-info*/}
           <div className="mt-5 space-y-5">
             <div>
-              {data?.product?.reservation && (
+              {data?.product?.reservation && !data?.product?.review && (
                 <span className="bg-emerald-500 rounded-md px-2 py-1 text-xs text-white font-medium">
                   예약중
                 </span>

@@ -199,15 +199,16 @@ model ChatRoom {
 }
 
 model Chat {
-  id         Int      @id @default(autoincrement())
-  created    DateTime @default(now())
-  chat       String
+  id              Int      @id @default(autoincrement())
+  created         DateTime @default(now())
+  chat            String
   //누가 썼냐
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     Int
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          Int
   //어느 룸에다 썼냐
-  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
-  chatRoomId Int
+  chatRoom        ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
+  chatRoomId      Int
+  isReservedAlarm Boolean  @default(false)
 
   @@index([userId, chatRoomId])
 }

@@ -38,6 +38,7 @@ async function handler(
 
     const alreadyExistsChatRoom = await client.chatRoom.findFirst({
       where: {
+        productId: +productId,
         userId: user?.id,
         product: { userId: productUserId },
       },

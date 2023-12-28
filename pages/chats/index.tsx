@@ -49,7 +49,7 @@ const Chats: NextPage = () => {
                 : chatRoom.user.name
             }
             otherUserAvatarUrl={
-              user?.user?.id === chatRoom.userId
+              user?.user?.id === chatRoom.user.id
                 ? chatRoom.product.user.avatar
                 : chatRoom.user.avatar
             }

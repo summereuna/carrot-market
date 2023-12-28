@@ -48,10 +48,7 @@ export function getTimeInterval(dataCreatedTime: Date | string) {
 
 export function getMessageTime(dataCreatedTime: Date | string) {
   const createdTime = dayjs(dataCreatedTime);
-  // const year: number = createdTime.year();
-  // const month: number = createdTime.month();
-  // const date: number = createdTime.date();
-  // const day: string = createdTime.format("ddd");
+
   const hour: number = createdTime.hour();
   const minute: number = createdTime.minute();
 
@@ -61,6 +58,23 @@ export function getMessageTime(dataCreatedTime: Date | string) {
     return `오전 12:${minute}`;
   } else {
     return `오전 ${hour}:${minute}`;
+  }
+}
+
+export function getReservationTime(dataCreatedTime: Date | string) {
+  const createdTime = dayjs(dataCreatedTime);
+  const month: number = createdTime.month();
+  const date: number = createdTime.date();
+  const day: string = createdTime.format("dd");
+  const hour: number = createdTime.hour();
+  const minute: number = createdTime.minute();
+
+  if (hour > 12) {
+    return `${month}월 ${date}일 (${day}) 오후 ${hour - 12}:${minute}`;
+  } else if (hour === 0) {
+    return `${month}월 ${date}일 (${day}) 오전 12:${minute}`;
+  } else {
+    return `${month}월 ${date}일 (${day}) 오전 ${hour}:${minute}`;
   }
 }
 
