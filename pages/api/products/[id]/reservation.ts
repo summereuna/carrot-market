@@ -75,8 +75,9 @@ async function handler(
           },
         });
 
-        const reservedChat = await client.chat.update({
-          where: { id: alreadyExistsReservationChat.id },
+        //알림 챗은 새로 만드는게 나은거 같기도 하고
+        const reservedChat = await client.chat.create({
+          //where: { id: alreadyExistsReservationChat.id },
           data: {
             chat: chat,
             isReservedAlarm: isReservedAlarm,
