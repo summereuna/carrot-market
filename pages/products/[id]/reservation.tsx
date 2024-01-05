@@ -2,7 +2,7 @@ import Button from "@/components/button";
 import Layout from "@/components/layout";
 import useMutation from "@/libs/client/useMutation";
 import useUser from "@/libs/client/useUser";
-import { getReservationTime, utcToKoreanTime } from "@/libs/client/utils";
+import { getReservationTime } from "@/libs/client/utils";
 import { ChatRoom, Product, Reservation } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
@@ -129,7 +129,7 @@ const Reservation: NextPage = () => {
           <div>
             <span className="font-semibold text-lg">
               {productReservationData?.productReservation?.reservation
-                ? utcToKoreanTime(
+                ? getReservationTime(
                     productReservationData?.productReservation?.reservation.date
                   )
                 : "약속 시간을 정해 예약을 완료하세요."}
