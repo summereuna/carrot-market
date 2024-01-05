@@ -46,7 +46,7 @@ async function handler(
 
     if (alreadyExistsChatRoom) {
       return res.json({ ok: true, chatRoom: alreadyExistsChatRoom });
-    } else {
+    } else if (productUserId !== user?.id) {
       const chatRoom = await client.chatRoom.create({
         data: {
           product: { connect: { id: +productId } },

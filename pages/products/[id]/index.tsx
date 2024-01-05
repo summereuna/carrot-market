@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import useSWR, { useSWRConfig } from "swr";
 import { useEffect } from "react";
 import Image from "next/image";
+import useUser from "@/libs/client/useUser";
 
 //프리즈마 클라이언트의 Product 타입에는 연결된 user에 대한 타입이 없으므로 확장시켜주기
 interface ProductWithUserAndStateCheck extends Product {
@@ -31,6 +32,7 @@ interface CreateChatRoomResponse {
 }
 
 const ProductDetail: NextPage = () => {
+  const { user } = useUser();
   const router = useRouter();
   //router가 마운트 중이기 때문에 /${router.query.id}로 바로 보낼 수 없다
   //undefined 뜰 수도 있기 때문에 처음부터 id에 접근할 수 없으므로 먼저 있는지 체크하자 => optional query
@@ -75,8 +77,7 @@ const ProductDetail: NextPage = () => {
 
   const onChatClick = () => {
     const wantToChatWithSeller = confirm("판매자와 채팅하시겠습니까?");
-
-    if (wantToChatWithSeller && data) {
+    if (wantToChatWithSeller && data && user?.id !== data?.product?.userId) {
       const chatRoomInfo = {
         productId: router.query.id,
         productUserId: data.product.userId,
@@ -220,7 +221,7 @@ const ProductDetail: NextPage = () => {
         </div>
 
         {/*direct-message btn*/}
-        {!data?.product?.review ? (
+        {!data?.product?.review && user?.id !== data?.product?.userId ? (
           <Button text="채팅하기" large onClick={onChatClick} />
         ) : (
           <Button text="채팅하기" large onClick={onChatClick} disabled />
