@@ -3,9 +3,10 @@ import Layout from "@/components/layout";
 import Message from "@/components/message";
 import useMutation from "@/libs/client/useMutation";
 import useUser from "@/libs/client/useUser";
-import { divideDate } from "@/libs/client/utils";
+import { cls, divideDate } from "@/libs/client/utils";
 import { Chat, ChatRoom } from "@prisma/client";
 import type { NextPage } from "next";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
@@ -29,6 +30,8 @@ interface productWthProductOwner {
   id: number;
   reservation: Reservation;
   user: productOwner;
+  userId: number;
+  review?: { id: number };
 }
 
 export interface chatMessage extends Chat {
@@ -37,6 +40,7 @@ export interface chatMessage extends Chat {
 export interface chatRoomWithChatMessage extends ChatRoom {
   chats: chatMessage[];
   product: productWthProductOwner;
+  user: { name: string };
 }
 
 interface ChatRoomResponse {
@@ -64,6 +68,7 @@ const ChatDetail: NextPage = () => {
     router.query.id ? `/api/chats/${router.query.id}` : null,
     useSWRConfigurationOption
   );
+  console.log(data);
 
   const [sendChat, { data: sendChatData, loading }] = useMutation<ChatForm>(
     `/api/chats/${router.query.id}/chats`
@@ -95,7 +100,14 @@ const ChatDetail: NextPage = () => {
   });
 
   return (
-    <Layout canGoBack title={data?.chats?.product?.user?.name}>
+    <Layout
+      canGoBack
+      title={
+        user?.id === data?.chats?.product?.userId
+          ? data?.chats?.user?.name
+          : data?.chats?.product?.user?.name
+      }
+    >
       <div className="border-b-[1px] pb-3">
         <ChatProductInfo
           key={data?.chats?.product?.id}
@@ -103,7 +115,8 @@ const ChatDetail: NextPage = () => {
           productImage={data?.chats?.product?.image}
           price={data?.chats?.product?.price}
           id={data?.chats?.product?.id}
-          isSoldOut={data?.chats?.product?.reservation ? true : false}
+          isOnSale={data?.chats?.product?.reservation ? false : true}
+          isSoldOut={data?.chats?.product?.review?.id ? true : false}
           onReservation={handleReservationToggleClick}
           writeReview={handleWriteReviewClick}
         />
@@ -158,6 +171,22 @@ const ChatDetail: NextPage = () => {
             <p>피해가 있을 수 있으니 주의하세요!</p>
           </div>
         )}
+        {data?.chats?.product?.review?.id && (
+          <div className="flex flex-col text-center mt-40 text-sm text-gray-400">
+            <p>거래를 완료했어요!</p>
+            <p>
+              {user?.id === data?.chats?.product?.userId
+                ? data?.chats?.user?.name
+                : data?.chats?.product?.user?.name}
+              님과의 채팅을 종료하겠습니까?
+            </p>
+            <Link href={`/`}>
+              <p className="underline cursor-pointer hover:text-orange-600">
+                채팅에서 나가기
+              </p>
+            </Link>
+          </div>
+        )}
         <div ref={scrollRef} />
         {/*플로팅 채팅창 고정*/}
         <div className="bg-gray-100 fixed bottom-0 p-2 inset-x-0 z-20">
@@ -171,6 +200,7 @@ const ChatDetail: NextPage = () => {
               type="text"
               placeholder="메시지를 입력하세요."
               required
+              disabled={Boolean(data?.chats?.product?.review?.id)}
               className="pr-12 shadow-sm rounded-full w-full border-gray-300 focus:outline-none focus:border-orange-500 focus:ring-orange-500"
             />
             <div className="absolute inset-y-0 flex py-1.5 pr-1.5 right-0">

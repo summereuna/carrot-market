@@ -143,8 +143,7 @@ const Review: NextPage = () => {
     if (makeReviewData?.ok) {
       console.log(makeReviewData);
       reset();
-      router.push(`/`);
-      //후기 작성 완료시 후기 작성 페이지 보여주기
+      router.push(`/products/${router.query.id}/review/send`);
     }
   }, [makeReviewData, router, reset]);
 
@@ -292,12 +291,13 @@ const Review: NextPage = () => {
                 <h3 className="text-lg font-semibold">어떤 점이 좋았나요?</h3>
                 <Checkbox
                   options={[
-                    "상품상태가 설명한 것과 같아요",
-                    "상품설명이 자세해요",
-                    "좋은 상품을 저렴하게 판매해요",
+                    "물품상태가 설명한 것과 같아요",
+                    "나눔을 해주셨어요",
+                    "좋은 물품을 저렴하게 판매해요",
+                    "물품설명이 자세해요",
                     "시간 약속을 잘 지켜요",
-                    "응답이 빨라요",
                     "친절하고 매너가 좋아요",
+                    "응답이 빨라요",
                   ]}
                   register={register("checkBoxes")}
                 />
@@ -308,13 +308,13 @@ const Review: NextPage = () => {
                 <h3 className="text-lg font-semibold">어떤 점이 최고였나요?</h3>
                 <Checkbox
                   options={[
-                    "무료로 나눠주셨어요",
-                    "상품상태가 설명한 것과 같아요",
-                    "상품설명이 자세해요",
-                    "좋은 상품을 저렴하게 판매해요",
+                    "물품상태가 설명한 것과 같아요",
+                    "나눔을 해주셨어요",
+                    "좋은 물품을 저렴하게 판매해요",
+                    "물품설명이 자세해요",
                     "시간 약속을 잘 지켜요",
-                    "응답이 빨라요",
                     "친절하고 매너가 좋아요",
+                    "응답이 빨라요",
                   ]}
                   register={register("checkBoxes")}
                 />

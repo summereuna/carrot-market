@@ -25,9 +25,25 @@ async function handler(
       },
     });
 
+    const getReview = await client.review.findFirst({
+      where: {
+        createdById: user?.id,
+        createdForId: productReservationInfo?.userId,
+        productId: +id!.toString(),
+      },
+      select: {
+        product: { select: { name: true } },
+        kind: true,
+        review: true,
+        reviewCheckBoxes: true,
+        createdFor: { select: { name: true } },
+      },
+    });
+
     return res.json({
       ok: true,
       productReservationInfo,
+      getReview,
     });
   }
 

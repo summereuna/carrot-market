@@ -56,8 +56,8 @@ export default function Message({
         </div>
       )}
       {isReservedAlarm && (
-        <div className="py-3 flex">
-          <span className="text-sm text-gray-400 px-24">{message}</span>
+        <div className="py-3 flex bg-sky-100 mx-16 rounded-xl">
+          <span className="text-sm text-sky-700 px-10">{message}</span>
         </div>
       )}
     </>

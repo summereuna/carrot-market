@@ -15,7 +15,8 @@ async function handler(
     where: {
       id: +id!.toString(),
     },
-    include: {
+    select: {
+      user: { select: { name: true } },
       product: {
         select: {
           name: true,
@@ -32,6 +33,8 @@ async function handler(
             },
           },
           user: { select: { name: true } },
+          userId: true,
+          review: { select: { id: true } },
         },
       },
       chats: {
