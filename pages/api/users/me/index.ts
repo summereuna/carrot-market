@@ -71,16 +71,19 @@ async function handler(
       res.json({ ok: true });
     }
 
+    //name은 unique아님
     if (name && name !== currentUser?.name) {
       const alreadyExistsName = Boolean(
-        await client.user.findUnique({
-          where: { name },
+        await client.user.findFirst({
+          where: { id: user?.id, name },
           select: { id: true },
         })
       );
       if (alreadyExistsName) {
         return res.json({ ok: false, error: "이미 사용중인 이름입니다." });
       }
+
+      console.log(alreadyExistsName);
       await client.user.update({
         where: { id: user?.id },
         data: {

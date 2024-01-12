@@ -48,9 +48,14 @@ const EditProfile: NextPage = () => {
   const onValid = async ({ name, email, phone, avatar }: EditProfileForm) => {
     if (loading) return;
     // 이메일/폰 모두 입력 안한 경우
-    if (email === "" && phone === "" && name === "") {
+    if (email === "" && phone === "") {
       return setError("formErrors", {
         message: "이메일 혹은 전화번호 중 하나를 입력하세요.",
+      });
+    }
+    if (name === "") {
+      return setError("formErrors", {
+        message: "이름을 입력하세요.",
       });
     }
 
