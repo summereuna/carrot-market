@@ -42,7 +42,7 @@ const Home: NextPage = () => {
             id={product.id}
             key={product.id}
             productReservation={product?.reservation?.id ? true : false}
-            productReview={product?.review?.id ? true : false}
+            productReview={product?.review?.length ? true : false}
           />
         ))}
       </div>

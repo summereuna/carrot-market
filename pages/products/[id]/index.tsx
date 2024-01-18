@@ -43,7 +43,6 @@ const ProductDetail: NextPage = () => {
   const { data, mutate: boundMutate } = useSWR<ProductDetailResponse>(
     router.query.id ? `/api/products/${router.query?.id}` : null
   );
-  console.log(data);
 
   //Optimistic UI Update (백엔드로 보낸 요청이 작동할 거라는 것에 낙관적(optimistic)
   //기본적으로 백엔드에 요청을 보낼 때 백엔드 응답 기다리지 않고 일단 변경사항 반영 ㅇㅇㅇ
@@ -108,29 +107,32 @@ const ProductDetail: NextPage = () => {
               className="bg-slate-100 absolute object-scale-down"
             />
           </div>
-          <Link href={`/users/profiles/${data?.product?.userId}`}>
+          <Link href={`/profile/${data?.product?.userId}`}>
             <div className="py-3 border-t border-b">
               <UserBox
                 name={data?.product?.user?.name}
                 avatar={data?.product?.user?.avatar}
                 size="small"
-                time={`${data?.product?.created}`}
+                time={data?.product?.created}
+                userId={data?.product?.userId}
               />
             </div>
           </Link>
           {/*product-info*/}
           <div className="mt-5 space-y-5">
             <div>
-              {data?.product?.reservation && !data?.product?.review && (
-                <span className="bg-emerald-500 rounded-md px-2 py-1 text-xs text-white font-medium">
-                  예약중
-                </span>
-              )}
-              {data?.product?.review && (
-                <span className="bg-gray-700 rounded-md px-2 py-1 text-xs text-white font-medium">
-                  거래완료
-                </span>
-              )}
+              {data?.product?.reservation &&
+                !(data?.product?.review.length > 0) && (
+                  <span className="bg-emerald-500 rounded-md px-2 py-1 text-xs text-white font-medium">
+                    예약중
+                  </span>
+                )}
+              {data?.product?.reservation &&
+                data?.product?.review?.length > 0 && (
+                  <span className="bg-gray-700 rounded-md px-2 py-1 text-xs text-white font-medium">
+                    거래완료
+                  </span>
+                )}
               <h1 className="text-xl font-bold text-gray-900">
                 {data?.product?.name}
               </h1>
@@ -221,7 +223,8 @@ const ProductDetail: NextPage = () => {
         </div>
 
         {/*direct-message btn*/}
-        {!data?.product?.review && user?.id !== data?.product?.userId ? (
+        {!(data?.product?.review?.length > 0) &&
+        user?.id !== data?.product?.userId ? (
           <Button text="채팅하기" large onClick={onChatClick} />
         ) : (
           <Button text="채팅하기" large onClick={onChatClick} disabled />
