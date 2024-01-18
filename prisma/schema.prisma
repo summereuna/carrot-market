@@ -69,7 +69,7 @@ model Product {
   purchases   Purchase[]
   chatRooms   ChatRoom[]
   reservation Reservation? //상품 당 예약은 없거나 한 건만 잡을 수 있으니까
-  review      Review? //상품 당 리뷰는 한 건뿐이거나 없거나
+  review      Review[] //상품 당 리뷰는 없거나 / 구매자/판매자가 각 1번 씩만 쓸 수 있도록
 
   @@index([userId])
 }
@@ -242,7 +242,7 @@ model Review {
   createdFor       User     @relation(name: "receivedReviews", fields: [createdForId], references: [id], onDelete: Cascade)
   createdForId     Int
   product          Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  productId        Int      @unique
+  productId        Int
 
   @@index([createdById, createdForId, productId])
 }
