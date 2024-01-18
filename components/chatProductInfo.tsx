@@ -49,7 +49,7 @@ export default function ChatProductInfo({
                   </span>
                 ) : (
                   <span className={"text-sm font-medium mr-2 text-gray-400"}>
-                    판매완료
+                    거래완료
                   </span>
                 )}
                 <h3 className="text-sm text-gray-900">{productName}</h3>

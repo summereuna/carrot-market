@@ -1,6 +1,7 @@
 interface LayoutProps {
   title?: string;
   canGoBack?: boolean;
+  canGoHome?: boolean;
   hasTabBar?: boolean;
   children: React.ReactNode;
 }
@@ -12,12 +13,16 @@ import { useRouter } from "next/router";
 export default function Layout({
   title,
   canGoBack,
+  canGoHome,
   hasTabBar,
   children,
 }: LayoutProps) {
   const router = useRouter();
-  const onClick = () => {
+  const onBackClick = () => {
     router.back();
+  };
+  const onGoHomeClick = () => {
+    router.push(`/`);
   };
   return (
     <div>
@@ -25,7 +30,25 @@ export default function Layout({
       모바일 사이즈로 일단 작업하기 위해 max-w-xl 줘서 fixed된 바 크기 조정*/}
       <div className="fixed max-w-xl top-0 flex items-center px-5 bg-white w-full text-lg font-medium text-gray-800 py-3 border-b justify-center h-12 z-20">
         {canGoBack ? (
-          <button onClick={onClick} className="absolute left-4">
+          <button onClick={onBackClick} className="absolute left-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15.75 19.5L8.25 12l7.5-7.5"
+              />
+            </svg>
+          </button>
+        ) : null}
+        {canGoHome ? (
+          <button onClick={onGoHomeClick} className="absolute left-4">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -155,7 +178,7 @@ export default function Layout({
               <span>라이브 스트리밍</span>
             </div>
           </Link>
-          <Link href="profile">
+          <Link href="/profile">
             <div
               className={cls(
                 "flex flex-col items-center space-y-2",
