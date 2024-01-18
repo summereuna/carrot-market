@@ -28,7 +28,12 @@ const Profile: NextPage = () => {
         {/* 유저 정보 */}
         <div className="px-4 py-4">
           <Link href="/profile/edit">
-            <UserBox name={user?.name} avatar={user?.avatar} size="large" />
+            <UserBox
+              name={user?.name}
+              avatar={user?.avatar}
+              size="large"
+              isMe={true}
+            />
           </Link>
         </div>
         {/*유저 활동 세부 정보 */}
