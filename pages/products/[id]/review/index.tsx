@@ -3,6 +3,7 @@ import Checkbox from "@/components/checkBox";
 import Layout from "@/components/layout";
 import Textarea from "@/components/textarea";
 import useMutation from "@/libs/client/useMutation";
+import useUser from "@/libs/client/useUser";
 import { cls } from "@/libs/client/utils";
 import { Review } from "@prisma/client";
 import type { NextPage } from "next";
@@ -14,12 +15,17 @@ import useSWRImmutable from "swr/immutable";
 
 interface GetReservationProductInfoResponse {
   ok: boolean;
-  productReservationInfo: {
+  productInfo: {
     image: string;
     name: string;
     userId: number;
     user: { name: string };
-    reservation: { date: string; productId: number; userId: number };
+    reservation: {
+      date: string;
+      productId: number;
+      userId: number;
+      user: { name: string };
+    };
   };
 }
 interface ReviewForm {
@@ -37,19 +43,14 @@ interface ReviewDataMutationResponse {
 }
 
 const Review: NextPage = () => {
+  const { user } = useUser();
   const router = useRouter();
 
-  // const useSWRConfigurationOption = {
-  //   //useSWR이 서버에서 얼마나 자주 새로고침 될지 명시
-  //   refreshInterval: 1000, //1초
-  // };
-
-  const { data: productReservationInfoData, mutate: boundMutate } =
+  const { data: productInfoData } =
     useSWRImmutable<GetReservationProductInfoResponse>(
       router.query.id ? `/api/products/${router.query.id}/review` : null
-      // useSWRConfigurationOption
     );
-  console.log(productReservationInfoData);
+  // console.log(productInfoData);
 
   const [sendReview, { loading, data: makeReviewData, error }] =
     useMutation<ReviewDataMutationResponse>(
@@ -76,7 +77,7 @@ const Review: NextPage = () => {
 
     //로딩중 아니면 uploadProduct() 실행하여 데이터 받아서 뮤테이션 하기
     if (
-      productReservationInfoData &&
+      productInfoData &&
       reviewKind &&
       reviewWrite &&
       checkBoxes &&
@@ -95,16 +96,29 @@ const Review: NextPage = () => {
             break;
         }
       };
-      const sellerId = productReservationInfoData.productReservationInfo.userId;
+      const sellerId = productInfoData.productInfo.userId;
+      const buyerId = productInfoData.productInfo.reservation.userId;
       //const parsedCheckBoxes = JSON.parse(stringifiedCheckBoxes);
       //나중에 열때 팔즈 해서 열기 > 이건 나중에 페이지 따로 만들어야 함
-      sendReview({
-        kind: reviewKind,
-        review: reviewWrite,
-        reviewCheckBoxes: JSON.stringify(checkBoxes),
-        score: getReviewScore(),
-        createdForId: sellerId,
-      });
+      if (sellerId !== user?.id) {
+        //구매자가 체크하는 판매자 평가
+        sendReview({
+          kind: reviewKind,
+          review: reviewWrite,
+          reviewCheckBoxes: JSON.stringify(checkBoxes),
+          score: getReviewScore(),
+          createdForId: sellerId,
+        });
+      } else {
+        //판매자가 체크하는 구매자 평가
+        sendReview({
+          kind: reviewKind,
+          review: reviewWrite,
+          reviewCheckBoxes: JSON.stringify(checkBoxes),
+          score: getReviewScore(),
+          createdForId: buyerId,
+        });
+      }
     } else {
       return setError("formErrors", {
         message: "하나 이상 체크하세요.",
@@ -151,7 +165,7 @@ const Review: NextPage = () => {
     <Layout canGoBack title="거래 후기 보내기">
       <div className="flex space-x-4 px-4 py-4 bg-gray-200">
         <Image
-          src={productReservationInfoData?.productReservationInfo?.image}
+          src={productInfoData?.productInfo?.image}
           alt="product-image"
           width={40}
           height={40}
@@ -162,7 +176,7 @@ const Review: NextPage = () => {
             거래한 물건
           </span>
           <span className="text-sm text-gray-900">
-            {productReservationInfoData?.productReservationInfo?.name}
+            {productInfoData?.productInfo?.name}
           </span>
         </div>
       </div>
@@ -171,8 +185,10 @@ const Review: NextPage = () => {
           {/* 체크박스 */}
           <div className="flex flex-col items-center border-b py-7 space-y-5">
             <h3 className="text-lg font-semibold ">
-              {productReservationInfoData?.productReservationInfo?.user?.name}님
-              과의 거래가 어땠나요?
+              {productInfoData?.productInfo?.userId !== user?.id
+                ? productInfoData?.productInfo?.user?.name
+                : productInfoData?.productInfo?.reservation?.user?.name}
+              님 과의 거래가 어땠나요?
             </h3>
             <span className="text-sm text-gray-500">
               거래선호도는 상대방이 알 수 없어요.
@@ -269,55 +285,116 @@ const Review: NextPage = () => {
             {reviewKind === "bad" && (
               <div id="badcheckBoxes" className="space-y-3">
                 <h3 className="text-lg font-semibold">어떤 점이 별로였나요?</h3>
-                <Checkbox
-                  options={[
-                    "시간약속을 안 지켜요",
-                    "채팅 메시지를 읽고도 답이 없어요",
-                    "원하지 않는 가격을 계속 요구해요",
-                    "예약만 하고 거래 시간을 명확하게 알려주지 않아요",
-                    "거래 시간과 장소를 정한 후 거래 직전 취소했어요",
-                    "거래 시간과 장소를 정한 후 연락이 안돼요",
-                    "약속 장소에 나타나지 않았어요",
-                    "상품 상태가 설명과 달라요",
-                    "반말을 사용해요",
-                    "불친절해요",
-                  ]}
-                  register={register("checkBoxes")}
-                />
+                {productInfoData?.productInfo?.userId !== user?.id ? (
+                  <>
+                    {/* 구매자가 체크: 판매자에 대한 평가 */}
+                    구매자가 체크하는 판매자 평가
+                    <Checkbox
+                      options={[
+                        "시간약속을 안 지켜요",
+                        "채팅 메시지를 읽고도 답이 없어요",
+                        "원하지 않는 가격을 계속 요구해요",
+                        "예약만 하고 거래 시간을 명확하게 알려주지 않아요",
+                        "거래 시간과 장소를 정한 후 거래 직전 취소했어요",
+                        "거래 시간과 장소를 정한 후 연락이 안돼요",
+                        "약속 장소에 나타나지 않았어요",
+                        "상품 상태가 설명과 달라요",
+                        "반말을 사용해요",
+                        "불친절해요",
+                      ]}
+                      register={register("checkBoxes")}
+                    />
+                  </>
+                ) : (
+                  <>
+                    {/* 판매자가 체크: 구매자에 대한 평가 */}
+                    판매자가 체크하는 구매자 평가
+                    <Checkbox
+                      options={[
+                        "무리하게 가격을 깎아요",
+                        "거래 시간과 장소를 정한 후 연락이 안돼요",
+                        "약속 장소에 나타나지 않았어요",
+                        "거래 시간과 장소를 정한 후 거래 직전 취소했어요",
+                        "단순 변심으로 환불을 요구해요",
+                      ]}
+                      register={register("checkBoxes")}
+                    />
+                  </>
+                )}
               </div>
             )}
             {reviewKind === "good" && (
               <div id="goodcheckBoxes" className="space-y-3">
                 <h3 className="text-lg font-semibold">어떤 점이 좋았나요?</h3>
-                <Checkbox
-                  options={[
-                    "물품상태가 설명한 것과 같아요",
-                    "나눔을 해주셨어요",
-                    "좋은 물품을 저렴하게 판매해요",
-                    "물품설명이 자세해요",
-                    "시간 약속을 잘 지켜요",
-                    "친절하고 매너가 좋아요",
-                    "응답이 빨라요",
-                  ]}
-                  register={register("checkBoxes")}
-                />
+                {productInfoData?.productInfo?.userId !== user?.id ? (
+                  <>
+                    {/* 구매자가 체크: 판매자에 대한 평가 */}
+                    구매자가 체크하는 판매자 평가
+                    <Checkbox
+                      options={[
+                        "물품상태가 설명한 것과 같아요",
+                        "나눔을 해주셨어요",
+                        "좋은 물품을 저렴하게 판매해요",
+                        "물품설명이 자세해요",
+                        "시간 약속을 잘 지켜요",
+                        "친절하고 매너가 좋아요",
+                        "응답이 빨라요",
+                      ]}
+                      register={register("checkBoxes")}
+                    />
+                  </>
+                ) : (
+                  <>
+                    {/* 판매자가 체크: 구매자에 대한 평가 */}
+                    판매자가 체크하는 구매자 평가
+                    <Checkbox
+                      options={[
+                        "제가 있는 곳까지 와서 거래했어요",
+                        "시간 약속을 잘 지켜요",
+                        "친절하고 매너가 좋아요",
+                        "응답이 빨라요",
+                      ]}
+                      register={register("checkBoxes")}
+                    />
+                  </>
+                )}
               </div>
             )}
             {reviewKind === "best" && (
               <div id="bestcheckBoxes" className="space-y-3">
                 <h3 className="text-lg font-semibold">어떤 점이 최고였나요?</h3>
-                <Checkbox
-                  options={[
-                    "물품상태가 설명한 것과 같아요",
-                    "나눔을 해주셨어요",
-                    "좋은 물품을 저렴하게 판매해요",
-                    "물품설명이 자세해요",
-                    "시간 약속을 잘 지켜요",
-                    "친절하고 매너가 좋아요",
-                    "응답이 빨라요",
-                  ]}
-                  register={register("checkBoxes")}
-                />
+                {productInfoData?.productInfo?.userId !== user?.id ? (
+                  <>
+                    {/* 구매자가 체크: 판매자에 대한 평가 */}
+                    구매자가 체크하는 판매자 평가
+                    <Checkbox
+                      options={[
+                        "물품상태가 설명한 것과 같아요",
+                        "나눔을 해주셨어요",
+                        "좋은 물품을 저렴하게 판매해요",
+                        "물품설명이 자세해요",
+                        "시간 약속을 잘 지켜요",
+                        "친절하고 매너가 좋아요",
+                        "응답이 빨라요",
+                      ]}
+                      register={register("checkBoxes")}
+                    />
+                  </>
+                ) : (
+                  <>
+                    {/* 판매자가 체크: 구매자에 대한 평가 */}
+                    판매자가 체크하는 구매자 평가
+                    <Checkbox
+                      options={[
+                        "제가 있는 곳까지 와서 거래했어요",
+                        "시간 약속을 잘 지켜요",
+                        "친절하고 매너가 좋아요",
+                        "응답이 빨라요",
+                      ]}
+                      register={register("checkBoxes")}
+                    />
+                  </>
+                )}
               </div>
             )}
           </section>
