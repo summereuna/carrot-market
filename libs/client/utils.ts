@@ -50,7 +50,7 @@ export function getTimeInterval(dataCreatedTime: Date | string) {
   if (year > 0) {
     return `${year}년 전`;
   } else if (month > 0) {
-    return `${month + 1}개월 전`; //이거 어째야 하지 ㅇㅇ? 좀더 고민 ㄱ
+    return `${month}개월 전`;
   } else if (date > 0) {
     return `${date}일 전`;
   } else if (hour > 0) {
