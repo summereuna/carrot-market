@@ -48,8 +48,23 @@ async function handler(
       },
     });
 
+    const sale = await client.sale.create({
+      data: {
+        user: {
+          connect: {
+            id: user?.id,
+          },
+        },
+        product: {
+          connect: {
+            id: product.id, //여기서 바로 만들 수 있나?
+          },
+        },
+      },
+    });
+
     //응답 json에 ok와 product 보내기
-    res.json({ ok: true, product });
+    res.json({ ok: true, product, sale });
   }
 }
 

@@ -17,6 +17,7 @@ async function handler(
       include: {
         createdBy: { select: { id: true, name: true, avatar: true } },
       },
+      orderBy: { created: "desc" },
     });
 
     return res.json({ ok: true, reviews });

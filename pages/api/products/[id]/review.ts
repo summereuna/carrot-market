@@ -154,6 +154,22 @@ async function handler(
         },
       });
 
+      //구매 목록에도 추가
+      await client.purchase.create({
+        data: {
+          user: {
+            connect: {
+              id: user?.id,
+            },
+          },
+          product: {
+            connect: {
+              id: +id!.toString(),
+            },
+          },
+        },
+      });
+
       return res.json({
         ok: true,
       });

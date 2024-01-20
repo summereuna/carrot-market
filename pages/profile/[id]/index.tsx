@@ -94,6 +94,13 @@ const UserProfile: NextPage = () => {
                 <CheckBoxReview count={value as number} review={key} />
               </div>
             ))}
+          {data?.reviews?.length === 0 && (
+            <div className="px-4 py-3 flex items-start">
+              <span className="text-sm font-medium text-gray-700">
+                받은 매너 평가가 없습니다.
+              </span>
+            </div>
+          )}
         </div>
 
         <div className="mt-3 py-4">
@@ -120,7 +127,7 @@ const UserProfile: NextPage = () => {
           {data?.reviews.map((review) => (
             <div key={review.id} className="py-3 px-4">
               <div className="flex items-center space-x-4">
-                {review?.createdById ? (
+                {review.createdBy.avatar ? (
                   <Image
                     src={review.createdBy.avatar}
                     alt="avatar-preview"
@@ -162,6 +169,13 @@ const UserProfile: NextPage = () => {
               </div>
             </div>
           ))}
+          {data?.reviews?.length === 0 && (
+            <div className="px-4 py-3 flex items-start">
+              <span className="text-sm font-medium text-gray-700">
+                받은 거래 후기가 없습니다.
+              </span>
+            </div>
+          )}
         </div>
       </div>
     </Layout>

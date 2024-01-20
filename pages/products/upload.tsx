@@ -28,8 +28,6 @@ interface UploadProductMutationResult {
 const Upload: NextPage = () => {
   const router = useRouter();
 
-  const [addSaleRecord] = useMutation(`/api/products/${router.query?.id}/sale`);
-
   const {
     register,
     handleSubmit,
@@ -52,7 +50,6 @@ const Upload: NextPage = () => {
     if (loading) return;
 
     //로딩중 아니면 uploadProduct() 실행하여 데이터 받아서 뮤테이션 하기
-    //console.log(data);
 
     if (productImage && productImage.length > 0) {
       //클라우디너리로 파일 업로드
@@ -67,9 +64,6 @@ const Upload: NextPage = () => {
         description,
         productImageUrl,
       });
-
-      //sale
-      addSaleRecord({}); //빈 객체 보내서 body가 빈 post 요청 보내기
     } else {
       return setError("formErrors", {
         message: "상품의 사진을 업로드하세요",
@@ -82,7 +76,7 @@ const Upload: NextPage = () => {
       router.push(`/products/${data.product.id}`);
       //상품 업로드 끝나면 상품 상세 페이지로 이동
     }
-  }, [data, router]);
+  }, [data, , router]);
 
   const productImageFileList = watch("productImage");
   const [productImagePreview, setProductImagePreview] = useState("");
