@@ -1,3 +1,37 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+::-webkit-progress-bar {
+  background-color: rgb(229, 231, 235);
+  border-radius: 2rem;
+}
+
+::-moz-progress-bar {
+  background-color: rgb(229, 231, 235);
+  border-radius: 2rem;
+}
+
+::-webkit-progress-value {
+  background-color: rgb(56, 189, 248);
+  border-radius: 2rem;
+}
+::-moz-progress-value {
+  background-color: rgb(56, 189, 248);
+  border-radius: 2rem;
+}
+
+.bad::-webkit-progress-value {
+  background-color: rgb(156 163 175);
+}
+
+.bad::-moz-progress-value {
+  background-color: rgb(156 163 175);
+}
+
+.best::-webkit-progress-value {
+  background-color: rgb(251 146 60);
+}
+.best::-moz-progress-value {
+  background-color: rgb(251 146 60);
+}
