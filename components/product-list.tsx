@@ -1,6 +1,7 @@
 import useSWR from "swr";
 import Item from "./item";
 import { Product } from "@prisma/client";
+import { useRouter } from "next/router";
 
 export interface ProductWithCountWishes extends Product {
   _count: { wishes: number };
@@ -19,10 +20,14 @@ interface ProductListResponse {
 
 interface ProductListProps {
   kind: "sales" | "purchases" | "wishes";
+  isMe?: boolean;
 }
 
-export default function ProductList({ kind }: ProductListProps) {
-  const { data } = useSWR<ProductListResponse>(`/api/users/me/${kind}`);
+export default function ProductList({ kind, isMe = true }: ProductListProps) {
+  const router = useRouter();
+  const { data } = useSWR<ProductListResponse>(
+    isMe ? `/api/users/me/${kind}` : `/api/users/${router.query?.id}/${kind}`
+  );
   //객체 프로퍼티
   //object.propertyName === object["propertyName"]
   console.log();

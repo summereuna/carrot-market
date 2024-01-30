@@ -13,7 +13,6 @@ async function handler(
 
   const profile = await client.user.findUnique({
     where: { id: +id!.toString() },
-    include: { receivedReviews: true },
   });
 
   const reviews = await client.review.findMany({
