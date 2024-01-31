@@ -1,10 +1,20 @@
 import { cls } from "@/libs/client/utils";
 
 interface MannerProps {
-  degree?: number;
+  degree: number;
 }
 
-export default function Manner({ degree = 36.5 }: MannerProps) {
+export default function Manner({ degree }: MannerProps) {
+  const getUserDegree = (degree: number) => {
+    if (degree < 0) {
+      return 0;
+    } else if (degree > 100) {
+      return 100;
+    } else if (0 < degree && degree < 100) {
+      return degree;
+    }
+  };
+
   return (
     <div className="flex flex-col space-y-2 pb-3">
       <div className="flex justify-end">
@@ -17,7 +27,7 @@ export default function Manner({ degree = 36.5 }: MannerProps) {
               65.5 <= degree ? "text-orange-400" : ""
             )}
           >
-            {degree}℃
+            {getUserDegree(degree)}℃
           </span>
           <div className="flex items-center justify-center rounded-full bg-yellow-200">
             {degree < 36.5 && (
