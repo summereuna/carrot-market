@@ -64,9 +64,9 @@ export default function Manner({ degree = 36.5 }: MannerProps) {
       </div>
       <div className="w-full">
         <div className="relative flex justify-end w-[36.5%] items-end">
-          <div className="absolute right-[-42px] flex flex-col items-center space-y-1">
+          <div className="absolute right-[-42px] bottom-[-5px] flex flex-col items-center space-y-1">
             <span className="text-sm text-gray-400">첫 온도 36.5℃</span>
-            <div className="w-0 h-0 border-l-[0.3rem] border-l-transparent border-t-[0.5rem] border-t-gray-500 border-r-[0.3rem] border-r-transparent"></div>
+            <div className="w-0 h-0 border-l-[0.3rem] border-l-transparent border-t-[0.45rem] border-t-gray-400 border-r-[0.3rem] border-r-transparent"></div>
           </div>
         </div>
       </div>

@@ -86,11 +86,14 @@ const Review: NextPage = () => {
       const getReviewScore = () => {
         switch (reviewKind) {
           case "best":
-            return 5;
+            5;
+            break;
           case "good":
-            return checkBoxes.length > 3 ? 4 : 3;
+            checkBoxes.length > 3 ? 4 : 3;
+            break;
           case "bad":
-            return checkBoxes.length > 3 ? 1 : 2;
+            checkBoxes.length > 3 ? 1 : 2;
+            break;
           default:
             3;
             break;

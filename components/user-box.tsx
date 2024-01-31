@@ -4,8 +4,8 @@ import Link from "next/link";
 
 interface UserProps {
   name: string;
-  avatar?: string;
-  time: string;
+  avatar?: string | null;
+  time?: string;
   size: "large" | "small";
   userId?: number;
 }
