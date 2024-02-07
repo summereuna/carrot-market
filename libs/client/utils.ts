@@ -14,100 +14,91 @@ export function cls(...classname: string[]) {
 // }
 
 import dayjs from "dayjs";
-import duration from "dayjs/plugin/duration";
-dayjs.extend(duration);
 import "dayjs/locale/ko";
-import { chatMessage } from "@/pages/chats/[id]";
 dayjs.locale("ko");
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
+import localizedFormat from "dayjs/plugin/localizedFormat";
+dayjs.extend(localizedFormat);
+
+import { chatMessage } from "@/pages/chats/[id]";
 
 export function getTimeInterval(dataCreatedTime: Date | string) {
-  const currentTime = dayjs(new Date());
-  const createdTime = dayjs(dataCreatedTime);
-  const year = currentTime.diff(createdTime, "year");
-  const month = currentTime.diff(createdTime, "month");
-  const date = currentTime.diff(createdTime, "day");
-  const hour = currentTime.diff(createdTime, "hour");
-  const minute = currentTime.diff(createdTime, "minute");
-  const second = currentTime.diff(createdTime, "second");
+  return dayjs(dataCreatedTime).fromNow();
 
-  // const timeInterval = dayjs.duration(currentTime.diff(dataCreatedTime));
-  // const yearInterval: number = parseInt(timeInterval.format("Y"));
-  // const monthInterval: number = parseInt(timeInterval.format("M"));
-  // const dateInterval: number = parseInt(timeInterval.format("D"));
-  // const hourInterval: number = parseInt(timeInterval.format("H"));
-  // const minuteInterval: number = parseInt(timeInterval.format("m"));
-  // const secondInterval: number = parseInt(timeInterval.format("s"));
+  // const currentTime = dayjs(new Date());
+  // const createdTime = dayjs(dataCreatedTime);
+  // const year = currentTime.diff(createdTime, "year");
+  // const month = currentTime.diff(createdTime, "month");
+  // const date = currentTime.diff(createdTime, "day");
+  // const hour = currentTime.diff(createdTime, "hour");
+  // const minute = currentTime.diff(createdTime, "minute");
+  // const second = currentTime.diff(createdTime, "second");
 
-  // console.log(
-  //   "지금",
-  //   currentTime.format(),
-  //   "만든날",
-  //   dataCreatedTime,
-  //   "인터벌",
-  //   monthInterval
-  // );
-
-  if (year > 0) {
-    return `${year}년 전`;
-  } else if (month > 0) {
-    return `${month}개월 전`;
-  } else if (date > 0) {
-    return `${date}일 전`;
-  } else if (hour > 0) {
-    return `${hour}시간 전`;
-  } else if (minute > 0) {
-    return `${minute}분 전`;
-  } else if (second > 0) {
-    return `${second}초 전`;
-  }
+  // if (year > 0) {
+  //   return `${year}년 전`;
+  // } else if (month > 0) {
+  //   return `${month}개월 전`;
+  // } else if (date > 0) {
+  //   return `${date}일 전`;
+  // } else if (hour > 0) {
+  //   return `${hour}시간 전`;
+  // } else if (minute > 0) {
+  //   return `${minute}분 전`;
+  // } else if (second > 0) {
+  //   return `${second}초 전`;
+  // }
 }
 
 export function getMessageTime(dataCreatedTime: Date | string) {
-  const createdTime = dayjs(dataCreatedTime);
+  return dayjs(dataCreatedTime).format("LT");
+  // const createdTime = dayjs(dataCreatedTime);
 
-  const hour: number = createdTime.hour();
-  const minute: number = createdTime.minute();
+  // const hour: number = createdTime.hour();
+  // const minute: number = createdTime.minute();
 
-  //이 방법 말고 dayjs 내부적으로 뭐 없나...
-  const getMinute = () => {
-    if (minute < 10) {
-      return `0${minute}`;
-    } else {
-      return minute;
-    }
-  };
+  // //이 방법 말고 dayjs 내부적으로 뭐 없나... 역시 있었구요 ^^!하핫
+  // const getMinute = () => {
+  //   if (minute < 10) {
+  //     return `0${minute}`;
+  //   } else {
+  //     return minute;
+  //   }
+  // };
 
-  if (hour > 12) {
-    return `오후 ${hour - 12}:${getMinute()}`;
-  } else if (hour === 0) {
-    return `오전 12:${getMinute()}`;
-  } else {
-    return `오전 ${hour}:${getMinute()}`;
-  }
+  // if (hour > 12) {
+  //   return `오후 ${hour - 12}:${getMinute()}`;
+  // } else if (hour === 0) {
+  //   return `오전 12:${getMinute()}`;
+  // } else {
+  //   return `오전 ${hour}:${getMinute()}`;
+  // }
 }
 
 export function getReservationTime(dataCreatedTime: Date | string) {
-  const createdTime = dayjs(dataCreatedTime);
-  const month: number = createdTime.month() + 1;
-  const date: number = createdTime.date();
-  const day: string = createdTime.format("dd");
-  const hour: number = createdTime.hour();
-  const minute: number = createdTime.minute();
-  const getMinute = () => {
-    if (minute < 10) {
-      return `0${minute}`;
-    } else {
-      return minute;
-    }
-  };
+  return dayjs(dataCreatedTime).format("LLLL");
 
-  if (hour > 12) {
-    return `${month}월 ${date}일 (${day}) 오후 ${hour - 12}:${getMinute()}`;
-  } else if (hour === 0) {
-    return `${month}월 ${date}일 (${day}) 오전 12:${getMinute()}`;
-  } else {
-    return `${month}월 ${date}일 (${day}) 오전 ${hour}:${getMinute()}`;
-  }
+  // const createdTime = dayjs(dataCreatedTime);
+  // const month: number = createdTime.month() + 1;
+  // const date: number = createdTime.date();
+  // const day: string = createdTime.format("dd");
+  // const hour: number = createdTime.hour();
+  // const minute: number = createdTime.minute();
+  // const getMinute = () => {
+  //   if (minute < 10) {
+  //     return `0${minute}`;
+  //   } else {
+  //     return minute;
+  //   }
+  // };
+
+  // if (hour > 12) {
+  //   return `${month}월 ${date}일 (${day}) 오후 ${hour - 12}:${getMinute()}`;
+  // } else if (hour === 0) {
+  //   return `${month}월 ${date}일 (${day}) 오전 12:${getMinute()}`;
+  // } else {
+  //   return `${month}월 ${date}일 (${day}) 오전 ${hour}:${getMinute()}`;
+  // }
 }
 
 interface divideDateSection {
@@ -118,11 +109,12 @@ export function divideDate(chatList: chatMessage[]) {
   const sections: divideDateSection = {};
 
   chatList.forEach((chat) => {
-    const chatCreateDate = dayjs(chat.created);
-    const year: number = chatCreateDate.year();
-    const month: number = chatCreateDate.month() + 1;
-    const date: number = chatCreateDate.date();
-    const formattedChatCreateDate = `${year}년 ${month}월 ${date}일`;
+    // const chatCreateDate = dayjs(chat.created);
+    // const year: number = chatCreateDate.year();
+    // const month: number = chatCreateDate.month() + 1;
+    // const date: number = chatCreateDate.date();
+    // const formattedChatCreateDate = `${year}년 ${month}월 ${date}일`;
+    const formattedChatCreateDate = dayjs(chat.created).format("LL");
 
     if (sections[formattedChatCreateDate]) {
       sections[formattedChatCreateDate].push(chat);
