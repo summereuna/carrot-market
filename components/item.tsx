@@ -9,8 +9,8 @@ interface ItemProps {
   productImage: string;
   hearts: number;
   id: number;
-  productReservation: boolean;
-  productReview: boolean;
+  productReservation?: boolean;
+  productReview?: boolean | [];
 }
 
 export default function Item({
@@ -48,7 +48,7 @@ export default function Item({
                     예약중
                   </span>
                 )}
-                {productReview && (
+                {productReservation && productReview && (
                   <span className="bg-gray-700 rounded-md px-2 py-1 text-xs text-white font-medium">
                     거래완료
                   </span>

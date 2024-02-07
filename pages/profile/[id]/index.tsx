@@ -26,7 +26,7 @@ const UserProfile: NextPage = () => {
   };
 
   const { data } = useSWR<UserResponse>(
-    router.query.id ? `/api/users/${router.query?.id}` : null
+    router.query.id ? `/api/users/${router.query.id}` : null
   );
 
   // console.log(typeof router.query.id);
@@ -58,8 +58,8 @@ const UserProfile: NextPage = () => {
   };
 
   return (
-    data && (
-      <Layout canGoBack title="프로필">
+    <Layout canGoBack title="프로필">
+      {data?.profile && (
         <div className="divide-y-[1px]">
           {/* 유저 정보 */}
           <div className="px-4 py-4">
@@ -90,7 +90,8 @@ const UserProfile: NextPage = () => {
               <h2 className="font-semibold">매너 온도</h2>
               <Manner
                 degree={
-                  data.reviews?.length === undefined || data.reviews?.length < 1
+                  data?.reviews?.length === undefined ||
+                  data?.reviews?.length < 1
                     ? 36.5
                     : getMannerDegree(
                         36.5,
@@ -122,8 +123,13 @@ const UserProfile: NextPage = () => {
             <Reviews reviews={data?.reviews} />
           </div>
         </div>
-      </Layout>
-    )
+      )}
+      {!data?.profile && (
+        <div className="flex justify-center mt-20">
+          존재하지 않는 사용자 입니다.
+        </div>
+      )}
+    </Layout>
   );
 };
 

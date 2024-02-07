@@ -8,7 +8,6 @@ async function handler(
   res: NextApiResponse<ResponseType>
 ) {
   const {
-    // session: { user },
     query: { id }, //유저
   } = req;
 
@@ -17,6 +16,8 @@ async function handler(
     include: {
       product: {
         include: {
+          reservation: { select: { id: true } },
+          review: { select: { id: true } },
           _count: { select: { wishes: true } },
         },
       },
@@ -24,7 +25,12 @@ async function handler(
     orderBy: { created: "desc" },
   });
 
-  res.json({ ok: true, sales });
+  const user = await client.user.findUnique({
+    where: { id: +id!.toString() },
+    select: { id: true, name: true, avatar: true },
+  });
+
+  res.json({ ok: true, user, sales });
 }
 
 export default withApiSession(withHandler({ methods: ["GET"], handler }));
