@@ -16,7 +16,6 @@ interface Record {
 }
 
 interface ProductListResponse {
-  ok: Boolean;
   [key: string]: Record[];
   //sales: Record[], purchases: Record[], wishes: Record[] 다 될 수 있게 설정
 }

@@ -10,7 +10,7 @@ import useSWR from "swr";
 export interface ProductWithCountWishesAndStateChecks extends Product {
   _count: { wishes: number };
   reservation?: { id: number };
-  review?: { id: number };
+  review?: { id: number; length: number };
 }
 
 interface ProductsResponse {
@@ -42,7 +42,9 @@ const Home: NextPage = () => {
             id={product.id}
             key={product.id}
             productReservation={product?.reservation?.id ? true : false}
-            productReview={product?.review?.length ? true : false}
+            productReview={
+              (product?.review?.length as number) > 0 ? true : false
+            }
           />
         ))}
       </div>

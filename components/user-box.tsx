@@ -5,7 +5,7 @@ import Link from "next/link";
 interface UserProps {
   name: string;
   avatar?: string | null;
-  time?: string;
+  time?: string | Date;
   size: "large" | "small";
   userId?: number;
 }
@@ -36,7 +36,7 @@ export default function UserBox({
             <div className="flex flex-col">
               <span className="text-sm font-medium text-gray-700">{name}</span>
               <span className="text-xs font-medium text-gray-500">
-                {getTimeInterval(time)}
+                {getTimeInterval(time as string)}
               </span>
             </div>
           </div>

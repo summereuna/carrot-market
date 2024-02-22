@@ -43,8 +43,10 @@ const Sales: NextPage = () => {
           hearts={sale.product._count.wishes}
           id={sale.id}
           key={sale.id}
-          productReservation={sale.product.reservation}
-          productReview={sale.product.review}
+          productReservation={sale.product.reservation?.id ? true : false}
+          productReview={
+            (sale.product.review?.length as number) > 0 ? true : false
+          }
         />
       )),
     },
@@ -67,8 +69,10 @@ const Sales: NextPage = () => {
             hearts={saleItem.product._count.wishes}
             id={saleItem.id}
             key={saleItem.id}
-            productReservation={saleItem.product.reservation}
-            productReview={saleItem.product.review}
+            productReservation={saleItem.product.reservation?.id ? true : false}
+            productReview={
+              (saleItem.product.review?.length as number) > 0 ? true : false
+            }
           />
         )),
     },
@@ -86,8 +90,10 @@ const Sales: NextPage = () => {
             hearts={saleItem.product._count.wishes}
             id={saleItem.id}
             key={saleItem.id}
-            productReservation={saleItem.product.reservation}
-            productReview={saleItem.product.review}
+            productReservation={saleItem.product.reservation?.id ? true : false}
+            productReview={
+              (saleItem.product.review?.length as number) > 0 ? true : false
+            }
           />
         )),
     },

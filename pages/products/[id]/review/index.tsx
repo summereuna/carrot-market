@@ -144,9 +144,9 @@ const Review: NextPage = () => {
 
   const [reviewKind, setReviewKind] = useState("good");
 
-  const reviewKindHandler = (e) => {
+  const reviewKindHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
-    setReviewKind(e.target.id);
+    setReviewKind((e.target as HTMLDivElement).id);
   };
 
   useEffect(() => {
@@ -168,7 +168,7 @@ const Review: NextPage = () => {
     <Layout canGoBack title="거래 후기 보내기">
       <div className="flex space-x-4 px-4 py-4 bg-gray-200">
         <Image
-          src={productInfoData?.productInfo?.image}
+          src={productInfoData?.productInfo?.image!}
           alt="product-image"
           width={40}
           height={40}

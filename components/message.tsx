@@ -3,7 +3,7 @@ import Image from "next/image";
 
 interface MessageProps {
   message: string;
-  time: string;
+  time: string | Date;
   me?: boolean;
   avatarUrl?: string;
   isReservedAlarm: boolean;
@@ -14,7 +14,7 @@ export default function Message({
   time,
   me,
   avatarUrl,
-  isReservedAlarm,
+  isReservedAlarm = false,
 }: MessageProps) {
   return (
     <>

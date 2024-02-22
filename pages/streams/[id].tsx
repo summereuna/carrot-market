@@ -125,6 +125,7 @@ const LiveDetail: NextPage = () => {
                 avatarUrl={
                   message.user.id !== user?.id ? message.user.avatar : undefined
                 }
+                isReservedAlarm={false}
               />
             ))}
             <div ref={scrollRef} />

@@ -16,7 +16,7 @@ import useUser from "@/libs/client/useUser";
 interface ProductWithUserAndStateCheck extends Product {
   user: User;
   reservation: { id: number };
-  review: { id: number };
+  review: { id: number; length: number };
 }
 
 interface ProductDetailResponse {
@@ -101,7 +101,7 @@ const ProductDetail: NextPage = () => {
         <div className="mb-8">
           <div className="relative pb-[348px] -z-10">
             <Image
-              src={data?.product?.image}
+              src={data?.product?.image!}
               alt="product-image"
               fill={true}
               className="bg-slate-100 absolute object-scale-down"
@@ -110,8 +110,12 @@ const ProductDetail: NextPage = () => {
           <Link href={`/profile/${data?.product?.userId}`}>
             <div className="py-3 border-t border-b">
               <UserBox
-                name={data?.product?.user?.name}
-                avatar={data?.product?.user?.avatar}
+                name={data?.product?.user?.name!}
+                avatar={
+                  data?.product?.user?.avatar
+                    ? data?.product?.user?.avatar
+                    : undefined
+                }
                 size="small"
                 time={data?.product?.created}
                 userId={data?.product?.userId}
@@ -223,7 +227,7 @@ const ProductDetail: NextPage = () => {
         </div>
 
         {/*direct-message btn*/}
-        {!(data?.product?.review?.length > 0) &&
+        {!((data?.product?.review?.length as number) > 0) &&
         user?.id !== data?.product?.userId ? (
           <Button text="채팅하기" large onClick={onChatClick} />
         ) : (

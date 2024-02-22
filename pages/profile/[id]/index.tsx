@@ -63,7 +63,7 @@ const UserProfile: NextPage = () => {
         <div className="divide-y-[1px]">
           {/* 유저 정보 */}
           <div className="px-4 py-4">
-            {parseInt(router.query.id) === user?.id ? (
+            {+router.query.id! === user?.id ? (
               <div className="px-4 py-4 flex flex-col space-y-4">
                 <UserBox
                   name={data?.profile?.name}

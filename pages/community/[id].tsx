@@ -119,9 +119,9 @@ const CommunityPostDetail: NextPage = () => {
         <Link href={`/profile/${data?.post?.userId}`}>
           <div className="px-4">
             <UserBox
-              name={data?.post?.user.name}
+              name={data?.post?.user.name!}
               size="small"
-              time={data?.post?.created}
+              time={data?.post?.created!}
               avatar={data?.post?.user.avatar}
               userId={data?.post?.user.id}
             />
@@ -173,7 +173,7 @@ const CommunityPostDetail: NextPage = () => {
             name={answer.user.name}
             time={answer.updated.toString()}
             comment={answer.answer}
-            avatar={answer.user.avatar}
+            avatar={answer.user.avatar ? answer.user.avatar : undefined}
             userId={answer.user.id}
           />
         ))}
