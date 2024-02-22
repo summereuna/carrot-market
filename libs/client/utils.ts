@@ -124,3 +124,9 @@ export function divideDate(chatList: chatMessage[]) {
   });
   return sections;
 }
+
+export function changeStringToArrayReviewBoxes(reviews: string): string[] {
+  const reviewReg = reviews!.match(/"([^"]*)"/g);
+  const reviewMatch = reviewReg!.map((match) => match.slice(1, -1));
+  return reviewMatch;
+}
