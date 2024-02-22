@@ -1,8 +1,8 @@
 import { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { cls } from "../libs/client/utils";
-import Button from "@/components/button";
-import Input from "@/components/input";
+import Button from "@/components/Button";
+import Input from "@/components/Input";
 import { useForm } from "react-hook-form";
 import useMutation from "@/libs/client/useMutation";
 import { useRouter } from "next/router";

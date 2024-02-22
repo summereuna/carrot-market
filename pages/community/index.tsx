@@ -1,5 +1,5 @@
-import FloatingButton from "@/components/floating-button";
-import Layout from "@/components/layout";
+import FloatingButton from "@/components/FloatingButton";
+import Layout from "@/components/Layout";
 import useCoords from "@/libs/client/useCoords";
 import { getTimeInterval } from "@/libs/client/utils";
 import { User, Post } from "@prisma/client";

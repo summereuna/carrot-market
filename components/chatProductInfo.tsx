@@ -1,7 +1,7 @@
 import { cls } from "@/libs/client/utils";
 import Image from "next/image";
 import Link from "next/link";
-import SmButton from "./smButton";
+import SmButton from "./SmButton";
 
 interface ChatProductInfoProps {
   productName: string;

@@ -1,5 +1,5 @@
-import Layout from "@/components/layout";
-import ProductList from "@/components/product-list";
+import Layout from "@/components/Layout";
+import ProductList from "@/components/ProductList";
 import type { NextPage } from "next";
 
 //상품 리스트

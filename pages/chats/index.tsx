@@ -1,5 +1,5 @@
-import ChattingRoom from "@/components/chattingRoom";
-import Layout from "@/components/layout";
+import ChattingRoom from "@/components/ChattingRoom";
+import Layout from "@/components/Layout";
 import useUser from "@/libs/client/useUser";
 import { Chat, ChatRoom } from "@prisma/client";
 import type { NextPage } from "next";

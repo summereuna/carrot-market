@@ -1,6 +1,6 @@
-import Button from "@/components/button";
-import Layout from "@/components/layout";
-import Textarea from "@/components/textarea";
+import Button from "@/components/Button";
+import Layout from "@/components/Layout";
+import Textarea from "@/components/Textarea";
 import useCoords from "@/libs/client/useCoords";
 import useMutation from "@/libs/client/useMutation";
 import { Post } from "@prisma/client";

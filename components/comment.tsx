@@ -1,6 +1,4 @@
-import { getTimeInterval } from "@/libs/client/utils";
-import Image from "next/image";
-import UserBox from "./user-box";
+import UserBox from "./UserBox";
 
 interface CommentProps {
   comment: string;

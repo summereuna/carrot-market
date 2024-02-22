@@ -1,7 +1,7 @@
-import Button from "@/components/button";
-import Input from "@/components/input";
-import Layout from "@/components/layout";
-import Textarea from "@/components/textarea";
+import Button from "@/components/Button";
+import Input from "@/components/Input";
+import Layout from "@/components/Layout";
+import Textarea from "@/components/Textarea";
 import useMutation from "@/libs/client/useMutation";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";

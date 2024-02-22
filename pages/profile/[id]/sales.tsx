@@ -1,11 +1,11 @@
-import Layout from "@/components/layout";
+import Layout from "@/components/Layout";
 import type { NextPage } from "next";
 import useSWR from "swr";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import Item from "@/components/item";
+import Item from "@/components/Item";
 import { Product, Sale } from "@prisma/client";
-import Tabs from "@/components/tabs";
+import Tabs from "@/components/Tabs";
 
 interface ProductWithIsOnSales extends Product {
   _count: { wishes: number };

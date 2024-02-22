@@ -1,6 +1,6 @@
-import FloatingButton from "@/components/floating-button";
-import Item from "@/components/item";
-import Layout from "@/components/layout";
+import FloatingButton from "@/components/FloatingButton";
+import Item from "@/components/Item";
+import Layout from "@/components/Layout";
 import useUser from "@/libs/client/useUser";
 import { Product } from "@prisma/client";
 import type { NextPage } from "next";

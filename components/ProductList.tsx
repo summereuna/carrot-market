@@ -1,6 +1,6 @@
 import useSWR from "swr";
 import { Product } from "@prisma/client";
-import Item from "./item";
+import Item from "./Item";
 
 export interface ProductWithCountWishes extends Product {
   _count: { wishes: number };

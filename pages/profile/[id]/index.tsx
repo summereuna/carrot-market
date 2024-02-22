@@ -1,15 +1,15 @@
-import Layout from "@/components/layout";
-import CheckBoxReview from "@/components/checkBoxReview";
-import UserBox from "@/components/user-box";
+import Layout from "@/components/Layout";
+import CheckBoxReview from "@/components/CheckBoxReview";
+import UserBox from "@/components/UserBox";
 import useUser from "@/libs/client/useUser";
 import { User } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import useSWR from "swr";
-import Reviews, { ReviewWithUser } from "@/components/reviews";
-import DetailPageTitle from "@/components/detailPageTitle";
-import SmButton from "@/components/smButton";
-import Manner from "@/components/manner";
+import Reviews, { ReviewWithUser } from "@/components/Reviews";
+import DetailPageTitle from "@/components/DetailPageTitle";
+import SmButton from "@/components/SmButton";
+import Manner from "@/components/Manner";
 
 export interface UserResponse {
   ok: boolean;

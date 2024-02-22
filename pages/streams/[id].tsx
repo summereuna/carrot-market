@@ -1,5 +1,5 @@
-import Layout from "@/components/layout";
-import Message from "@/components/message";
+import Layout from "@/components/Layout";
+import Message from "@/components/Message";
 import useUser from "@/libs/client/useUser";
 import useMutation from "@/libs/client/useMutation";
 import { Message as MessageModel, Stream } from "@prisma/client";

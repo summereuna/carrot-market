@@ -1,7 +1,7 @@
-import Layout from "@/components/layout";
-import Reviews from "@/components/reviews";
-import SmButton from "@/components/smButton";
-import UserBox from "@/components/user-box";
+import Layout from "@/components/Layout";
+import Reviews from "@/components/Reviews";
+import SmButton from "@/components/SmButton";
+import UserBox from "@/components/UserBox";
 import useUser from "@/libs/client/useUser";
 import { Review, User } from "@prisma/client";
 import type { NextPage } from "next";

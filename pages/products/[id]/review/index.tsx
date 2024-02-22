@@ -1,7 +1,7 @@
-import Button from "@/components/button";
-import Checkbox from "@/components/checkBox";
-import Layout from "@/components/layout";
-import Textarea from "@/components/textarea";
+import Button from "@/components/Button";
+import Checkbox from "@/components/CheckBox";
+import Layout from "@/components/Layout";
+import Textarea from "@/components/Textarea";
 import useMutation from "@/libs/client/useMutation";
 import useUser from "@/libs/client/useUser";
 import { cls } from "@/libs/client/utils";

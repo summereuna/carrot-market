@@ -1,6 +1,6 @@
-import Button from "@/components/button";
-import Layout from "@/components/layout";
-import UserBox from "@/components/user-box";
+import Button from "@/components/Button";
+import Layout from "@/components/Layout";
+import UserBox from "@/components/UserBox";
 import useMutation from "@/libs/client/useMutation";
 import { cls } from "@/libs/client/utils";
 import { ChatRoom, Product, User } from "@prisma/client";

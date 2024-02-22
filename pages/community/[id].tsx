@@ -1,8 +1,8 @@
-import Button from "@/components/button";
-import Layout from "@/components/layout";
-import Textarea from "@/components/textarea";
-import UserBox from "@/components/user-box";
-import Comment from "@/components/comment";
+import Button from "@/components/Button";
+import Layout from "@/components/Layout";
+import Textarea from "@/components/Textarea";
+import UserBox from "@/components/UserBox";
+import Comment from "@/components/Comment";
 
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
