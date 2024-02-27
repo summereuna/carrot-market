@@ -1,9 +1,9 @@
 import ChattingRoom from "@/components/ChattingRoom";
 import Layout from "@/components/Layout";
+import Seo from "@/components/Seo";
 import useUser from "@/libs/client/useUser";
 import { Chat, ChatRoom } from "@prisma/client";
 import type { NextPage } from "next";
-import Head from "next/head";
 import useSWR from "swr";
 
 interface PurchaserInfo {
@@ -34,9 +34,7 @@ const Chats: NextPage = () => {
   console.log(user);
   return (
     <Layout title="채팅" hasTabBar>
-      <Head>
-        <title>채팅</title>
-      </Head>
+      <Seo title="채팅 | 당근마켓" description="당근마켓 채팅" />
       <div className="flex flex-col pb-3 divide-y">
         {data?.chats?.map((chatRoom) => (
           <ChattingRoom

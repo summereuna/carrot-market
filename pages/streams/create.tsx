@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Stream } from "@prisma/client";
+import Seo from "@/components/Seo";
 
 interface CreateStreamForm {
   name: string;
@@ -41,6 +42,10 @@ const Create: NextPage = () => {
 
   return (
     <Layout canGoBack title="라이브">
+      <Seo
+        title="글쓰기 | 라이브 스트리밍"
+        description="당근마켓 라이브 스트리밍 글쓰기"
+      />
       <form onSubmit={handleSubmit(onValid)} className="px-4 py-10 space-y-5">
         <Input
           register={register("name", {

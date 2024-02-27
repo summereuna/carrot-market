@@ -1,6 +1,7 @@
 import Button from "@/components/Button";
 import Checkbox from "@/components/CheckBox";
 import Layout from "@/components/Layout";
+import Seo from "@/components/Seo";
 import Textarea from "@/components/Textarea";
 import useMutation from "@/libs/client/useMutation";
 import useUser from "@/libs/client/useUser";
@@ -166,6 +167,10 @@ const Review: NextPage = () => {
 
   return (
     <Layout canGoBack title="거래 후기 보내기">
+      <Seo
+        title="거래 후기 보내기 | 중고거래"
+        description="당근마켓 중고거래 후기 보내기"
+      />
       <div className="flex space-x-4 px-4 py-4 bg-gray-200">
         <Image
           src={productInfoData?.productInfo?.image!}

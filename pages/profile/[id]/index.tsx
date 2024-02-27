@@ -10,6 +10,7 @@ import Reviews, { ReviewWithUser } from "@/components/Reviews";
 import DetailPageTitle from "@/components/DetailPageTitle";
 import SmButton from "@/components/SmButton";
 import Manner from "@/components/Manner";
+import Seo from "@/components/Seo";
 
 export interface UserResponse {
   ok: boolean;
@@ -59,6 +60,10 @@ const UserProfile: NextPage = () => {
 
   return (
     <Layout canGoBack title="프로필">
+      <Seo
+        title={`${data?.profile?.name}님의 프로필 | 당근마켓`}
+        description="당근마켓 유저 프로필"
+      />
       {data?.profile && (
         <div className="divide-y-[1px]">
           {/* 유저 정보 */}

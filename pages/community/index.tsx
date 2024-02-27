@@ -1,5 +1,6 @@
 import FloatingButton from "@/components/FloatingButton";
 import Layout from "@/components/Layout";
+import Seo from "@/components/Seo";
 import useCoords from "@/libs/client/useCoords";
 import { getTimeInterval } from "@/libs/client/utils";
 import { User, Post } from "@prisma/client";
@@ -32,6 +33,7 @@ const Community: NextPage = () => {
   console.log(latitude, longitude);
   return (
     <Layout title="동네생활" hasTabBar>
+      <Seo title="동네생활 | 당근마켓" description="당근마켓 동네생활" />
       <div className="divide-y">
         {data?.posts?.map((post) => (
           <div key={post.id}>

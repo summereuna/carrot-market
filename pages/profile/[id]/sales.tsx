@@ -6,6 +6,7 @@ import Image from "next/image";
 import Item from "@/components/Item";
 import { Product, Sale } from "@prisma/client";
 import Tabs from "@/components/Tabs";
+import Seo from "@/components/Seo";
 
 interface ProductWithIsOnSales extends Product {
   _count: { wishes: number };
@@ -101,6 +102,10 @@ const Sales: NextPage = () => {
 
   return (
     <Layout canGoBack title="판매내역">
+      <Seo
+        title={`판매내역 | ${data?.user?.name}님의 프로필`}
+        description="당근마켓 유저 프로필 판매내역"
+      />
       {data?.user && (
         <div className="flex justify-between py-5 px-5">
           <span className="text-xl font-semibold">

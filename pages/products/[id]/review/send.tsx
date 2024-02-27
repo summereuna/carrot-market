@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import useSWRImmutable from "swr/immutable";
 import thanksImg from "@/public/thanksImg.png";
 import { changeStringToArrayReviewBoxes, cls } from "@/libs/client/utils";
+import Seo from "@/components/Seo";
 
 interface GetReservationProductInfoResponse {
   ok: boolean;
@@ -33,6 +34,10 @@ const Send: NextPage = () => {
 
   return (
     <Layout title="내가 보낸 거래 후기" canGoHome>
+      <Seo
+        title="내가 보낸 거래 후기 | 중고거래"
+        description="당근마켓 중고거래 내가 보낸 거래 후기"
+      />
       {!data?.reviewInfo && (
         <div className="flex justify-center mt-20">잘못된 접근입니다.</div>
       )}

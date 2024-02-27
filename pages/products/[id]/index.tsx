@@ -11,6 +11,7 @@ import useSWR, { useSWRConfig } from "swr";
 import { useEffect } from "react";
 import Image from "next/image";
 import useUser from "@/libs/client/useUser";
+import Seo from "@/components/Seo";
 
 //프리즈마 클라이언트의 Product 타입에는 연결된 user에 대한 타입이 없으므로 확장시켜주기
 interface ProductWithUserAndStateCheck extends Product {
@@ -97,6 +98,10 @@ const ProductDetail: NextPage = () => {
   //일단 ?로 만들고 나중에 필요하면 스켈레톤 넣기
   return (
     <Layout canGoBack>
+      <Seo
+        title={`${data?.product?.name} | 중고거래`}
+        description="당근마켓 중고거래"
+      />
       <div className="px-4">
         <div className="mb-8">
           <div className="relative pb-[348px] -z-10">

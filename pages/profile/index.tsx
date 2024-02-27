@@ -1,5 +1,6 @@
 import Layout from "@/components/Layout";
 import Reviews from "@/components/Reviews";
+import Seo from "@/components/Seo";
 import SmButton from "@/components/SmButton";
 import UserBox from "@/components/UserBox";
 import useUser from "@/libs/client/useUser";
@@ -31,6 +32,10 @@ const Profile: NextPage = () => {
   return (
     user && (
       <Layout title="나의 당근" hasTabBar>
+        <Seo
+          title="나의 프로필 | 당근마켓"
+          description="당근마켓 나의 프로필"
+        />
         <div className="divide-y-[1px]">
           {/* 유저 정보 */}
           <div className="px-4 py-4 flex justify-between items-center">

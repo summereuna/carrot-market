@@ -1,5 +1,6 @@
 import FloatingButton from "@/components/FloatingButton";
 import Layout from "@/components/Layout";
+import Seo from "@/components/Seo";
 import { Stream } from "@prisma/client";
 import type { NextPage } from "next";
 import Link from "next/link";
@@ -27,6 +28,10 @@ const Streams: NextPage = () => {
   };
   return (
     <Layout title="라이브 스트리밍" hasTabBar>
+      <Seo
+        title="라이브 스트리밍 | 당근마켓"
+        description="당근마켓 라이브 스트리밍"
+      />
       <div className="grid grid-cols-2 pt-3 pb-3">
         {/*divide-y-2 요소 사이사이에 선 넣기 */}
 

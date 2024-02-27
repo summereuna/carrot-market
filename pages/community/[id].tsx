@@ -13,6 +13,7 @@ import Link from "next/link";
 import { cls } from "@/libs/client/utils";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
+import Seo from "@/components/Seo";
 
 interface AnswerWithUser extends Answer {
   user: User;
@@ -108,6 +109,10 @@ const CommunityPostDetail: NextPage = () => {
   }, [answerData, resetAnswerForm, boundMutate]);
   return (
     <Layout canGoBack>
+      <Seo
+        title={`${data?.post?.title} | 동네생활`}
+        description={`당근마켓 동네 생활: ${data?.post?.content}`}
+      />
       <div className="border-b-8 border-slate-100 w-full space-y-5 py-3">
         <span
           className="ml-4 inline-flex my-3 items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800

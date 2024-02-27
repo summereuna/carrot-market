@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import fileUploader from "@/libs/client/fileUploader";
 import Image from "next/image";
+import Seo from "@/components/Seo";
 
 interface EditProfileForm {
   name?: string;
@@ -96,6 +97,7 @@ const EditProfile: NextPage = () => {
   //console.log(user?.avatar);
   return (
     <Layout canGoBack title="프로필 수정">
+      <Seo title="프로필 수정 | 당근마켓" description="당근마켓 프로필 수정" />
       <form onSubmit={handleSubmit(onValid)} className="py-5 px-4 space-y-4">
         <div className="flex items-center space-x-3">
           {avatarPreview ? (
