@@ -28,6 +28,7 @@ export default function Message({
                 width={40}
                 height={40}
                 className="w-8 h-8 rounded-full bg-slate-300 object-cover"
+                priority
               />
             ) : (
               <div className="w-8 h-8 rounded-full bg-slate-300 flex-shrink-0" />

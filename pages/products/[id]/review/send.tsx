@@ -70,6 +70,7 @@ const Send: NextPage = () => {
                 "w-full h-60 object-contain rounded-t-xl",
                 data?.reviewInfo?.kind === "bad" ? "bg-white" : "bg-yellow-50"
               )}
+              priority
             />
             <div
               className={cls(

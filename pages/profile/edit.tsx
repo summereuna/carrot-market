@@ -107,6 +107,7 @@ const EditProfile: NextPage = () => {
               width={56}
               height={56}
               className="w-14 h-14 rounded-full bg-slate-300 object-cover"
+              priority
             />
           ) : (
             <div className="w-14 h-14 rounded-full bg-slate-300" />

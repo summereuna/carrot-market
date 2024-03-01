@@ -103,6 +103,7 @@ const Upload: NextPage = () => {
                 alt="preview"
                 fill={true}
                 className="text-gray-600 rounded-md mb-8 object-contain"
+                priority
               />
             </div>
           ) : (

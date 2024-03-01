@@ -119,6 +119,7 @@ const Sales: NextPage = () => {
                 width={40}
                 height={40}
                 className="w-20 h-w-20 rounded-full bg-slate-300 object-cover"
+                priority
               />
             ) : (
               <div className="w-20 h-20 bg-slate-300 rounded-full"></div>

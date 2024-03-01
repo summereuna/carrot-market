@@ -35,6 +35,7 @@ export default function ChatProductInfo({
               width={40}
               height={40}
               className="w-16 h-16 bg-slate-300 rounded-md object-fill border-[1px]"
+              priority
             />
             <div className="pt-2 flex flex-col space-y-1">
               <div className="flex items-center">

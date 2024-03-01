@@ -29,6 +29,7 @@ export default function ChattingRoom({
               width={40}
               height={40}
               className="w-12 h-12 rounded-full bg-slate-300 object-cover"
+              priority
             />
           ) : (
             <div className="w-12 h-12 rounded-full bg-slate-300" />

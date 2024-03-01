@@ -34,6 +34,7 @@ export default function Item({
               width={40}
               height={40}
               className="w-20 h-w-20 bg-slate-300 rounded-md object-fill border-[1px]"
+              priority
             />
             <div className="pt-2 flex flex-col space-y-1">
               <h3 className="text-sm font-medium text-gray-900">

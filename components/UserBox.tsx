@@ -29,6 +29,7 @@ export default function UserBox({
                 width={40}
                 height={40}
                 className="w-10 h-10 rounded-full bg-slate-300 object-cover"
+                priority
               />
             ) : (
               <div className="w-10 h-10 bg-slate-300 rounded-full" />
@@ -51,6 +52,7 @@ export default function UserBox({
               width={40}
               height={40}
               className="w-14 h-14 rounded-full bg-slate-300 object-cover"
+              priority
             />
           ) : (
             <div className="w-14 h-14 bg-slate-300 rounded-full" />

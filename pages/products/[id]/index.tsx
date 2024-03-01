@@ -110,6 +110,7 @@ const ProductDetail: NextPage = () => {
               alt="product-image"
               fill={true}
               className="bg-slate-100 absolute object-scale-down"
+              priority
             />
           </div>
           <Link href={`/profile/${data?.product?.userId}`}>
@@ -166,6 +167,7 @@ const ProductDetail: NextPage = () => {
                       alt="product-image"
                       fill={true}
                       className="absolute object-cover rounded-md"
+                      priority
                     />
                   </div>
                   <h3 className="text-sm text-gray-700 -mb-1">

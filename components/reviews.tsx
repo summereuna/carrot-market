@@ -24,6 +24,7 @@ export default function Reviews({ reviews }: ReviewsResponse) {
                   width={40}
                   height={40}
                   className="w-10 h-10 rounded-full bg-slate-300 object-cover"
+                  priority
                 />
               ) : (
                 <div className="w-10 h-10 bg-slate-300 rounded-full" />
