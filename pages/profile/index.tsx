@@ -4,11 +4,13 @@ import Seo from "@/components/Seo";
 import SmButton from "@/components/SmButton";
 import UserBox from "@/components/UserBox";
 import useUser from "@/libs/client/useUser";
+import { withSsrSession } from "@/libs/server/withSession";
 import { Review, User } from "@prisma/client";
-import type { NextPage } from "next";
+import type { NextPage, NextPageContext } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import useSWR from "swr";
+import useSWR, { SWRConfig } from "swr";
+import client from "@/libs/server/client";
 
 interface ReviewWithUser extends Review {
   createdBy: User;
@@ -23,7 +25,6 @@ const Profile: NextPage = () => {
   const { user } = useUser();
   const { data } = useSWR<ReviewsResponse>("/api/reviews");
   const router = useRouter();
-  console.log(data);
 
   const handlerProfileClick = () => {
     router.push(`/profile/${user?.id}`);
@@ -145,4 +146,66 @@ const Profile: NextPage = () => {
   );
 };
 
-export default Profile;
+const Page: NextPage<{
+  profile: User;
+  // reviews: ReviewWithUser[]
+}> = ({
+  profile,
+  // reviews
+}) => {
+  return (
+    <SWRConfig
+      value={{
+        fallback: {
+          "/api/users/me": { ok: true, profile },
+          // "/api/reviews": {
+          //   ok: true,
+          //   reviews,
+          // },
+        },
+      }}
+    >
+      <Profile />
+    </SWRConfig>
+  );
+};
+
+//함수를 다른 함수의 인자로 전달! > 함수형 프로그래밍
+//getServerSideProps 함수 내용에 해당하는 부분을 withSsrSession() 함수로 감싸고 getServerSideProps 변수에 명명한다.
+//NextJS가 찾는 건 getServerSideProps 함수니까 그렇게 해도 된다.
+//이렇게 getServerSideProps의 함수 내용에 해당하는 handler를 withSsrSession() 함수의 인자로 보내면,
+// context.req.session.id 얻을 수 있음
+export const getServerSideProps = withSsrSession(async function ({
+  req,
+}: NextPageContext) {
+  //요렇게
+  // console.log(context.req?.session.user);
+
+  //req.session.user에 있는 id 사용하여 유저 데이터 찾아오기
+  const profile = await client.user.findUnique({
+    where: { id: req?.session.user?.id },
+  });
+  // const reviews = await client.review.findMany({
+  //   where: { createdForId: req?.session.user?.id },
+  //   include: {
+  //     createdBy: { select: { id: true, name: true, avatar: true } },
+  //   },
+  //   orderBy: { created: "desc" },
+  // });
+
+  return {
+    props: {
+      profile: JSON.parse(JSON.stringify(profile)),
+      // reviews: JSON.parse(JSON.stringify(reviews)),
+    },
+  };
+});
+
+export default Page;
+
+//상품 정보같은 데서는 인증해 줄게 없기 때문에 getServerSideProps 안에서 인증 요청은 없지만
+//프로필 페이지는 getServerSideProps 함수 안에서 인증 요청보내서 로그인된 유저가 누구인지 미리 알면 편하다.
+//그래서 유저의 프로필을 server side에서 렌더링 한 것임
+
+//useSWR 사용해서 fallback 안에 컴포넌트의 캐시 초기값도 제공하고 있다.
+//useUser훅이 백그라운드에서 실행되기 때문에 사용자가 프로필 페이지에 접속 시 로딩 상태 없이 바로 렌더링된 페이즈를 볼 수 있다.
