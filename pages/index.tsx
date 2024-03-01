@@ -89,15 +89,11 @@ export async function getServerSideProps() {
     orderBy: { created: "desc" },
   });
 
-  // res.json({
-  //   ok: true,
-  //   products,
-  // });
   return {
     props: { products: JSON.parse(JSON.stringify(products)) },
-    // Error serializing props ~ 에러 해결 위해 parse
+    // Error serializing props... 에러 해결 위해 parse
   };
 }
 
-//2. 내보내는 컴포넌트는 상품 정보를 prop으로 받는 컴포넌트인 Page 컴포넌트로
+//2. 내보내는 컴포넌트는 getServerSideProps를 통해 상품 정보를 prop으로 받는 컴포넌트인 Page 컴포넌트로
 export default Page;

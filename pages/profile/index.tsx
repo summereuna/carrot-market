@@ -4,12 +4,12 @@ import Seo from "@/components/Seo";
 import SmButton from "@/components/SmButton";
 import UserBox from "@/components/UserBox";
 import useUser from "@/libs/client/useUser";
-import { withSsrSession } from "@/libs/server/withSession";
 import { Review, User } from "@prisma/client";
 import type { NextPage, NextPageContext } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import useSWR, { SWRConfig } from "swr";
+import { withSsrSession } from "@/libs/server/withSession";
 import client from "@/libs/server/client";
 
 interface ReviewWithUser extends Review {
