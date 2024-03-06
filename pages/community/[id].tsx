@@ -121,17 +121,15 @@ const CommunityPostDetail: NextPage = () => {
           동네질문
         </span>
         {/*user-profile"*/}
-        <Link href={`/profile/${data?.post?.userId}`}>
-          <div className="px-4">
-            <UserBox
-              name={data?.post?.user.name!}
-              size="small"
-              time={data?.post?.created!}
-              avatar={data?.post?.user.avatar}
-              userId={data?.post?.user.id}
-            />
-          </div>
-        </Link>
+        <div className="px-4">
+          <UserBox
+            name={data?.post?.user.name!}
+            size="small"
+            time={data?.post?.created!}
+            avatar={data?.post?.user.avatar}
+            userId={data?.post?.user.id}
+          />
+        </div>
         {/* 내용 */}
         <div className="px-4 text-gray-700 flex flex-col space-y-3">
           <div className="text-xl font-semibold">

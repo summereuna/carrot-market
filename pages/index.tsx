@@ -3,7 +3,7 @@ import Item from "@/components/Item";
 import Layout from "@/components/Layout";
 import Seo from "@/components/Seo";
 import { Product } from "@prisma/client";
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import useSWR, { SWRConfig } from "swr";
 import client from "@/libs/server/client";
 
@@ -76,7 +76,7 @@ const Page: NextPage<{ products: ProductWithCountWishesAndStateChecks[] }> = ({
 };
 
 //1. getServerSideProps 함수 안에서 products를 가져온다.
-export async function getServerSideProps() {
+export const getServerSideProps: GetServerSideProps = async () => {
   const products = await client.product.findMany({
     //거기에 wishes 카운트도 포함해서
     include: {
@@ -93,7 +93,7 @@ export async function getServerSideProps() {
     props: { products: JSON.parse(JSON.stringify(products)) },
     // Error serializing props... 에러 해결 위해 parse
   };
-}
+};
 
 //2. 내보내는 컴포넌트는 getServerSideProps를 통해 상품 정보를 prop으로 받는 컴포넌트인 Page 컴포넌트로
 export default Page;
