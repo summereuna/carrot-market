@@ -4,9 +4,10 @@ import Seo from "@/components/Seo";
 import useCoords from "@/libs/client/useCoords";
 import { getTimeInterval } from "@/libs/client/utils";
 import { User, Post } from "@prisma/client";
-import type { NextPage } from "next";
+import type { GetStaticProps, NextPage } from "next";
 import Link from "next/link";
 import useSWR from "swr";
+import client from "@/libs/server/client";
 
 interface PostWithRecsAndAnswers extends Post {
   user: User;
@@ -18,24 +19,27 @@ interface PostResponse {
   posts: PostWithRecsAndAnswers[];
 }
 
-const Community: NextPage = () => {
-  //유저의 위치와 가까운 곳에 있는 포스트만 보기
-  //위 api에 위도경도 담아보내야함
-  const { latitude, longitude } = useCoords();
+const Community: NextPage<{ posts: PostWithRecsAndAnswers[] }> = ({
+  posts,
+}) => {
+  //✅리액트 부분 주석처리
+  // //유저의 위치와 가까운 곳에 있는 포스트만 보기
+  // //위 api에 위도경도 담아보내야함
+  // const { latitude, longitude } = useCoords();
 
-  const { data } = useSWR<PostResponse>(
-    latitude && longitude
-      ? `/api/posts?latitude=${latitude}&longitude=${longitude}`
-      : null
-  );
-  //console.log(data?.posts);
+  // const { data } = useSWR<PostResponse>(
+  //   latitude && longitude
+  //     ? `/api/posts?latitude=${latitude}&longitude=${longitude}`
+  //     : null
+  // );
+  // //console.log(data?.posts);
+  // console.log(latitude, longitude);
 
-  console.log(latitude, longitude);
   return (
     <Layout title="동네생활" hasTabBar>
       <Seo title="동네생활 | 당근마켓" description="당근마켓 동네생활" />
       <div className="divide-y">
-        {data?.posts?.map((post) => (
+        {posts?.map((post) => (
           <div key={post.id}>
             <Link href={`/community/${post.id}`}>
               <div className="cursor-pointer flex flex-col items-start space-y-2 py-4">
@@ -103,6 +107,28 @@ const Community: NextPage = () => {
       </div>
     </Layout>
   );
+};
+
+export const getStaticProps: GetStaticProps = async () => {
+  console.log("커뮤니티 페이지 정적으로 생성 중...");
+  //포스트 db가져오기: 실제 프로덕션에서는 페이지네이션 하는게 좋음
+  const posts = await client.post.findMany({
+    //다 가져오기
+    //거기에 추천, 답변 카운트도 포함해서
+    include: {
+      _count: {
+        select: { recommendations: true, answers: true },
+      },
+      user: { select: { name: true, id: true, avatar: true } },
+    },
+    orderBy: { created: "desc" },
+  });
+  return {
+    props: { posts: JSON.parse(JSON.stringify(posts)) },
+    revalidate: 10, //페이지로 사용자 진입 후 10초가 지나면 해당 페이지 정적생성진행
+    //이때 정적생성으로 업데이트 된 페이지가 다음 사용자에게 제공됨
+    //10초마다 생성되는게 아님 ㅇㅇ!
+  };
 };
 
 export default Community;
