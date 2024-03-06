@@ -35,3 +35,17 @@
 .best::-moz-progress-value {
   background-color: rgb(251 146 60);
 }
+
+/*마크다운에서 가져오는 html에 적용하기 위해 css 파일에도 tailwind 사용하기*/
+
+.blog-post-content h1 {
+  @apply font-semibold;
+}
+
+.blog-post-content p {
+  @apply mb-2 text-gray-700;
+}
+
+.blog-post-content ul {
+  @apply pl-5 list-disc text-gray-700;
+}

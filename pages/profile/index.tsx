@@ -5,7 +5,7 @@ import SmButton from "@/components/SmButton";
 import UserBox from "@/components/UserBox";
 import useUser from "@/libs/client/useUser";
 import { Review, User } from "@prisma/client";
-import type { NextPage, NextPageContext } from "next";
+import type { GetServerSideProps, NextPage, NextPageContext } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import useSWR, { SWRConfig } from "swr";
@@ -175,31 +175,31 @@ const Page: NextPage<{
 //NextJS가 찾는 건 getServerSideProps 함수니까 그렇게 해도 된다.
 //이렇게 getServerSideProps의 함수 내용에 해당하는 handler를 withSsrSession() 함수의 인자로 보내면,
 // context.req.session.id 얻을 수 있음
-export const getServerSideProps = withSsrSession(async function ({
-  req,
-}: NextPageContext) {
-  //요렇게
-  // console.log(context.req?.session.user);
+export const getServerSideProps: GetServerSideProps = withSsrSession(
+  async function ({ req }: NextPageContext) {
+    //요렇게
+    // console.log(context.req?.session.user);
 
-  //req.session.user에 있는 id 사용하여 유저 데이터 찾아오기
-  const profile = await client.user.findUnique({
-    where: { id: req?.session.user?.id },
-  });
-  // const reviews = await client.review.findMany({
-  //   where: { createdForId: req?.session.user?.id },
-  //   include: {
-  //     createdBy: { select: { id: true, name: true, avatar: true } },
-  //   },
-  //   orderBy: { created: "desc" },
-  // });
+    //req.session.user에 있는 id 사용하여 유저 데이터 찾아오기
+    const profile = await client.user.findUnique({
+      where: { id: req?.session.user?.id },
+    });
+    // const reviews = await client.review.findMany({
+    //   where: { createdForId: req?.session.user?.id },
+    //   include: {
+    //     createdBy: { select: { id: true, name: true, avatar: true } },
+    //   },
+    //   orderBy: { created: "desc" },
+    // });
 
-  return {
-    props: {
-      profile: JSON.parse(JSON.stringify(profile)),
-      // reviews: JSON.parse(JSON.stringify(reviews)),
-    },
-  };
-});
+    return {
+      props: {
+        profile: JSON.parse(JSON.stringify(profile)),
+        // reviews: JSON.parse(JSON.stringify(reviews)),
+      },
+    };
+  }
+);
 
 export default Page;
 
