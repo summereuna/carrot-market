@@ -110,7 +110,7 @@ const Community: NextPage<{ posts: PostWithRecsAndAnswers[] }> = ({
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  console.log("커뮤니티 페이지 정적으로 생성 중...");
+  console.log("커뮤니티에 글쓰면 /community 페이지 정적으로 재생성...");
   //포스트 db가져오기: 실제 프로덕션에서는 페이지네이션 하는게 좋음
   const posts = await client.post.findMany({
     //다 가져오기
@@ -125,9 +125,8 @@ export const getStaticProps: GetStaticProps = async () => {
   });
   return {
     props: { posts: JSON.parse(JSON.stringify(posts)) },
-    revalidate: 10, //페이지로 사용자 진입 후 10초가 지나면 해당 페이지 정적생성진행
-    //이때 정적생성으로 업데이트 된 페이지가 다음 사용자에게 제공됨
-    //10초마다 생성되는게 아님 ㅇㅇ!
+    //커뮤니티 클 올릴 때 마다 revalidate 되게 API handler에 작성하면
+    //여기서 revalidate 옵션은 없애도 됨
   };
 };
 
