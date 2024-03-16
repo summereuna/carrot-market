@@ -40,7 +40,7 @@ export default function Item({
               <h3 className="text-sm font-medium text-gray-900">
                 {productName}
               </h3>
-              <span className="text-xs text-gray-500">
+              <span suppressHydrationWarning className="text-xs text-gray-500">
                 {getTimeInterval(productCreated)}
               </span>
               <div className="flex space-x-1 items-center">
