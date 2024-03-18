@@ -30,7 +30,11 @@ export default function Layout({
       모바일 사이즈로 일단 작업하기 위해 max-w-xl 줘서 fixed된 바 크기 조정*/}
       <div className="fixed max-w-xl top-0 flex items-center px-5 bg-white w-full text-lg font-medium text-gray-800 py-3 border-b justify-center h-12 z-20">
         {canGoBack ? (
-          <button onClick={onBackClick} className="absolute left-4">
+          <button
+            aria-label="Go To Back Button"
+            onClick={onBackClick}
+            className="absolute left-4"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -48,7 +52,11 @@ export default function Layout({
           </button>
         ) : null}
         {canGoHome ? (
-          <button onClick={onGoHomeClick} className="absolute left-4">
+          <button
+            aria-label="Go To Home Button"
+            onClick={onGoHomeClick}
+            className="absolute left-4"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

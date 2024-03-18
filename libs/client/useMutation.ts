@@ -43,7 +43,11 @@ export default function useMutation<T = any>(
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     })
-      .then((response) => response.json().catch(() => {})) //혹시 에러 있으면 일단 에러 무시
+      .then((response) =>
+        response.json().catch(() => {
+          console.log("POST fetch 오류 발생");
+        })
+      )
       .then((data) => setState((prev) => ({ ...prev, data, loading: false })))
       .catch((error) =>
         setState((prev) => ({ ...prev, error, loading: false }))
