@@ -1,37 +1,26 @@
-import ChatProductInfo from "@/components/chatProductInfo";
-import Layout from "@/components/layout";
-import Message from "@/components/message";
+import ChatProductInfo from "@/components/ChatProductInfo";
+import FloatingInput from "@/components/FloatingInput";
+import Layout from "@/components/Layout";
+import Message from "@/components/Message";
+import Seo from "@/components/Seo";
 import useMutation from "@/libs/client/useMutation";
 import useUser from "@/libs/client/useUser";
-import { cls, divideDate } from "@/libs/client/utils";
-import { Chat, ChatRoom } from "@prisma/client";
+import { divideDate } from "@/libs/client/utils";
+import { Chat, ChatRoom, Product, Reservation } from "@prisma/client";
 import type { NextPage } from "next";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
 
-interface productOwner {
-  name: string;
-}
-interface Reservation {
-  date: Date;
-  id: number;
-  userId: number;
+interface ReservationInfo extends Reservation {
   user: { name: string };
-  updated: Date;
 }
 
-interface productWthProductOwner {
-  name: string;
-  image: string;
-  price: number;
-  id: number;
-  reservation: Reservation;
-  user: productOwner;
-  userId: number;
-  review?: { id: number };
+interface productWthProductOwner extends Product {
+  reservation: ReservationInfo;
+  user: { name: string };
+  review?: { id: number; length: number };
 }
 
 export interface chatMessage extends Chat {
@@ -51,10 +40,10 @@ interface ChatForm {
   chat: string;
 }
 
-interface CreateReservationResponse {
-  ok: boolean;
-  chatRoom: ChatRoom;
-}
+// interface CreateReservationResponse {
+//   ok: boolean;
+//   chatRoom: ChatRoom;
+// }
 
 const ChatDetail: NextPage = () => {
   const { user } = useUser();
@@ -95,6 +84,26 @@ const ChatDetail: NextPage = () => {
   };
   //채팅창 스크롤 맨 밑 유지
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  // const [
+  //   removeChatRoom,
+  //   { data: removeChatRoomData, loading: removeChatRoomLoading },
+  // ] = useMutation<ChatForm>(`/api/chats`);
+
+  // const onLeaveChatRoom = () => {
+  //   if (removeChatRoomLoading) return;
+  //   const confirmRemoveChatRoom = confirm("정말 채팅방을 나가겠습니까?");
+  //   if (confirmRemoveChatRoom && data?.chats?.product?.review?.id) {
+  //     removeChatRoom({});
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   if (removeChatRoomData) {
+  //     router.push(`/chats`);
+  //   }
+  // });
+
   useEffect(() => {
     scrollRef?.current?.scrollIntoView();
   });
@@ -108,22 +117,28 @@ const ChatDetail: NextPage = () => {
           : data?.chats?.product?.user?.name
       }
     >
+      <Seo title="채팅 | 당근마켓" description="당근마켓 채팅" />
       <div className="border-b-[1px] pb-3">
         <ChatProductInfo
           key={data?.chats?.product?.id}
-          productName={data?.chats?.product?.name}
-          productImage={data?.chats?.product?.image}
-          price={data?.chats?.product?.price}
-          id={data?.chats?.product?.id}
+          productName={data?.chats?.product?.name!}
+          productImage={data?.chats?.product?.image!}
+          price={data?.chats?.product?.price!}
+          id={data?.chats?.product?.id!}
           isOnSale={data?.chats?.product?.reservation ? false : true}
-          isSoldOut={data?.chats?.product?.review?.id ? true : false}
+          isSoldOut={
+            data?.chats?.product?.reservation &&
+            (data?.chats?.product?.review?.length as number) > 0
+              ? true
+              : false
+          }
           onReservation={handleReservationToggleClick}
           writeReview={handleWriteReviewClick}
         />
       </div>
       <div className="px-4 py-3 space-y-3 mb-12">
         {(data?.chats?.chats?.length as number) > 0 &&
-          Object.entries(divideDate(data?.chats?.chats)).map(
+          Object.entries(divideDate(data?.chats?.chats!)).map(
             ([formattedChatCreateDate, chats]) => (
               <div
                 key={formattedChatCreateDate}
@@ -171,20 +186,28 @@ const ChatDetail: NextPage = () => {
             <p>피해가 있을 수 있으니 주의하세요!</p>
           </div>
         )}
-        {data?.chats?.product?.review?.id && (
-          <div className="flex flex-col text-center mt-40 text-sm text-gray-400">
-            <p>거래를 완료했어요!</p>
-            <p>
-              {user?.id === data?.chats?.product?.userId
-                ? data?.chats?.user?.name
-                : data?.chats?.product?.user?.name}
-              님과의 채팅을 종료하겠습니까?
-            </p>
-            <Link href={`/`}>
-              <p className="underline cursor-pointer hover:text-orange-600">
-                채팅에서 나가기
+        {(data?.chats?.product?.review?.length as number) > 0 && (
+          <div className="space-y-2 py-4 flex flex-col items-center text-sm text-gray-400">
+            <div className="flex flex-col items-center">
+              <p>거래를 완료했어요!</p>
+              <p>
+                {user?.id === data?.chats?.product?.userId
+                  ? data?.chats?.user?.name
+                  : data?.chats?.product?.user?.name}
+                님과의 채팅을 종료하겠습니까?
               </p>
-            </Link>
+            </div>
+
+            <button
+              onClick={onLeaveChatRoom}
+              className="w-24 underline cursor-pointer hover:text-orange-500 focus:text-orange-500"
+            >
+              {removeChatRoomLoading ? "로딩 중..." : "채팅방 나가기"}
+            </button>
+            <div className="flex flex-col items-center text-sm">
+              <p>나가기를 하면 대화내용이 모두 삭제되고</p>
+              <p>채팅목록에서도 삭제됩니다.</p>
+            </div>
           </div>
         )}
         <div ref={scrollRef} />
@@ -194,20 +217,15 @@ const ChatDetail: NextPage = () => {
             onSubmit={handleSubmit(onValid)}
             className="relative flex max-w-md items-center w-full mx-auto"
           >
-            <input
-              {...register("chat", { required: true })}
+            <FloatingInput
+              register={register("chat", {
+                required: true,
+              })}
               name="chat"
-              type="text"
-              placeholder="메시지를 입력하세요."
+              placeholder="메세지를 입력하세요."
               required
-              disabled={Boolean(data?.chats?.product?.review?.id)}
-              className="pr-12 shadow-sm rounded-full w-full border-gray-300 focus:outline-none focus:border-orange-500 focus:ring-orange-500"
+              isLoading={loading}
             />
-            <div className="absolute inset-y-0 flex py-1.5 pr-1.5 right-0">
-              <button className="flex items-center bg-orange-500 rounded-full px-3 hover:bg-orange-600 focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 text-sm text-white">
-                &rarr;
-              </button>
-            </div>
           </form>
         </div>
       </div>

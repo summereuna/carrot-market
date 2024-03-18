@@ -2,13 +2,14 @@ import Layout from "@/components/Layout";
 import Message from "@/components/Message";
 import useUser from "@/libs/client/useUser";
 import useMutation from "@/libs/client/useMutation";
-import { Message as MessageModel, Stream } from "@prisma/client";
+import { Stream } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
 import Seo from "@/components/Seo";
+import FloatingInput from "@/components/FloatingInput";
 
 interface StreamMessage {
   id: number;
@@ -103,7 +104,7 @@ const LiveDetail: NextPage = () => {
             title={`${data?.stream?.name} | 라이브 스트리밍`}
             description={`당근마켓 라이브 스트리밍 | ${data?.stream?.description}`}
           />
-          <div className="py-10 px-4 space-y-4">
+          <div className="py-4 px-4 space-y-4 mb-10">
             {/* 라이브 스트리밍 동영상 */}
             <div className="w-full aspect-video rounded-md shadow-sm  bg-slate-300" />
             <div className="mt-5">
@@ -120,10 +121,8 @@ const LiveDetail: NextPage = () => {
             </div>
 
             {/* 채팅창: 보이는 화면 50에 고정*/}
-            <h2 className="text-2xl font-semibold text-gray-900">
-              라이브 채팅
-            </h2>
-            <div className="py-4 pb-4 h-[50vh] overflow-y-scroll px-4 space-y-3">
+            <h2 className="text-xl font-semibold text-gray-900">라이브 채팅</h2>
+            <div className="py-4 pb-2 h-[50vh] overflow-y-auto px-4 space-y-3">
               {data?.stream?.messages.map((message) => (
                 <Message
                   key={message.id}
@@ -141,24 +140,20 @@ const LiveDetail: NextPage = () => {
               <div ref={scrollRef} />
             </div>
             {/*플로팅 채팅창 고정*/}
-            <div className="bg-white fixed bottom-0 p-2 inset-x-0">
+            <div className="bg-gray-100 fixed bottom-0 p-2 inset-x-0">
               <form
                 onSubmit={handleSubmit(onValid)}
                 className="relative flex max-w-md items-center w-full mx-auto"
               >
-                <input
-                  {...register("message", { required: true })}
+                <FloatingInput
+                  register={register("message", {
+                    required: true,
+                  })}
                   name="message"
-                  type="text"
-                  placeholder="메시지를 입력하세요."
+                  placeholder="메시지를 입력하세요"
                   required
-                  className="pr-12 shadow-sm rounded-full w-full border-gray-300 focus:outline-none focus:border-orange-500 focus:ring-orange-500"
+                  isLoading={loading}
                 />
-                <div className="absolute inset-y-0 flex py-1.5 pr-1.5 right-0">
-                  <button className="flex items-center bg-orange-500 rounded-full px-3 hover:bg-orange-600 focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 text-sm text-white">
-                    &rarr;
-                  </button>
-                </div>
               </form>
             </div>
           </div>

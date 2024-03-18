@@ -74,7 +74,7 @@ const Upload: NextPage = () => {
 
   useEffect(() => {
     if (data?.ok) {
-      router.push(`/products/${data.product.id}`);
+      router.replace(`/products/${data.product.id}`);
       //상품 업로드 끝나면 상품 상세 페이지로 이동
     }
   }, [data, , router]);
