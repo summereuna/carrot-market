@@ -49,3 +49,11 @@
 .blog-post-content ul {
   @apply pl-5 list-disc text-gray-700;
 }
+
+::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera*/
+}
+
+::-moz-scrollbar {
+  scrollbar-width: none; /* Firefox */
+}
