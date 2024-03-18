@@ -1,10 +1,8 @@
-import Button from "@/components/Button";
 import Layout from "@/components/Layout";
-import Textarea from "@/components/Textarea";
 import UserBox from "@/components/UserBox";
 import Comment from "@/components/Comment";
 
-import type { NextPage } from "next";
+import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import { Post, Answer, User } from "@prisma/client";
@@ -14,14 +12,18 @@ import { cls } from "@/libs/client/utils";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 import Seo from "@/components/Seo";
+import client from "@/libs/server/client";
+import FloatingInput from "@/components/FloatingInput";
 
 interface AnswerWithUser extends Answer {
+  //프론트
   user: User;
 }
 
 interface PostWithUserAndAnswers extends Post {
-  user: User;
-  answers: AnswerWithUser[];
+  id: number; //프론트
+  user: User; // 백
+  answers: AnswerWithUser[]; //프론트
   _count: { answers: number; recommendations: number };
 }
 
@@ -40,7 +42,7 @@ interface AnswerFormResponse {
   answer: Answer;
 }
 
-const CommunityPostDetail: NextPage = () => {
+const CommunityPostDetail: NextPage<CommunityPostResponse> = ({ post }) => {
   const router = useRouter();
   const {
     register,
@@ -49,6 +51,7 @@ const CommunityPostDetail: NextPage = () => {
     reset: resetAnswerForm,
   } = useForm<AnswerForm>();
 
+  //1. post의 user,answers, _count 데이터 / isRecommend 불리언 값 get
   const {
     data,
     error,
@@ -57,8 +60,7 @@ const CommunityPostDetail: NextPage = () => {
     router.query.id ? `/api/posts/${router.query.id}` : null
   );
 
-  console.log(data);
-
+  // 2. 좋아요 버튼
   const [toggleRecommendation, { loading: recommendLoading }] = useMutation(
     `/api/posts/${router.query.id}/recommendation`
   );
@@ -66,6 +68,7 @@ const CommunityPostDetail: NextPage = () => {
   const onRecommendationClick = () => {
     if (!data) return;
 
+    //swr로 local에서 mutate하기
     //optimistic ui update in local
     boundMutate(
       {
@@ -90,7 +93,7 @@ const CommunityPostDetail: NextPage = () => {
     }
   };
 
-  //답변 보내기
+  //댓글 작성
   const [sendAnswer, { loading: answerLoading, data: answerData }] =
     useMutation<AnswerFormResponse>(`/api/posts/${router.query.id}/answers`);
 
@@ -110,8 +113,8 @@ const CommunityPostDetail: NextPage = () => {
   return (
     <Layout canGoBack>
       <Seo
-        title={`${data?.post?.title} | 동네생활`}
-        description={`당근마켓 동네 생활: ${data?.post?.content}`}
+        title={`${post?.title} | 동네생활`}
+        description={`당근마켓 동네 생활: ${post?.content}`}
       />
       <div className="border-b-8 border-slate-100 w-full space-y-5 py-3">
         <span
@@ -123,19 +126,19 @@ const CommunityPostDetail: NextPage = () => {
         {/*user-profile"*/}
         <div className="px-4">
           <UserBox
-            name={data?.post?.user.name!}
+            name={post?.user.name!}
             size="small"
-            time={data?.post?.created!}
-            avatar={data?.post?.user.avatar}
-            userId={data?.post?.user.id}
+            time={post?.created!}
+            avatar={post?.user.avatar}
+            userId={post?.user.id}
           />
         </div>
         {/* 내용 */}
         <div className="px-4 text-gray-700 flex flex-col space-y-3">
           <div className="text-xl font-semibold">
-            <span>{data?.post?.title}</span>
+            <span>{post?.title}</span>
           </div>
-          <p>{data?.post?.content}</p>
+          <p>{post?.content}</p>
           <div className="py-1">
             <button
               onClick={onRecommendationClick}
@@ -165,12 +168,12 @@ const CommunityPostDetail: NextPage = () => {
       </div>
       {/* 내용 */}
 
-      {/*댓글*/}
-      <div className="px-4 my-5 space-y-5">
+      {/*댓글은 SWR로 클라이언트 단에서 받아옴*/}
+      <div className="px-4 my-5 space-y-5 mb-20">
         <div className="flex space-x-2 items-center text-gray-700 text-sm">
-          <span>댓글 {data?.post?._count.answers}</span>
+          <span>댓글 {data?.post._count.answers}</span>
         </div>
-        {data?.post?.answers?.map((answer) => (
+        {data?.post.answers?.map((answer) => (
           <Comment
             key={answer.id}
             name={answer.user.name}
@@ -182,25 +185,61 @@ const CommunityPostDetail: NextPage = () => {
         ))}
       </div>
 
-      {/*댓글 입력 폼*/}
-      <form className="px-4 space-y-2" onSubmit={handleSubmit(onValid)}>
-        <Textarea
-          register={register("answer", {
-            required: true,
-            minLength: {
-              value: 2,
-              message: "댓글을 2글자 이상 입력해주세요.",
-            },
-          })}
-          name="answer"
-          placeholder="댓글을 달아주세요."
-          required
-        />
-        {errors?.answer ? <p>{errors.answer?.message}</p> : null}
-        <Button loading={answerLoading} text="댓글달기" />
-      </form>
+      {/*플로팅 댓글창 고정*/}
+      <div className="bg-gray-100 fixed bottom-0 p-2 inset-x-0 z-20">
+        <form
+          onSubmit={handleSubmit(onValid)}
+          className="relative flex max-w-md items-center w-full mx-auto"
+        >
+          <FloatingInput
+            register={register("answer", {
+              required: true,
+              minLength: {
+                value: 1,
+                message: "댓글을 1 글자 이상 입력해 주세요.",
+              },
+            })}
+            name="answer"
+            placeholder="댓글을 입력해주세요."
+            required
+            errorMessage={errors?.answer ? errors.answer?.message : null}
+            isLoading={answerLoading}
+          />
+        </form>
+      </div>
     </Layout>
   );
 };
 
 export default CommunityPostDetail;
+
+//미리 빌드해 놓지 않고 사용자 요청시 빌드하여 보여주기
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [],
+    fallback: "blocking",
+  };
+};
+
+//post만 정적 생성하고
+//사용자 상호작용인 isRecommendation은 useSWR로 가져와 mutate하기
+export const getStaticProps: GetStaticProps = async (context) => {
+  const id = context.params?.id;
+
+  const post = await client.post.findUnique({
+    where: {
+      id: +id!.toString(),
+    },
+    //사전 렌더링할 post 및 user, _count
+    include: {
+      user: { select: { id: true, name: true, avatar: true } },
+      _count: { select: { answers: true, recommendations: true } },
+    },
+  });
+
+  return {
+    props: {
+      post: JSON.parse(JSON.stringify(post)),
+    },
+  };
+};

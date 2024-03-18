@@ -49,9 +49,14 @@ async function handler(
   }
 
   if (req.method === "POST") {
-    // if (req.query.secret !== process.env.ODR_SECRET_TOKEN) {
-    //   return res.status(401).json({ ok: false, message: "Invalid token" });
-    // }
+    const {
+      query: { secret },
+    } = req;
+    if (secret !== process.env.ODR_SECRET_TOKEN) {
+      return res
+        .status(401)
+        .json({ ok: false, message: "유효하지 않은 토큰입니다." });
+    }
 
     try {
       // 동네생활 write form의 post 데이터
@@ -73,7 +78,7 @@ async function handler(
         },
       });
 
-      //ISR & On Demand Revalidation(ODR)
+      //✅ ISR & On Demand Revalidation(ODR)
       //재생성할 페이지 경로 "/community"
       await res.revalidate("/community");
       //응답 json에 ok와 product 보내기
@@ -81,7 +86,9 @@ async function handler(
     } catch (error) {
       // If there was an error, Next.js will continue
       // to show the last successfully generated page
-      return res.status(500).json({ ok: false, error: "Error revalidating" });
+      return res
+        .status(500)
+        .json({ ok: false, error: "사이트 revalidate 실패" });
     }
   }
 }

@@ -17,8 +17,11 @@ async function handler(
       id: +id!.toString(),
     },
 
-    //post에 필요한 user 데이터, _count 할 레코드 담기
-    include: {
+    //클라이언트 단에서 필요한 정보만 가져오기
+    // post는 사전 렌더링 하니까 ㄴ
+    // 필요한 post.id, user 데이터, _count 할 레코드 담기
+    select: {
+      id: true,
       user: { select: { id: true, name: true, avatar: true } },
       answers: {
         select: {
@@ -47,18 +50,10 @@ async function handler(
     })
   );
 
-  // //Answer 가져오기
-  // const answers = await client.answer.findMany({
-  //   where: {
-  //     postId: post?.id,
-  //   },
-  // });
-
   res.json({
     ok: true,
     post,
     isRecommend,
-    //answers,
   });
 }
 

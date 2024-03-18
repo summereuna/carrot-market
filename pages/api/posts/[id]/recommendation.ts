@@ -62,8 +62,12 @@ async function handler(
     });
   }
 
-  res.json({
+  //⚠️ dev 환경에서 307 상태 에러 뜨는데 왜 그런지 모르겠음
+  await res.revalidate(`/community`);
+
+  return res.json({
     ok: true,
+    revalidated: true,
   });
 }
 

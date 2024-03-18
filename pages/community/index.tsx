@@ -14,10 +14,10 @@ interface PostWithRecsAndAnswers extends Post {
   _count: { recommendations: number; answers: number };
 }
 
-interface PostResponse {
-  ok: boolean;
-  posts: PostWithRecsAndAnswers[];
-}
+// interface PostResponse {
+//   ok: boolean;
+//   posts: PostWithRecsAndAnswers[];
+// }
 
 const Community: NextPage<{ posts: PostWithRecsAndAnswers[] }> = ({
   posts,
@@ -57,7 +57,9 @@ const Community: NextPage<{ posts: PostWithRecsAndAnswers[] }> = ({
                   <div className="flex items-center space-x-1 w-full ">
                     <span>{post.user.name}</span>
                     <span>&#183;</span>
-                    <span>{getTimeInterval(post.created)}</span>
+                    <span suppressHydrationWarning>
+                      {getTimeInterval(post.created)}
+                    </span>
                   </div>
                   {/*icons*/}
                   <div className="flex space-x-2">
@@ -110,7 +112,10 @@ const Community: NextPage<{ posts: PostWithRecsAndAnswers[] }> = ({
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  console.log("커뮤니티에 글쓰면 /community 페이지 정적으로 재생성...");
+  console.log(
+    "✅ 커뮤니티에 글쓰기/댓글달기/추천누르기 => /community 페이지 백에서 정적 재생성..."
+  );
+
   //포스트 db가져오기: 실제 프로덕션에서는 페이지네이션 하는게 좋음
   const posts = await client.post.findMany({
     //다 가져오기

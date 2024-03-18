@@ -34,9 +34,11 @@ async function handler(
     },
   });
 
+  //⚠️ dev 환경에서 307 상태 에러 뜨는데 왜 그런지 모르겠음
+  await res.revalidate("/community");
   //응답 json에 ok 내기
   //이론상 newAnswer는 리턴할 필요는 없음 ㅇㅇ... url 리다이렉트 할 것이 없으므로..
-  res.json({ ok: true, answer: newAnswer });
+  return res.json({ ok: true, answer: newAnswer, revalidated: true });
 }
 
 export default withApiSession(withHandler({ methods: ["POST"], handler }));
