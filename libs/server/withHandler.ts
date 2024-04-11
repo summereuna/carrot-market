@@ -5,7 +5,7 @@ export interface ResponseType {
   [key: string]: any;
 }
 
-type method = "GET" | "POST" | "DELETE";
+type method = "GET" | "POST" | "PUT" | "DELETE";
 
 //인자 많아져서 객체로 따로 빼고 타입 설정
 interface ConfigType {

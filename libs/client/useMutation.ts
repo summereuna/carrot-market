@@ -11,6 +11,7 @@ interface UseMutationState<T> {
 type UseMutationResult<T> = [(data: any) => void, UseMutationState<T>];
 
 /**
+ * DB에 데이터 생성(POST)하는 함수
  * useMutation("/어떤 url을 mutate할지 알아야 함")
  * 그리고 훅에서 어레이받음
  * 배열의 첫 번째 요소는 호출할 수 있는 함수로, data를 백엔드에 POST 하면 데이터베이스의 상태를 mutate할수 있는 함수
