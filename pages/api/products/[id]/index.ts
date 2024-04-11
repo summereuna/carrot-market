@@ -68,7 +68,7 @@ async function handler(
       })
     );
 
-    return res.json({
+    return res.status(200).json({
       ok: true,
       isWished,
       // product,
@@ -80,7 +80,7 @@ async function handler(
     if (isProductExist?.userId !== user?.id) {
       return res.status(404).json({
         ok: false,
-        error: "상품이 존재하지 않습니다.",
+        error: "상품을 수정할 수 없습니다.",
       });
     }
 
@@ -98,14 +98,14 @@ async function handler(
     });
 
     //응답 json에 ok와 product 보내기
-    return res.json({ ok: true, product });
+    return res.status(200).json({ ok: true, product });
   }
 
   if (req.method === "DELETE") {
     if (isProductExist?.userId !== user?.id) {
       return res.status(404).json({
         ok: false,
-        error: "상품이 존재하지 않습니다.",
+        error: "상품을 삭제할 수 없습니다.",
       });
     }
 
@@ -115,7 +115,7 @@ async function handler(
       },
     });
 
-    return res.json({ ok: true });
+    return res.status(200).json({ ok: true });
   }
 }
 

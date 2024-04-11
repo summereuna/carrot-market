@@ -14,6 +14,7 @@ import { useEffect } from "react";
 import Seo from "@/components/Seo";
 import client from "@/libs/server/client";
 import FloatingInput from "@/components/FloatingInput";
+import useUser from "@/libs/client/useUser";
 
 interface AnswerWithUser extends Answer {
   //프론트
@@ -27,7 +28,7 @@ interface PostWithUserAndAnswers extends Post {
   _count: { answers: number; recommendations: number };
 }
 
-interface CommunityPostResponse {
+export interface CommunityPostResponse {
   ok: boolean;
   post: PostWithUserAndAnswers;
   isRecommend: boolean;
@@ -50,6 +51,8 @@ const CommunityPostDetail: NextPage<CommunityPostResponse> = ({ post }) => {
     handleSubmit,
     reset: resetAnswerForm,
   } = useForm<AnswerForm>();
+
+  const { user } = useUser();
 
   //1. post의 user,answers, _count 데이터 / isRecommend 불리언 값 get
   const {
@@ -111,7 +114,7 @@ const CommunityPostDetail: NextPage<CommunityPostResponse> = ({ post }) => {
     }
   }, [answerData, resetAnswerForm, boundMutate]);
   return (
-    <Layout canGoBack>
+    <Layout canGoBack isMe={user?.id !== post?.userId ? false : true}>
       <Seo
         title={`${post?.title} | 동네생활`}
         description={`당근마켓 동네 생활: ${post?.content}`}

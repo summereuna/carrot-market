@@ -133,7 +133,9 @@ const ProductEdit: NextPage = ({
   useEffect(() => {
     if (data?.ok) {
       //상품 업로드 끝나면 상품 상세 페이지로 이동
-      router.replace(`/products/${data.product.id}`);
+      router.replace(`/products/${data.product.id}`, undefined, {
+        shallow: true,
+      });
     }
   }, [data, , router]);
 
