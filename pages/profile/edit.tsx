@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import fileUploader from "@/libs/client/fileUploader";
 import Image from "next/image";
 import Seo from "@/components/Seo";
+import { useRouter } from "next/router";
 
 interface EditProfileForm {
   name?: string;
@@ -23,6 +24,7 @@ interface EditProfileResponse {
   error?: string;
 }
 const EditProfile: NextPage = () => {
+  const router = useRouter();
   const { user } = useUser();
 
   const [editProfile, { data, loading }] =
@@ -80,7 +82,11 @@ const EditProfile: NextPage = () => {
         message: data.error,
       });
     }
-  }, [data, setError]);
+    if (data?.ok) {
+      router.replace(`/profile/${user?.id}`);
+      //상품 업로드 끝나면 상품 상세 페이지로 이동
+    }
+  }, [data, setError, router, user]);
 
   const [avatarPreview, setAvatarPreview] = useState("");
   const fileList = watch("avatar");
