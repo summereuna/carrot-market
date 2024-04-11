@@ -18,7 +18,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
 import client from "@/libs/server/client";
-import { ProductsResponse } from "@/pages";
+import { ProductsResponse } from "@/pages/products";
 import { ProductDetailResponse } from "../[id]";
 
 interface UploadProductForm {
@@ -137,7 +137,7 @@ const ProductEdit: NextPage = ({
         shallow: true,
       });
     }
-  }, [data, , router]);
+  }, [data, router]);
 
   const productImageFileList = watch("productImage");
   const [productImagePreview, setProductImagePreview] = useState("");

@@ -19,9 +19,7 @@ interface PostWithRecsAndAnswers extends Post {
 //   posts: PostWithRecsAndAnswers[];
 // }
 
-const Community: NextPage<{ posts: PostWithRecsAndAnswers[] }> = ({
-  posts,
-}) => {
+const Posts: NextPage<{ posts: PostWithRecsAndAnswers[] }> = ({ posts }) => {
   //✅리액트 부분 주석처리
   // //유저의 위치와 가까운 곳에 있는 포스트만 보기
   // //위 api에 위도경도 담아보내야함
@@ -41,7 +39,7 @@ const Community: NextPage<{ posts: PostWithRecsAndAnswers[] }> = ({
       <div className="divide-y">
         {posts?.map((post) => (
           <div key={post.id}>
-            <Link href={`/community/${post.id}`}>
+            <Link href={`/posts/${post.id}`}>
               <div className="cursor-pointer flex flex-col items-start space-y-2 py-4">
                 <span
                   className="flex ml-4 items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800
@@ -105,7 +103,7 @@ const Community: NextPage<{ posts: PostWithRecsAndAnswers[] }> = ({
           </div>
         ))}
 
-        <FloatingButton href="/community/write" text="글쓰기" />
+        <FloatingButton href="/posts/write" text="글쓰기" />
       </div>
     </Layout>
   );
@@ -113,7 +111,7 @@ const Community: NextPage<{ posts: PostWithRecsAndAnswers[] }> = ({
 
 export const getStaticProps: GetStaticProps = async () => {
   console.log(
-    "✅ 커뮤니티에 글쓰기/댓글달기/추천누르기 => /community 페이지 백에서 정적 재생성..."
+    "✅ 커뮤니티에 글쓰기/댓글달기/추천누르기 => /posts 페이지 백에서 정적 재생성..."
   );
 
   //포스트 db가져오기: 실제 프로덕션에서는 페이지네이션 하는게 좋음
@@ -135,4 +133,4 @@ export const getStaticProps: GetStaticProps = async () => {
   };
 };
 
-export default Community;
+export default Posts;

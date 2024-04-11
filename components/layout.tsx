@@ -2,8 +2,10 @@ import Link from "next/link";
 import { cls } from "../libs/client/utils";
 import { useRouter } from "next/router";
 import useUser from "@/libs/client/useUser";
-import { useState } from "react";
-import ModalContent from "./ModalContent";
+import { useEffect, useState } from "react";
+import EditDeleteModal from "./EditDeleteModal";
+import DeleteModal from "./DeleteModal";
+import useDelete from "@/libs/client/useDelete";
 
 interface LayoutProps {
   title?: string;
@@ -30,23 +32,58 @@ export default function Layout({
     router.push(`/`);
   };
 
+  //에딧모달
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const openModalHandler = () => {
+  const openEditModalHandler = () => {
     setIsModalOpen(true);
   };
-  const closeModalHandler = () => {
+  const closeEditModalHandler = () => {
     setIsModalOpen(false);
   };
 
-  const editModalHandler = () => {
+  const editHandler = () => {
     router.push(
       `${router.pathname.replace("/[id]", "")}/edit/${router.query.id}`
     );
   };
-  const deleteModalHandler = () => {
-    confirm("정말 삭제하겠습니까?");
+
+  //딜리트모달
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  const openDeleteModalHandler = () => {
+    closeEditModalHandler();
+    setIsDeleteModalOpen(true);
   };
+
+  const closeDeleteModalHandler = () => {
+    setIsDeleteModalOpen(false);
+  };
+
+  interface DeleteDataResult {
+    ok: boolean;
+  }
+
+  const [removeData, { data }] = useDelete<DeleteDataResult>(
+    `/api${router.asPath}`
+  );
+  const deleteHandler = () => {
+    removeData({});
+    closeDeleteModalHandler();
+  };
+
+  useEffect(() => {
+    if (data?.ok) {
+      //상품 업로드 끝나면 상품 상세 페이지로 이동
+      router.pathname.includes("products")
+        ? router.replace("/", undefined, {
+            shallow: true,
+          })
+        : router.replace(`${router.pathname.replace("/[id]", "")}`, undefined, {
+            shallow: true,
+          });
+    }
+  }, [data, router]);
 
   return (
     <div>
@@ -54,10 +91,16 @@ export default function Layout({
       모바일 사이즈로 일단 작업하기 위해 max-w-xl 줘서 fixed된 바 크기 조정*/}
       <div className="fixed max-w-xl top-0 flex items-center px-5 bg-white w-full text-lg font-medium text-gray-800 py-3 border-b justify-center h-12 z-20">
         {isModalOpen && (
-          <ModalContent
-            onClose={closeModalHandler}
-            onEdit={editModalHandler}
-            onDelete={deleteModalHandler}
+          <EditDeleteModal
+            onClose={closeEditModalHandler}
+            onEdit={editHandler}
+            onDelete={openDeleteModalHandler}
+          />
+        )}
+        {isDeleteModalOpen && (
+          <DeleteModal
+            onClose={closeDeleteModalHandler}
+            onDelete={deleteHandler}
           />
         )}
         {canGoBack ? (
@@ -111,7 +154,7 @@ export default function Layout({
           <>
             <button
               aria-label="post edit or delete button"
-              onClick={openModalHandler}
+              onClick={openEditModalHandler}
               className="absolute right-2 flex justify-center cursor-pointer w-8"
             >
               <svg
@@ -166,11 +209,11 @@ export default function Layout({
               <span>홈</span>
             </div>
           </Link>
-          <Link href="/community">
+          <Link href="/posts">
             <div
               className={cls(
                 "flex flex-col items-center space-y-2",
-                router.pathname === "/community"
+                router.pathname === "/posts"
                   ? "text-orange-500"
                   : "hover:text-gray-400 transition-colors"
               )}

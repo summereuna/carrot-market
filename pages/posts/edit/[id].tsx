@@ -3,48 +3,91 @@ import Layout from "@/components/Layout";
 import Seo from "@/components/Seo";
 import Textarea from "@/components/Textarea";
 import useCoords from "@/libs/client/useCoords";
-import useMutation from "@/libs/client/useMutation";
 import { Post } from "@prisma/client";
-import type { NextPage } from "next";
+import type {
+  GetStaticPaths,
+  GetStaticProps,
+  InferGetStaticPropsType,
+  NextPage,
+} from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import client from "@/libs/server/client";
+import { CommunityPostResponse } from "../[id]";
+import useSWR from "swr";
+import useUpdate from "@/libs/client/useUpdate";
 
 interface WriteForm {
   title: string;
   content: string;
   latitude: number;
   longitude: number;
+  formErrors?: string;
 }
 interface WriteFormResponse {
   ok: boolean;
   post: Post;
 }
 
-const Write: NextPage = () => {
-  //위도경도 가져와서 위치 설정
-  const { latitude, longitude } = useCoords();
+const PostEdit: NextPage = ({
+  id,
+  fallbackData,
+}: InferGetStaticPropsType<typeof getStaticProps>) => {
+  const router = useRouter();
 
+  //✅ 기존 데이터 GET
+  //프로덕트 데이터
+  const {
+    data: prevPost,
+    mutate: mutatePost,
+    isLoading: isLoadingPrevPost,
+  } = useSWR<CommunityPostResponse>(`/api/posts/${id}`, {
+    fallbackData,
+    revalidateOnMount: false,
+  });
+
+  // ✅ PUT
+  //포스트 업데이트하기
+  const [updatePost, { loading, data }] = useUpdate<WriteFormResponse>(
+    `/api/posts/${router.query.id}`
+  );
+
+  // 📝 useForm
   const {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm<WriteForm>();
+    clearErrors,
+    setError,
+  } = useForm<WriteForm>({
+    defaultValues: {
+      title: fallbackData.post.title,
+      content: fallbackData.post.content,
+    },
+  });
 
-  const [post, { loading, data }] =
-    useMutation<WriteFormResponse>("/api/posts");
-
-  const onValid = (data: WriteForm) => {
+  const onValid = ({ title, content }: WriteForm) => {
     //console.log(postData);
     if (loading) return;
-    post({ ...data, latitude, longitude }); //요청 보낼때 위도경도 같이 보내기
-  };
 
-  const router = useRouter();
+    if (
+      fallbackData.post.title === title &&
+      fallbackData.post.content === content
+    ) {
+      return setError("formErrors", {
+        message:
+          "수정한 항목이 없습니다. 수정할 항목이 없으면 취소 버튼을 누르세요.",
+      });
+    }
+    updatePost({ title, content, ...data });
+  };
 
   useEffect(() => {
     if (data && data.ok) {
-      router.replace(`/community/${data.post.id}`);
+      router.replace(`/posts/${data.post.id}`, undefined, {
+        shallow: true,
+      });
     }
   }, [data, router]);
 
@@ -106,13 +149,61 @@ const Write: NextPage = () => {
             required
             placeholder="가까이 사는 동네 이웃들에게 궁금한 것을 물어보세요! 근처 이웃이 친절하게 진짜 동네 정보를 알려줄거예요. (5글자 이상 입력하기)"
           />
+          {errors.formErrors ? (
+            <span className="my-2 text-red-500 font-medium block text-sm">
+              {errors.formErrors.message}
+            </span>
+          ) : null}
           {errors?.title ? <p>{errors.title?.message}</p> : null}
           {errors?.content ? <p>{errors.content?.message}</p> : null}
-          <Button loading={loading} text="완료" />
+          <Button
+            loading={loading}
+            text="수정 완료"
+            onClick={() => clearErrors()}
+          />
+          <Button
+            text="취소"
+            onClick={() => {
+              clearErrors();
+              router.back();
+            }}
+          />
         </form>
       </div>
     </Layout>
   );
 };
 
-export default Write;
+export default PostEdit;
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [],
+    fallback: "blocking",
+  };
+};
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  const id = context.params?.id;
+  console.log(context);
+
+  const post = await client.post.findUnique({
+    where: {
+      id: +id!.toString(),
+    },
+  });
+
+  if (!post) {
+    return { notFound: true };
+  }
+
+  return {
+    props: {
+      id: post.id,
+      fallbackData: {
+        post: JSON.parse(JSON.stringify(post)),
+      },
+    },
+    revalidate: 1,
+  };
+};

@@ -79,8 +79,8 @@ async function handler(
       });
 
       //✅ ISR & On Demand Revalidation(ODR)
-      //재생성할 페이지 경로 "/community"
-      await res.revalidate("/community");
+      //재생성할 페이지 경로 "/posts"
+      await res.revalidate("/posts");
       //응답 json에 ok와 product 보내기
       return res.json({ ok: true, post, revalidated: true });
     } catch (error) {

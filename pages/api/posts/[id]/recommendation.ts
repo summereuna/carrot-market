@@ -63,7 +63,7 @@ async function handler(
   }
 
   //⚠️ dev 환경에서 307 상태 에러 뜨는데 왜 그런지 모르겠음
-  await res.revalidate(`/community`);
+  await res.revalidate(`/posts`);
 
   return res.json({
     ok: true,

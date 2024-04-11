@@ -43,7 +43,7 @@ interface AnswerFormResponse {
   answer: Answer;
 }
 
-const CommunityPostDetail: NextPage<CommunityPostResponse> = ({ post }) => {
+const PostDetail: NextPage<CommunityPostResponse> = ({ post }) => {
   const router = useRouter();
   const {
     register,
@@ -214,7 +214,7 @@ const CommunityPostDetail: NextPage<CommunityPostResponse> = ({ post }) => {
   );
 };
 
-export default CommunityPostDetail;
+export default PostDetail;
 
 //미리 빌드해 놓지 않고 사용자 요청시 빌드하여 보여주기
 export const getStaticPaths: GetStaticPaths = async () => {

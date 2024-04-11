@@ -1,16 +1,16 @@
 import Modal from "./Modal";
 
-interface ModalContentProps {
+interface EditDeleteModalProps {
   onClose: () => void;
   onEdit: () => void;
   onDelete: () => void;
 }
 
-export default function ModalContent({
+export default function EditDeleteModal({
   onClose,
   onEdit,
   onDelete,
-}: ModalContentProps) {
+}: EditDeleteModalProps) {
   return (
     <Modal isGlobal={false} onClose={onClose}>
       <div

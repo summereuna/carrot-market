@@ -30,6 +30,7 @@ export default function useDelete<T = any>(url: string): UseDeleteResult<T> {
     fetch(url, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
+      body: null,
     })
       .then((response) =>
         response.json().catch(() => {
