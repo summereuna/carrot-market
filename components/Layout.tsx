@@ -1,20 +1,25 @@
+import Link from "next/link";
+import { cls } from "../libs/client/utils";
+import { useRouter } from "next/router";
+import useUser from "@/libs/client/useUser";
+import { useState } from "react";
+import ModalContent from "./ModalContent";
+
 interface LayoutProps {
   title?: string;
   canGoBack?: boolean;
   canGoHome?: boolean;
   hasTabBar?: boolean;
+  isMe?: boolean;
   children: React.ReactNode;
 }
-
-import Link from "next/link";
-import { cls } from "../libs/client/utils";
-import { useRouter } from "next/router";
 
 export default function Layout({
   title,
   canGoBack,
   canGoHome,
   hasTabBar,
+  isMe,
   children,
 }: LayoutProps) {
   const router = useRouter();
@@ -24,11 +29,37 @@ export default function Layout({
   const onGoHomeClick = () => {
     router.push(`/`);
   };
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModalHandler = () => {
+    setIsModalOpen(true);
+  };
+  const closeModalHandler = () => {
+    setIsModalOpen(false);
+  };
+
+  const editModalHandler = () => {
+    router.push(
+      `${router.pathname.replace("/[id]", "")}/edit/${router.query.id}`
+    );
+  };
+  const deleteModalHandler = () => {
+    confirm("정말 삭제하겠습니까?");
+  };
+
   return (
     <div>
       {/*네비게이션 바
       모바일 사이즈로 일단 작업하기 위해 max-w-xl 줘서 fixed된 바 크기 조정*/}
       <div className="fixed max-w-xl top-0 flex items-center px-5 bg-white w-full text-lg font-medium text-gray-800 py-3 border-b justify-center h-12 z-20">
+        {isModalOpen && (
+          <ModalContent
+            onClose={closeModalHandler}
+            onEdit={editModalHandler}
+            onDelete={deleteModalHandler}
+          />
+        )}
         {canGoBack ? (
           <button
             aria-label="Go To Back Button"
@@ -76,9 +107,35 @@ export default function Layout({
         {title ? (
           <span className={cls(canGoBack ? "mx-auto" : "", "")}>{title}</span>
         ) : null}
+        {router.query.id && isMe ? (
+          <>
+            <button
+              aria-label="post edit or delete button"
+              onClick={openModalHandler}
+              className="absolute right-2 flex justify-center cursor-pointer w-8"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z"
+                />
+              </svg>
+            </button>
+          </>
+        ) : null}
       </div>
+
       {/*컨텐츠*/}
       <div className={cls("pt-12", hasTabBar ? "pb-20" : "")}>{children}</div>
+
       {/*하단 탭*/}
       {/*모바일 사이즈로 일단 작업하기 위해 max-w-xl 줘서 fixed된 바 크기 조정*/}
       {hasTabBar ? (

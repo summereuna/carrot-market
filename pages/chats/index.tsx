@@ -28,7 +28,7 @@ interface ChatRoomResponse {
 }
 
 const Chats: NextPage = () => {
-  const user = useUser();
+  const { user } = useUser();
   const { data } = useSWR<ChatRoomResponse>(`api/chats`);
   console.log(data?.chats);
   console.log(user);
@@ -42,12 +42,12 @@ const Chats: NextPage = () => {
             roomId={chatRoom.id}
             updated={chatRoom.updated}
             otherUserName={
-              user?.user?.id === chatRoom.user.id
+              user?.id === chatRoom.user.id
                 ? chatRoom.product.user.name
                 : chatRoom.user.name
             }
             otherUserAvatarUrl={
-              user?.user?.id === chatRoom.user.id
+              user?.id === chatRoom.user.id
                 ? chatRoom.product.user.avatar
                 : chatRoom.user.avatar
             }

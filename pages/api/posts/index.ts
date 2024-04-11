@@ -49,14 +49,14 @@ async function handler(
   }
 
   if (req.method === "POST") {
-    const {
-      query: { secret },
-    } = req;
-    if (secret !== process.env.ODR_SECRET_TOKEN) {
-      return res
-        .status(401)
-        .json({ ok: false, message: "유효하지 않은 토큰입니다." });
-    }
+    // const {
+    //   query: { secret },
+    // } = req;
+    // if (secret !== process.env.ODR_SECRET_TOKEN) {
+    //   return res
+    //     .status(401)
+    //     .json({ ok: false, message: "유효하지 않은 토큰입니다." });
+    // }
 
     try {
       // 동네생활 write form의 post 데이터

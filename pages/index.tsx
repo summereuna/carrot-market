@@ -13,7 +13,7 @@ export interface ProductWithCountWishesAndStateChecks extends Product {
   review?: { id: number; length: number };
 }
 
-interface ProductsResponse {
+export interface ProductsResponse {
   ok: boolean;
   products: ProductWithCountWishesAndStateChecks[];
 }
