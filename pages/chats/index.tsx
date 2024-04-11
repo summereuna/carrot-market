@@ -30,34 +30,52 @@ interface ChatRoomResponse {
 const Chats: NextPage = () => {
   const { user } = useUser();
   const { data } = useSWR<ChatRoomResponse>(`api/chats`);
-  console.log(data?.chats);
-  console.log(user);
+
   return (
     <Layout title="채팅" hasTabBar>
       <Seo title="채팅 | 당근마켓" description="당근마켓 채팅" />
       <div className="flex flex-col pb-3 divide-y">
-        {data?.chats?.map((chatRoom) => (
-          <ChattingRoom
-            key={chatRoom.id}
-            roomId={chatRoom.id}
-            updated={chatRoom.updated}
-            otherUserName={
-              user?.id === chatRoom.user.id
-                ? chatRoom.product.user.name
-                : chatRoom.user.name
-            }
-            otherUserAvatarUrl={
-              user?.id === chatRoom.user.id
-                ? chatRoom.product.user.avatar
-                : chatRoom.user.avatar
-            }
-            lastChat={
-              chatRoom.chats.length > 0
-                ? chatRoom?.chats?.at(-1)?.chat
-                : `🥕 채팅을 시작해 보세요!`
-            }
-          />
-        ))}
+        {data?.chats.length === 0 && (
+          <div>
+            <div className="cursor-pointer px-4 py-3 flex space-x-3 items-center">
+              <div className="flex-shrink-0">
+                <div className="w-12 h-12 rounded-full bg-slate-300" />
+              </div>
+              <div className="flex flex-col">
+                <div className="space-x-2">
+                  <span className="font-medium text-gray-700">당근팀</span>
+                  <span className="text-xs text-gray-500"></span>
+                </div>
+                <span className="text-sm text-gray-500">
+                  🥕 환영합니다! 채팅을 시작해 보세요!
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
+        {data?.chats &&
+          data?.chats?.map((chatRoom) => (
+            <ChattingRoom
+              key={chatRoom.id}
+              roomId={chatRoom.id}
+              updated={chatRoom.updated}
+              otherUserName={
+                user?.id === chatRoom.user.id
+                  ? chatRoom.product.user.name
+                  : chatRoom.user.name
+              }
+              otherUserAvatarUrl={
+                user?.id === chatRoom.user.id
+                  ? chatRoom.product.user.avatar
+                  : chatRoom.user.avatar
+              }
+              lastChat={
+                chatRoom.chats.length > 0
+                  ? chatRoom?.chats?.at(-1)?.chat
+                  : `🥕 채팅을 시작해 보세요!`
+              }
+            />
+          ))}
       </div>
     </Layout>
   );

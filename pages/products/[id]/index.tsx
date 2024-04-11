@@ -88,7 +88,7 @@ const ProductDetail: NextPage<ProductDetailResponse> = ({
     if (wantToChatWithSeller && data && user?.id !== product?.userId) {
       const chatRoomInfo = {
         productId: router.query.id,
-        productUserId: data.product.userId,
+        productUserId: product.userId,
       };
 
       createChatRoom(chatRoomInfo);
