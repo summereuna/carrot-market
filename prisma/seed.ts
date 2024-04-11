@@ -1,29 +1,29 @@
 // 테스트 위해 가짜 데이터 생성하기(seeding)
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
 
-const client = new PrismaClient();
+// const client = new PrismaClient();
 
-async function main() {
-  [...Array.from(Array(10).keys())].forEach(async (item) => {
-    await client.stream.create({
-      data: {
-        name: String(item),
-        description: String(item),
-        price: item,
-        user: {
-          connect: {
-            id: 29, //테스트유저 아이디
-          },
-        },
-      },
-    });
-    console.log(`${item}/10`);
-  });
-}
+// async function main() {
+//   [...Array.from(Array(10).keys())].forEach(async (item) => {
+//     await client.stream.create({
+//       data: {
+//         name: String(item),
+//         description: String(item),
+//         price: item,
+//         user: {
+//           connect: {
+//             id: 29, //테스트유저 아이디
+//           },
+//         },
+//       },
+//     });
+//     console.log(`${item}/10`);
+//   });
+// }
 
-main()
-  .catch((e) => console.log(e))
-  .finally(() => client.$disconnect());
+// main()
+//   .catch((e) => console.log(e))
+//   .finally(() => client.$disconnect());
 
 /*
 Seeding your database

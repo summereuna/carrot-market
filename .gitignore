@@ -34,3 +34,7 @@ yarn-error.log*
 next-env.d.ts
 
 .env
+
+# SQLite DB
+*.db
+*.db-journal

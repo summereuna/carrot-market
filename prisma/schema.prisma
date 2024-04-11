@@ -1,3 +1,7 @@
+//프리즈마에게 스케마 설명하는 명령어
+//npx prisma migrate dev
+//새로운 머ㅏ이그레이션 이름 넣어서 DB 변경사항 추적 & 프리즈마 SQL코드로 만들어서 저장해줌
+
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
@@ -5,8 +9,9 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// provider     = "mysql"
 datasource db {
-  provider     = "mysql"
+  provider     = "sqlite"
   url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
@@ -14,8 +19,10 @@ datasource db {
 model User {
   id              Int              @id @default(autoincrement())
   name            String
-  phone           String?          @unique
   email           String?          @unique
+  //password        String?
+  phone           String?          @unique
+  github_id       String?          @unique
   avatar          String?
   created         DateTime         @default(now())
   updated         DateTime         @updatedAt
@@ -63,7 +70,7 @@ model Product {
   image       String
   name        String
   price       Int
-  description String       @db.MediumText
+  description String
   wishes      Wish[]
   sales       Sale[] //음 근데 이건 배열로 안해도 되는게 user랑 같음
   purchases   Purchase[]
@@ -81,8 +88,8 @@ model Post {
   id              Int              @id @default(autoincrement())
   created         DateTime         @default(now())
   updated         DateTime         @updatedAt
-  title           String           @db.Text
-  content         String           @db.MediumText
+  title           String
+  content         String
   user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId          Int
   latitude        Float?
@@ -97,7 +104,7 @@ model Answer {
   id      Int      @id @default(autoincrement())
   created DateTime @default(now())
   updated DateTime @updatedAt
-  answer  String   @db.MediumText
+  answer  String
   user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId  Int
   post    Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
@@ -160,7 +167,7 @@ model Stream {
   updated     DateTime  @updatedAt
   name        String
   price       Int
-  description String    @db.MediumText
+  description String
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      Int
   messages    Message[]
@@ -172,7 +179,7 @@ model Message {
   id       Int      @id @default(autoincrement())
   created  DateTime @default(now())
   updated  DateTime @updatedAt
-  message  String   @db.MediumText
+  message  String
   user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId   Int
   stream   Stream   @relation(fields: [streamId], references: [id], onDelete: Cascade)
@@ -234,8 +241,8 @@ model Review {
   created          DateTime @default(now())
   updated          DateTime @updatedAt
   kind             String
-  review           String   @db.MediumText
-  reviewCheckBoxes String   @db.MediumText
+  review           String
+  reviewCheckBoxes String
   score            Int
   createdBy        User     @relation(name: "writtenReviews", fields: [createdById], references: [id], onDelete: Cascade)
   createdById      Int
