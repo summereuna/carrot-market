@@ -24,7 +24,7 @@ export default function useUser() {
 
   useEffect(() => {
     if (data && !data.ok) {
-      router.replace("/enter");
+      router.replace("/login");
     }
   }, [data, router]);
 
