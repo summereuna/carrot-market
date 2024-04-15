@@ -2,7 +2,9 @@ import { cls } from "@/libs/client/utils";
 
 interface SmButtonProps {
   text: string;
+  onClick?: () => void;
   bgGray?: boolean;
+  pathD?: string;
   [key: string]: any;
 }
 

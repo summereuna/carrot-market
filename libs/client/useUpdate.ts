@@ -34,8 +34,8 @@ export default function useUpdate<T = any>(url: string): UseUpdateResult<T> {
       body: JSON.stringify(data),
     })
       .then((response) =>
-        response.json().catch(() => {
-          console.log("PUT fetch 오류 발생");
+        response.json().catch((error) => {
+          console.log("PUT fetch 오류 발생:", error.message);
         })
       )
       .then((data) => setState((prev) => ({ ...prev, data, loading: false })))

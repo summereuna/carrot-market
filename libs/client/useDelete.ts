@@ -33,8 +33,8 @@ export default function useDelete<T = any>(url: string): UseDeleteResult<T> {
       body: null,
     })
       .then((response) =>
-        response.json().catch(() => {
-          console.log("데이터를 삭제하는 도중 fetch 오류 발생!");
+        response.json().catch((error) => {
+          console.log("DELETE fetch 오류 발생:", error.message);
         })
       )
       .then((data) => setState((prev) => ({ ...prev, data, loading: false })))

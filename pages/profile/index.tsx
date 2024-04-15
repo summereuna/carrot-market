@@ -11,6 +11,8 @@ import { useRouter } from "next/router";
 import useSWR, { SWRConfig } from "swr";
 import { withSsrSession } from "@/libs/server/withSession";
 import client from "@/libs/server/client";
+import useMutation from "@/libs/client/useMutation";
+import { useEffect } from "react";
 
 interface ReviewWithUser extends Review {
   createdBy: User;
@@ -26,9 +28,24 @@ const Profile: NextPage = () => {
   const { data } = useSWR<ReviewsResponse>("/api/reviews");
   const router = useRouter();
 
-  const handlerProfileClick = () => {
+  const handleProfileClick = () => {
     router.push(`/profile/${user?.id}`);
   };
+
+  const [logout, { loading, data: isLogout }] =
+    useMutation(`/api/users/logout`);
+
+  const handleLogout = () => {
+    // if (loading) return;
+    logout({});
+  };
+
+  useEffect(() => {
+    if (isLogout?.ok) {
+      router.push("/login");
+    }
+  }, [router, isLogout]);
+  //아니 백엔드에서 발 못보내냐고 ㅇㅇ...??
 
   return (
     user && (
@@ -46,11 +63,19 @@ const Profile: NextPage = () => {
               프로필 보기
             </button>
           </Link> */}
-            <SmButton
-              onClick={handlerProfileClick}
-              loading={null}
-              text={"프로필 보기"}
-            />
+            <div className="flex space-x-2">
+              <SmButton
+                onClick={handleProfileClick}
+                loading={null}
+                text={"프로필 보기"}
+              />
+              <SmButton
+                onClick={handleLogout}
+                loading={null}
+                text={"로그아웃"}
+                bgGray
+              />
+            </div>
           </div>
           {/*유저 활동 세부 정보 */}
           <div className="py-2">
@@ -191,7 +216,6 @@ export const getServerSideProps: GetServerSideProps = withSsrSession(
     //   },
     //   orderBy: { created: "desc" },
     // });
-
     return {
       props: {
         profile: JSON.parse(JSON.stringify(profile)),
