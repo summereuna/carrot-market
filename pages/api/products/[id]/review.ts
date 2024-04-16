@@ -33,7 +33,13 @@ async function handler(
       },
     });
 
-    if (user?.id !== productInfo?.userId) {
+    //예약 없으면 404 반환
+    const isReservation = Boolean(productInfo?.reservation);
+    if (!isReservation) {
+      return res.status(404).json({ ok: false });
+    }
+
+    if (user?.id === productInfo?.reservation?.userId) {
       //구매자인 경우
       const reviewInfo = await client.review.findFirst({
         where: {
@@ -55,7 +61,7 @@ async function handler(
         productInfo,
         reviewInfo,
       });
-    } else {
+    } else if (user?.id === productInfo?.userId) {
       //판매자인 경우
       const reviewInfo = await client.review.findFirst({
         where: {
@@ -76,6 +82,9 @@ async function handler(
         productInfo,
         reviewInfo,
       });
+    } else {
+      //판매자도 구매자도 아닌 경우 404 반환
+      return res.status(404).json({ ok: false });
     }
   }
 
