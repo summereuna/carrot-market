@@ -20,6 +20,10 @@ export const middleware = async (req: NextRequest, event: NextFetchEvent) => {
     },
   });
 
+  //로그인한 유저 /login 접근막기
+  if (session.user && req.url.includes("/login")) {
+    return NextResponse.redirect(new URL("/", req.url));
+  }
   // /login페이지를 제외한 모든 페이지에서 아이언세션의 세션유저 쿠키가 없으면 /login로 리다이렉트
   // /login 페이지는 빼고 리다이렉트 해줘야 리다이렉트 많아서 발생하는 오류 안남
   if (!session.user && !req.url.includes("/login")) {
