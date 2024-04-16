@@ -230,14 +230,16 @@ const ProductDetail: NextPage<ProductDetailResponse> = ({
             {product?.price ? product?.price.toLocaleString() : "0"}원
           </span>
         </div>
-
         {/*direct-message btn*/}
-        {!((product?.review?.length as number) > 0) &&
-        user?.id !== product?.userId ? (
-          <Button text="채팅하기" large onClick={onChatClick} />
-        ) : (
-          <Button text="채팅하기" large onClick={onChatClick} disabled />
-        )}
+        <Button
+          text="채팅하기"
+          large
+          onClick={onChatClick}
+          disabled={
+            (product?.review?.length as number) > 0 ||
+            user?.id === product?.userId
+          }
+        />
       </nav>
     </Layout>
   );

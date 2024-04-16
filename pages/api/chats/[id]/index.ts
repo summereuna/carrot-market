@@ -34,7 +34,7 @@ async function handler(
           },
           user: { select: { name: true } },
           userId: true,
-          review: { select: { id: true } },
+          review: { select: { id: true, createdById: true } },
         },
       },
       chats: {

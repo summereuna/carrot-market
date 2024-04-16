@@ -20,7 +20,7 @@ interface ReservationInfo extends Reservation {
 interface productWthProductOwner extends Product {
   reservation: ReservationInfo;
   user: { name: string };
-  review?: { id: number; length: number };
+  review?: { id: number; createdById: number; length: number }[];
 }
 
 export interface chatMessage extends Chat {
@@ -132,6 +132,11 @@ const ChatDetail: NextPage = () => {
               ? true
               : false
           }
+          isReviewedByMe={Boolean(
+            data?.chats?.product?.review
+              ?.map((item) => item.createdById)
+              .includes(user?.id as number)
+          )}
           onReservation={handleReservationToggleClick}
           writeReview={handleWriteReviewClick}
         />
