@@ -14,7 +14,8 @@ export default function SocialLoginButton({
   const handleSocialLoginClick = async () => {
     const res = await fetch(api);
     const data = await res.json();
-    return window.open(data.url, "_blank", "noopener, noreferrer");
+    //새창에서 열지 말지 ㅇㅇ....
+    return window.open(data.url, "_self", "noopener, noreferrer");
   };
 
   return (
