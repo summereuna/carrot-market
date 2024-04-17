@@ -101,6 +101,8 @@ export default function Layout({
           <DeleteModal
             onClose={closeDeleteModalHandler}
             onDelete={deleteHandler}
+            contentText="정말로 삭제하시겠습니까?"
+            buttonText="삭제하기"
           />
         )}
         {canGoBack ? (

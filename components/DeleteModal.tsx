@@ -3,14 +3,21 @@ import Modal from "./Modal";
 interface DeleteModalProps {
   onClose: () => void;
   onDelete: () => void;
+  contentText: string;
+  buttonText: string;
 }
 
-export default function DeleteModal({ onClose, onDelete }: DeleteModalProps) {
+export default function DeleteModal({
+  onClose,
+  onDelete,
+  contentText,
+  buttonText,
+}: DeleteModalProps) {
   return (
     <Modal isGlobal={true} onClose={onClose}>
       <div className="flex flex-col space-y-7 py-5 items-center">
         <div>
-          <span className="cursor-default">정말로 삭제하시겠습니까?</span>
+          <span className="cursor-default">{contentText}</span>
         </div>
         <div className="w-full flex justify-around">
           <div
@@ -24,7 +31,7 @@ export default function DeleteModal({ onClose, onDelete }: DeleteModalProps) {
             onClick={onDelete}
             className="border-y cursor-pointer w-full p-3 flex justify-center hover:bg-red-100 focus:bg-red-100 transition-colors"
           >
-            <span className="text-red-500">삭제하기</span>
+            <span className="text-red-500">{buttonText}</span>
           </div>
         </div>
       </div>

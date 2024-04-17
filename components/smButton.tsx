@@ -26,9 +26,9 @@ export default function SmButton({
       className={cls(
         `space-x-2 py-2 px-3 flex items-center justify-center  transition-colors rounded-lg `,
         bgGray
-          ? "bg-gray-100 enabled:hover:bg-gray-200 enabled:focus:bg-gray-200"
+          ? "bg-gray-200 enabled:hover:bg-gray-300 enabled:focus:bg-gray-200"
           : "border-[1px] enabled:hover:bg-slate-100 enabled:focus:bg-slate-100",
-        disabled ? "bg-gray-200 text-gray-500 hover:" : "bg-white"
+        disabled ? "disabled bg-gray-200 text-gray-500" : ""
       )}
     >
       {pathD && (

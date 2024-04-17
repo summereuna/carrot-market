@@ -39,7 +39,9 @@ const Chats: NextPage = () => {
           <div>
             <div className="cursor-pointer px-4 py-3 flex space-x-3 items-center">
               <div className="flex-shrink-0">
-                <div className="w-12 h-12 rounded-full bg-slate-300" />
+                <div className="w-12 h-12 rounded-full bg-amber-200 flex items-center justify-center">
+                  <span className="text-3xl">🥕</span>
+                </div>
               </div>
               <div className="flex flex-col">
                 <div className="space-x-2">
@@ -47,7 +49,7 @@ const Chats: NextPage = () => {
                   <span className="text-xs text-gray-500"></span>
                 </div>
                 <span className="text-sm text-gray-500">
-                  🥕 환영합니다! 채팅을 시작해 보세요!
+                  환영합니다! 채팅을 시작해 보세요!
                 </span>
               </div>
             </div>

@@ -4,6 +4,7 @@ interface ButtonProps {
   text: string;
   large?: boolean;
   disabled?: boolean;
+  bgGray?: boolean;
   [key: string]: any;
 }
 
@@ -13,6 +14,7 @@ export default function Button({
   loading,
   text,
   disabled,
+  bgGray,
   ...rest
 }: ButtonProps) {
   return (
@@ -20,11 +22,12 @@ export default function Button({
       onClick={onClick}
       {...rest}
       className={cls(
-        "w-full px-4 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2  shadow-sm font-medium ",
+        "w-full px-4 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2  shadow-sm font-medium bg-orange-500 hover:bg-orange-600",
         large ? "py-3 text-base" : "py-2 text-sm",
-        disabled
-          ? "bg-gray-400"
-          : "bg-orange-500 hover:bg-orange-600 focus:ring-orange-500"
+        disabled ? "enabled:bg-gray-400" : "",
+        bgGray
+          ? "enabled:bg-gray-300 enabled:hover:bg-gray-400 enabled:focus:bg-gray-200"
+          : ""
       )}
       disabled={disabled}
     >
