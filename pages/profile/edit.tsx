@@ -2,7 +2,6 @@ import Button from "@/components/Button";
 import Input from "@/components/Input";
 import Layout from "@/components/Layout";
 import useUser from "@/libs/client/useUser";
-import useMutation from "@/libs/client/useMutation";
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -10,6 +9,9 @@ import fileUploader from "@/libs/client/fileUploader";
 import Image from "next/image";
 import Seo from "@/components/Seo";
 import { useRouter } from "next/router";
+import useDelete from "@/libs/client/useDelete";
+import useUpdate from "@/libs/client/useUpdate";
+import DeleteModal from "@/components/DeleteModal";
 
 interface EditProfileForm {
   name?: string;
@@ -28,7 +30,7 @@ const EditProfile: NextPage = () => {
   const { user } = useUser();
 
   const [editProfile, { data, loading }] =
-    useMutation<EditProfileResponse>(`/api/users/me`);
+    useUpdate<EditProfileResponse>(`/api/users/me`);
 
   const {
     register,
@@ -100,11 +102,36 @@ const EditProfile: NextPage = () => {
     }
   }, [fileList]);
 
-  //console.log(user?.avatar);
+  const [deleteUser, { data: deleteData, loading: deleteUserLoading }] =
+    useDelete("/api/users/me");
+
+  const deleteHandler = () => {
+    if (deleteUserLoading) return;
+    deleteUser({});
+    closeDeleteModalHandler();
+  };
+
+  //딜리트모달
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  const openDeleteModalHandler = () => {
+    setIsDeleteModalOpen(true);
+  };
+
+  const closeDeleteModalHandler = () => {
+    setIsDeleteModalOpen(false);
+  };
+
+  useEffect(() => {
+    if (deleteData?.ok) {
+      router.replace("/login");
+    }
+  }, [deleteData, router]);
+
   return (
     <Layout canGoBack title="프로필 수정">
       <Seo title="프로필 수정 | 당근마켓" description="당근마켓 프로필 수정" />
-      <form onSubmit={handleSubmit(onValid)} className="py-5 px-4 space-y-4">
+      <form onSubmit={handleSubmit(onValid)} className="py-5 px-4 space-y-5">
         <div className="flex items-center space-x-3">
           {avatarPreview ? (
             <Image
@@ -165,13 +192,23 @@ const EditProfile: NextPage = () => {
           text="프로필 수정하기"
           loading={loading}
         />
-        <Button
-          onClick={() => clearErrors()}
-          text="회원 탈퇴하기"
-          disabled
-          loading={loading}
-        />
       </form>
+      <div className="px-4">
+        <Button
+          onClick={openDeleteModalHandler}
+          text="회원 탈퇴하기"
+          loading={deleteUserLoading}
+          bgGray
+        />
+      </div>
+      {isDeleteModalOpen && (
+        <DeleteModal
+          onClose={closeDeleteModalHandler}
+          onDelete={deleteHandler}
+          contentText="정말로 탈퇴하겠습니까?"
+          buttonText="탈퇴하기"
+        />
+      )}
     </Layout>
   );
 };

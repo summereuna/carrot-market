@@ -25,7 +25,7 @@ async function handler(
 
   const payload = Math.floor(100000 + Math.random() * 900000) + "";
 
-  //토큰 생성
+  //토큰 생성 및 유저 생성
   const token = await client.token.create({
     data: {
       payload,
@@ -38,7 +38,7 @@ async function handler(
           where: { ...userEnterInfo },
           //유저가 없으면 유저 새로 만들고, 유저에 토큰 연결
           create: {
-            name: "익명",
+            name: email ? email.split("@", 1)[0] : `익명`,
             ...userEnterInfo,
           },
         },

@@ -7,25 +7,20 @@ async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseType>
 ) {
+  const {
+    session: { user },
+    body: { email, phone, name, avatarUrl },
+  } = req;
+
   if (req.method === "GET") {
-    const {
-      session: { user },
-    } = req;
-    //req.session.user에 있는 id 사용하여 유저 데이터 찾아오기
     const profile = await client.user.findUnique({
       where: { id: user?.id },
     });
 
-    //응답 json애 유저 데이터 담아서 보내기
     return res.json({ ok: true, profile });
   }
 
-  if (req.method === "POST") {
-    const {
-      session: { user },
-      body: { email, phone, name, avatarUrl },
-    } = req;
-
+  if (req.method === "PUT") {
     const currentUser = await client.user.findUnique({
       where: { id: user?.id },
     });
@@ -106,6 +101,29 @@ async function handler(
 
     res.json({ ok: false, error: "현재 사용중인 이메일/전화번호입니다." });
   }
+
+  if (req.method === "DELETE") {
+    const isUserExist = await client.user.findUnique({
+      where: { id: user?.id },
+    });
+
+    if (isUserExist?.id !== user?.id) {
+      return res.status(404).json({
+        ok: false,
+        error: "본인이 아니면 탈퇴할 수 없습니다.",
+      });
+    }
+
+    await client.user.delete({
+      where: {
+        id: isUserExist?.id,
+      },
+    });
+
+    req.session.destroy();
+
+    return res.status(200).json({ ok: true });
+  }
 }
 
 //왜 감싸줘야 되냐면
@@ -114,7 +132,7 @@ async function handler(
 
 //GET으로 해야 req.session.user 가져올 수 있음
 export default withApiSession(
-  withHandler({ methods: ["GET", "POST"], handler })
+  withHandler({ methods: ["GET", "PUT", "DELETE"], handler })
 );
 //withHandler 설정 객체 보내기
 // isPrivate에 true를 보내면, me 핸들러는 로그인 한 유저만 호출할 수 있게 된다.
