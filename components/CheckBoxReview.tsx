@@ -4,7 +4,7 @@ export default function CheckBoxReview({ reviews }: ReviewsResponse) {
   function convertReviews(reviewsArrayData: ReviewWithUser[]) {
     //받은 리뷰 하나의 배열로 변환해 넣기
     const reviewsArray = reviewsArrayData.map(
-      (review) => review.reviewCheckBoxes!
+      (review) => review.reviewCheckBoxes as string
     );
 
     //문자열을 배열로 변환해 합치기
