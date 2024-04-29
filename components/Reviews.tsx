@@ -4,6 +4,7 @@ import Image from "next/image";
 
 export interface ReviewWithUser extends Review {
   createdBy: User;
+  [key: string]: any;
 }
 
 export interface ReviewsResponse {

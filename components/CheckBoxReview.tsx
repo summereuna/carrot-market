@@ -1,26 +1,23 @@
 import { ReviewWithUser, ReviewsResponse } from "@/components/Reviews";
 
+function convertReviews(reviews: ReviewWithUser[]) {
+  //받은 리뷰 하나의 배열로 변환해 넣기
+  const reviewsArray = reviews.map((review) => review.reviewCheckBoxes);
+  //문자열을 배열로 변환해 합치기
+  const flatReviewsArray = reviewsArray?.flatMap((review) =>
+    JSON.parse(review)
+  );
+
+  //각 요소 개수 세기
+  const countReviews = flatReviewsArray?.reduce((acc, value) => {
+    acc[value] = (acc[value] || 0) + 1;
+    return acc;
+  }, {});
+
+  return Object.entries(countReviews);
+}
+
 export default function CheckBoxReview({ reviews }: ReviewsResponse) {
-  function convertReviews(reviewsArrayData: ReviewWithUser[]) {
-    //받은 리뷰 하나의 배열로 변환해 넣기
-    const reviewsArray = reviewsArrayData.map(
-      (review) => review.reviewCheckBoxes as string
-    );
-
-    //문자열을 배열로 변환해 합치기
-    const flatReviewsArray = reviewsArray?.flatMap((review) =>
-      JSON.parse(review)
-    );
-
-    //각 요소 개수 세기
-    const countReviews = flatReviewsArray?.reduce((acc, value) => {
-      acc[value] = (acc[value] || 0) + 1;
-      return acc;
-    }, {});
-
-    return Object.entries(countReviews);
-  }
-
   return (
     <>
       {reviews &&
