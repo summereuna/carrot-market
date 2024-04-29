@@ -4,6 +4,7 @@ import Image from "next/image";
 
 export interface ReviewWithUser extends Review {
   createdBy: User;
+  reviewCheckBoxes: string;
 }
 
 export interface ReviewsResponse {
