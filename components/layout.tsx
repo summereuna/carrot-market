@@ -3,8 +3,8 @@ import { cls } from "../libs/client/utils";
 import { useRouter } from "next/router";
 import useUser from "@/libs/client/useUser";
 import { useEffect, useState } from "react";
-import EditDeleteModal from "./EditDeleteModal";
-import DeleteModal from "./DeleteModal";
+import EditDeleteModal from "@/components/EditDeleteModal";
+import DeleteModal from "@/components/DeleteModal";
 import useDelete from "@/libs/client/useDelete";
 
 interface LayoutProps {

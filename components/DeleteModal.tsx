@@ -1,4 +1,4 @@
-import Modal from "./Modal";
+import Modal from "@/components/Modal";
 
 interface DeleteModalProps {
   onClose: () => void;

@@ -18,7 +18,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
 import client from "@/libs/server/client";
-import { ProductsResponse } from "@/pages/products";
+import { ProductsResponse } from "@/pages";
 import { ProductDetailResponse } from "../[id]";
 
 interface UploadProductForm {

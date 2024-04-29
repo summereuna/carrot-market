@@ -1,4 +1,4 @@
-import UserBox from "./UserBox";
+import UserBox from "@/components/UserBox";
 
 interface CommentProps {
   comment: string;

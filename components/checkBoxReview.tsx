@@ -1,4 +1,4 @@
-import { ReviewWithUser, ReviewsResponse } from "./Reviews";
+import { ReviewWithUser, ReviewsResponse } from "@/components/Reviews";
 
 export default function CheckBoxReview({ reviews }: ReviewsResponse) {
   function convertReviews(reviewsArrayData: ReviewWithUser[]) {
