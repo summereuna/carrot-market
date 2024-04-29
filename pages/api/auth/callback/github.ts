@@ -19,13 +19,13 @@ async function handler(
   }
 
   const accessTokenURL = "https://github.com/login/oauth/access_token";
-  const accessTokenParams = {
-    client_id: process.env.GITHUB_OAUTH_CLIENT_ID!,
-    client_secret: process.env.GITHUB_OAUTH_CLIENT_SECRET!,
-    code,
-  };
-  const formattedParams = new URLSearchParams(accessTokenParams).toString();
-  const finalUrl = `${accessTokenURL}?${formattedParams}`;
+
+  const accessTokenSearchParams = new URLSearchParams(
+    `client_id=${process.env.GITHUB_OAUTH_CLIENT_ID!}&client_secret=${process
+      .env.GITHUB_OAUTH_CLIENT_SECRET!}&code=${code}`
+  ).toString();
+
+  const finalUrl = `${accessTokenURL}?${accessTokenSearchParams}`;
 
   //   return res.json({ url: finalUrl });
   // return Response.json({ code });
