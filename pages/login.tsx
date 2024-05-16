@@ -167,13 +167,7 @@ const Login: NextPage = () => {
                 </span>
               </div>
             </div>
-            <div className="mt-2 grid grid-cols-2 gap-3">
-              {/* <Link href="/github/start"> */}
-              <SocialLoginButton
-                api="/api/auth/github"
-                title="카카오로 로그인하기"
-                logo={kakaoLogo}
-              />
+            <div className="mt-2">
               {/* </Link> */}
               <SocialLoginButton
                 api="/api/auth/github"
