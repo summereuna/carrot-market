@@ -11,7 +11,6 @@ generator client {
 
 //깃헙에 client가 있는 node_modules 안올렸기 때문에 vercel이 배포하려고 하면 알수가 없으니 에러남
 //따라서 빌드 진행 중에 prisma generate 명령어 실행해서 버셀이 서버 만들면서 노드모듈 만들 때 프리즈마도 포함되게 해줘야 함
-//package.json에 명령어 추가 ㄱ
 
 // provider     = "mysql"
 // datasource db {
