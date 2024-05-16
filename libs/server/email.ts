@@ -18,9 +18,9 @@ const sendEmail = (userPayload: string, tokenPayload: string) => {
   const mailOptions = {
     from: process.env.MAIL_ID,
     to: userPayload,
-    subject: "[당근 마켓] 로그인 인증 이메일입니다.",
-    text: `타인노출금지 [당근마켓] 인증 번호: [${tokenPayload}]`,
-    html: `<b>타인노출금지 [당근마켓] 인증 번호: [${tokenPayload}]</b>`,
+    subject: "[네이버후드] 로그인 인증 이메일입니다.",
+    text: `타인노출금지 [네이버후드] 인증 번호: [${tokenPayload}]`,
+    html: `<b>타인노출금지 [네이버후드] 인증 번호: [${tokenPayload}]</b>`,
   };
   const result = smtpTransport.sendMail(mailOptions, (error, res) => {
     if (error) {

@@ -35,7 +35,7 @@ const Posts: NextPage<{ posts: PostWithRecsAndAnswers[] }> = ({ posts }) => {
 
   return (
     <Layout title="동네생활" hasTabBar>
-      <Seo title="동네생활 | 당근마켓" description="당근마켓 동네생활" />
+      <Seo title="동네생활 | 네이버후드" description="네이버후드 동네생활" />
       <div className="divide-y">
         {posts?.map((post) => (
           <div key={post.id}>
@@ -110,9 +110,9 @@ const Posts: NextPage<{ posts: PostWithRecsAndAnswers[] }> = ({ posts }) => {
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  console.log(
-    "✅ 커뮤니티에 글쓰기/댓글달기/추천누르기 => /posts 페이지 백에서 정적 재생성..."
-  );
+  // console.log(
+  //   "✅ 커뮤니티에 글쓰기/댓글달기/추천누르기 => /posts 페이지 백에서 정적 재생성..."
+  // );
 
   //포스트 db가져오기: 실제 프로덕션에서는 페이지네이션 하는게 좋음
   const posts = await client.post.findMany({

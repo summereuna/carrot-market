@@ -102,7 +102,7 @@ const LiveDetail: NextPage = () => {
         <>
           <Seo
             title={`${data?.stream?.name} | 라이브 스트리밍`}
-            description={`당근마켓 라이브 스트리밍 | ${data?.stream?.description}`}
+            description={`네이버후드 라이브 스트리밍 | ${data?.stream?.description}`}
           />
           <div className="py-4 px-4 space-y-4 mb-10">
             {/* 라이브 스트리밍 동영상 */}

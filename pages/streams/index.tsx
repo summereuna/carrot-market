@@ -19,7 +19,7 @@ const Streams: NextPage = () => {
     `/api/streams?page=${pageIndex}&limit=${pageLimit}`
   );
 
-  console.log(data);
+  // console.log(data);
   const onPreBtn = () => {
     setPageIndex((prev) => prev - 1);
   };
@@ -29,8 +29,8 @@ const Streams: NextPage = () => {
   return (
     <Layout title="라이브 스트리밍" hasTabBar>
       <Seo
-        title="라이브 스트리밍 | 당근마켓"
-        description="당근마켓 라이브 스트리밍"
+        title="라이브 스트리밍 | 네이버후드"
+        description="네이버후드 라이브 스트리밍"
       />
       <div className="grid grid-cols-2 pt-3 pb-3">
         {/*divide-y-2 요소 사이사이에 선 넣기 */}

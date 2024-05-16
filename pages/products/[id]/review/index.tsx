@@ -147,7 +147,7 @@ const Review: NextPage = () => {
 
   useEffect(() => {
     if (makeReviewData?.ok) {
-      console.log(makeReviewData);
+      // console.log(makeReviewData);
       reset();
       router.push(`/products/${router.query.id}/review/send`);
     }
@@ -157,7 +157,7 @@ const Review: NextPage = () => {
     <Layout canGoBack title="거래 후기 보내기">
       <Seo
         title="거래 후기 보내기 | 중고거래"
-        description="당근마켓 중고거래 후기 보내기"
+        description="네이버후드 중고거래 후기 보내기"
       />
       {productInfoData && (
         <>
@@ -437,7 +437,7 @@ const Review: NextPage = () => {
                 {reviewKind === "bad" && (
                   <>
                     <h3 className="text-lg font-semibold">
-                      아쉬웠던 점을 당근마켓 팀에 알려주세요.
+                      아쉬웠던 점을 네이버후드 팀에 알려주세요.
                     </h3>
                     <span className="text-gray-500 text-sm">
                       상대방에게 전달되지 않으니 안심하세요.

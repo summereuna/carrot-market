@@ -130,7 +130,10 @@ const EditProfile: NextPage = () => {
 
   return (
     <Layout canGoBack title="프로필 수정">
-      <Seo title="프로필 수정 | 당근마켓" description="당근마켓 프로필 수정" />
+      <Seo
+        title="프로필 수정 | 네이버후드"
+        description="네이버후드 프로필 수정"
+      />
       <form onSubmit={handleSubmit(onValid)} className="py-5 px-4 space-y-5">
         <div className="flex items-center space-x-3">
           {avatarPreview ? (

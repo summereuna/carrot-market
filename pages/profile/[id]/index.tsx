@@ -61,8 +61,8 @@ const UserProfile: NextPage = () => {
   return (
     <Layout canGoBack title="프로필">
       <Seo
-        title={`${data?.profile?.name}님의 프로필 | 당근마켓`}
-        description="당근마켓 유저 프로필"
+        title={`${data?.profile?.name}님의 프로필 | 네이버후드`}
+        description="네이버후드 유저 프로필"
       />
       {data?.profile && (
         <div className="divide-y-[1px]">

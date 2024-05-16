@@ -38,7 +38,7 @@ const Send: NextPage = () => {
         <Layout title="내가 보낸 거래 후기" canGoHome>
           <Seo
             title="내가 보낸 거래 후기 | 중고거래"
-            description="당근마켓 중고거래 내가 보낸 거래 후기"
+            description="네이버후드 중고거래 내가 보낸 거래 후기"
           />
 
           <div className="px-4 py-2 space-y-10">
@@ -98,7 +98,7 @@ const Send: NextPage = () => {
         <Layout title="내가 보낸 거래 후기" canGoHome>
           <Seo
             title="내가 보낸 거래 후기 | 중고거래"
-            description="당근마켓 중고거래 내가 보낸 거래 후기"
+            description="네이버후드 중고거래 내가 보낸 거래 후기"
           />
           <div className="flex justify-center mt-20">잘못된 접근입니다.</div>
         </Layout>

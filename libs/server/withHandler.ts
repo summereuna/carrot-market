@@ -41,7 +41,7 @@ export default function withHandler({
       await handler(req, res);
       //이때 handler 펑션이 실행됨 ㅇㅇ!
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       return res.status(500).json({ error }); //서버 에러: 500
     }
   };

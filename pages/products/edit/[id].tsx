@@ -153,7 +153,7 @@ const ProductEdit: NextPage = ({
     <Layout canGoBack title="상품 수정">
       <Seo
         title="상품 수정 글쓰기 | 중고거래"
-        description="당근마켓 중고거래 상품 수정 글쓰기"
+        description="네이버후드 중고거래 상품 수정 글쓰기"
       />
       <form onSubmit={handleSubmit(onValid)}>
         <div className="px-4 py-2 space-y-5">
@@ -281,7 +281,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const id = context.params?.id;
-  console.log(context);
+  // console.log(context);
 
   const product = await client.product.findUnique({
     where: {

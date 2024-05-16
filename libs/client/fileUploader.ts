@@ -20,7 +20,6 @@ export default async function fileUploader(file: File, presetName: string) {
       throw new Error(`이미지 업로드에 실패했습니다: ${response.status}`);
     }
     const data = await response.json();
-    console.log(data);
     const imageUrl = data.url;
     return imageUrl;
   } catch (error) {

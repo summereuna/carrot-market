@@ -7,10 +7,10 @@ export default function Document() {
         <meta charSet="utf-8" />
         <meta property="og:locale" content="ko_KR" />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="당근마켓 클론" />
+        <meta property="og:title" content="네이버후드" />
         <meta
           property="og:description"
-          content="당근마켓 클론 | 중고 거래부터 동네 정보까지, 이웃과 함께해요. 가깝고 따뜻한 당신의 근처를 만들어요."
+          content="네이버후드 | 중고 거래부터 동네 정보까지, 이웃과 함께해요. 가깝고 따뜻한 당신의 근처를 만들어요."
         />
         <meta property="og:url" content="https://carrot어쩌구" />
         {/* <meta property="og:url" content="" /> */}

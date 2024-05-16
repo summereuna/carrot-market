@@ -104,7 +104,7 @@ const Sales: NextPage = () => {
     <Layout canGoBack title="판매내역">
       <Seo
         title={`판매내역 | ${data?.user?.name}님의 프로필`}
-        description="당근마켓 유저 프로필 판매내역"
+        description="네이버후드 유저 프로필 판매내역"
       />
       {data?.user && (
         <div className="flex justify-between py-5 px-5">

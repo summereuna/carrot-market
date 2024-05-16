@@ -24,7 +24,7 @@ export default function SmButton({
       onClick={onClick}
       {...rest}
       className={cls(
-        `space-x-2 py-2 px-3 flex items-center justify-center  transition-colors rounded-lg `,
+        `space-x-2 py-2 px-3 flex items-center justify-center transition-colors rounded-lg `,
         bgGray
           ? "bg-gray-200 enabled:hover:bg-gray-300 enabled:focus:bg-gray-200"
           : "border-[1px] enabled:hover:bg-slate-100 enabled:focus:bg-slate-100",

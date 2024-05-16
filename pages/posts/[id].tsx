@@ -117,7 +117,7 @@ const PostDetail: NextPage<CommunityPostResponse> = ({ post }) => {
     <Layout canGoBack isMe={user?.id !== post?.userId ? false : true}>
       <Seo
         title={`${post?.title} | 동네생활`}
-        description={`당근마켓 동네 생활: ${post?.content}`}
+        description={`네이버후드 동네 생활: ${post?.content}`}
       />
       <div className="border-b-8 border-slate-100 w-full space-y-5 py-3">
         <span

@@ -50,7 +50,7 @@ const Write: NextPage = () => {
 
   return (
     <Layout canGoBack title="동네생활 글쓰기">
-      <Seo title="글쓰기 | 동네생활" description="당근마켓 동네생활 글쓰기" />
+      <Seo title="글쓰기 | 동네생활" description="네이버후드 동네생활 글쓰기" />
       <div className="px-4 py-2 space-y-2">
         <div
           className="cursor-pointer flex items-center justify-between px-3 py-3 text-gray-800 border-b border-gray-300

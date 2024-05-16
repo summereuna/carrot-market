@@ -49,10 +49,10 @@ const Profile: NextPage = () => {
 
   return (
     user && (
-      <Layout title="나의 당근" hasTabBar>
+      <Layout title="나의 프로필" hasTabBar>
         <Seo
-          title="나의 프로필 | 당근마켓"
-          description="당근마켓 나의 프로필"
+          title="나의 프로필 | 네이버후드"
+          description="네이버후드 나의 프로필"
         />
         <div className="divide-y-[1px]">
           {/* 유저 정보 */}

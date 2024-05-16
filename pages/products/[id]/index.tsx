@@ -105,10 +105,10 @@ const ProductDetail: NextPage<ProductDetailResponse> = ({
   //1초 이상 걸리는 작업에는 로딩 중임을 표시하는게 더 좋음
   //일단 ?로 만들고 나중에 필요하면 스켈레톤 넣거나 / ISR
   return (
-    <Layout canGoBack isMe={user?.id !== product?.userId ? false : true}>
+    <Layout canGoHome isMe={user?.id !== product?.userId ? false : true}>
       <Seo
         title={`${product?.name} | 중고거래`}
-        description="당근마켓 중고거래"
+        description="네이버후드 중고거래"
       />
       <div className="px-4">
         <div className="mb-8">

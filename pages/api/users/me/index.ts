@@ -78,7 +78,6 @@ async function handler(
         return res.json({ ok: false, error: "이미 사용중인 이름입니다." });
       }
 
-      console.log(alreadyExistsName);
       await client.user.update({
         where: { id: user?.id },
         data: {

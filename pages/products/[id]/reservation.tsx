@@ -121,7 +121,7 @@ const Reservation: NextPage = () => {
     <Layout canGoBack title="약속 잡기">
       <Seo
         title="약속잡기 | 중고거래"
-        description="당근마켓 중고거래 약속잡기"
+        description="네이버후드 중고거래 약속잡기"
       />
       <form onSubmit={handleSubmit(onValid)}>
         <div className="px-4 py-2 space-y-5">

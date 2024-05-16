@@ -47,20 +47,20 @@ async function handler(
   });
 
   //폰이면 트윌리오 SMS 문자보내기
+  //돈 아껴야 되니까 이거 나중에 그냥 비번으로 바꾸자
   if (phone) {
-    //돈 아껴야 되니까 주석 처리 ^^..
-    // const message = await twilioClient.messages.create({
-    //   messagingServiceSid: messagingServiceSid,
-    //   from: fromNumber,
-    //   to: toNumber!, //phone으로 줘야 하는게 맞지만 트라이얼이니까
-    //   // ! 사용하여 확실히 존재하는 변수라고 타입스크립트에게 알리기
-    //   body: `타인노출금지 [당근마켓] 인증번호 [${payload}]`,
-    //});
-    //console.log(message);
+    try {
+      await twilioClient.messages.create({
+        messagingServiceSid: messagingServiceSid,
+        from: fromNumber,
+        to: `+82${phone}`!,
+        body: `타인노출금지 [네이버후드] 인증번호 [${payload}]`,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   } else if (email) {
-    //이메일도 마찬가지 주석 처리
-    //이메일일 때
-    // sendEmail(email, payload);
+    sendEmail(email, payload);
   }
 
   //res 반환: data.ok

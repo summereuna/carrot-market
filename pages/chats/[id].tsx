@@ -57,7 +57,6 @@ const ChatDetail: NextPage = () => {
     router.query.id ? `/api/chats/${router.query.id}` : null,
     useSWRConfigurationOption
   );
-  console.log(data);
 
   const [sendChat, { data: sendChatData, loading }] = useMutation<ChatForm>(
     `/api/chats/${router.query.id}/chats`
@@ -117,7 +116,7 @@ const ChatDetail: NextPage = () => {
           : data?.chats?.product?.user?.name
       }
     >
-      <Seo title="채팅 | 당근마켓" description="당근마켓 채팅" />
+      <Seo title="채팅 | 네이버후드" description="네이버후드 채팅" />
       <div className="border-b-[1px] pb-3">
         <ChatProductInfo
           key={data?.chats?.product?.id}
@@ -186,7 +185,7 @@ const ChatDetail: NextPage = () => {
          ))}*/}
         {data?.chats?.chats?.length === 0 && (
           <div className="flex flex-col text-center mt-40 text-sm text-gray-400">
-            <p>[거래꿀팁] 당근마켓 채팅이 가장 편하고 안전해요. 🥕</p>
+            <p>[거래꿀팁] 네이버후드 채팅이 가장 편하고 안전해요. 🥕</p>
             <p>카카오톡ID 등으로 대화를 유도하는 경우,</p>
             <p>피해가 있을 수 있으니 주의하세요!</p>
           </div>
