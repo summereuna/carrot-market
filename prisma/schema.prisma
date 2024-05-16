@@ -1,3 +1,6 @@
+//깃헙에 client가 있는 node_modules 안올렸기 때문에 vercel이 배포하려고 하면 알수가 없으니 에러남
+//따라서 빌드 진행 중에 prisma generate 명령어 실행해서 버셀이 서버 만들면서 노드모듈 만들 때 프리즈마도 포함되게 해줘야 함
+
 //프리즈마에게 스케마 설명하는 명령어
 //npx prisma migrate dev
 //새로운 머ㅏ이그레이션 이름 넣어서 DB 변경사항 추적 & 프리즈마 SQL코드로 만들어서 저장해줌
@@ -9,15 +12,7 @@ generator client {
   provider = "prisma-client-js"
 }
 
-//깃헙에 client가 있는 node_modules 안올렸기 때문에 vercel이 배포하려고 하면 알수가 없으니 에러남
-//따라서 빌드 진행 중에 prisma generate 명령어 실행해서 버셀이 서버 만들면서 노드모듈 만들 때 프리즈마도 포함되게 해줘야 함
 
-// provider     = "mysql"
-// datasource db {
-//   provider     = "sqlite"
-//   url          = env("DATABASE_URL")
-//   relationMode = "prisma"
-// }
 datasource db {
   provider = "postgresql"
   url = env("POSTGRES_PRISMA_URL") // uses connection pooling
