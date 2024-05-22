@@ -11,11 +11,13 @@ import DetailPageTitle from "@/components/DetailPageTitle";
 import SmButton from "@/components/SmButton";
 import Manner from "@/components/Manner";
 import Seo from "@/components/Seo";
+import { getMannerDegree } from "@/libs/client/utils";
 
 export interface UserResponse {
   ok: boolean;
   profile: User;
   reviews?: ReviewWithUser[];
+  notFound?: string;
 }
 
 const UserProfile: NextPage = () => {
@@ -33,33 +35,8 @@ const UserProfile: NextPage = () => {
   // console.log(typeof router.query.id);
   // console.log(typeof user?.id);
 
-  const getMannerDegree = (initialDegree: number, reviewsScore: number[]) => {
-    for (let i = 0; i < reviewsScore.length; i++) {
-      switch (reviewsScore[i]) {
-        case 1:
-          initialDegree += -0.5;
-          break;
-        case 2:
-          initialDegree += -0.25;
-          break;
-        case 3:
-          initialDegree += 0.25;
-          break;
-        case 4:
-          initialDegree += 0.5;
-          break;
-        case 5:
-          initialDegree += 0.75;
-          break;
-        default:
-          break;
-      }
-    }
-    return initialDegree;
-  };
-
   return (
-    <Layout canGoBack title="프로필">
+    <Layout canGoHome title="프로필">
       <Seo
         title={`${data?.profile?.name}님의 프로필 | 네이버후드`}
         description="네이버후드 유저 프로필"
@@ -130,7 +107,7 @@ const UserProfile: NextPage = () => {
         </div>
       )}
 
-      {!isLoading && !data?.ok && (
+      {!data?.ok && data?.notFound && (
         <div className="flex justify-center mt-20">
           존재하지 않는 사용자 입니다.
         </div>

@@ -2,7 +2,7 @@ import withHandler, { ResponseType } from "@/libs/server/withHandler";
 import { NextApiRequest, NextApiResponse } from "next";
 import client from "@/libs/server/client";
 import { withApiSession } from "@/libs/server/withSession";
-import { NextResponse } from "next/server";
+// import { NextResponse } from "next/server";
 
 async function handler(
   req: NextApiRequest,
@@ -27,7 +27,12 @@ async function handler(
     // const url = req.nextUrl.clone();
     // url.pathname = `/404`;
     // return NextResponse.rewrite(url);
-    return NextResponse.rewrite("/404");
+    // return NextResponse.rewrite("/404");
+    //프로필 없으면 404 띄워주고 싶은데 어떻게 해야 하지?
+    return res.status(200).json({
+      ok: false,
+      notFound: true,
+    });
   }
 
   return res.json({ ok: true, profile, reviews });

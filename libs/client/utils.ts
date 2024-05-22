@@ -130,3 +130,31 @@ export function changeStringToArrayReviewBoxes(reviews: string): string[] {
   const reviewMatch = reviewReg!.map((match) => match.slice(1, -1));
   return reviewMatch;
 }
+
+export const getMannerDegree = (
+  initialDegree: number,
+  reviewsScore: number[]
+) => {
+  for (let i = 0; i < reviewsScore.length; i++) {
+    switch (reviewsScore[i]) {
+      case 1:
+        initialDegree += -0.5;
+        break;
+      case 2:
+        initialDegree += -0.25;
+        break;
+      case 3:
+        initialDegree += 0.25;
+        break;
+      case 4:
+        initialDegree += 0.5;
+        break;
+      case 5:
+        initialDegree += 0.75;
+        break;
+      default:
+        break;
+    }
+  }
+  return initialDegree;
+};
