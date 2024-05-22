@@ -256,9 +256,7 @@ const Review: NextPage = () => {
                     onClick={reviewKindHandler}
                     className={cls(
                       "flex flex-col items-center justify-center w-24 h-24 rounded-3xl space-y-1 transition-colors",
-                      reviewKind === "best"
-                        ? "text-orange-400"
-                        : " text-gray-500"
+                      reviewKind === "best" ? "text-lime-500" : " text-gray-500"
                     )}
                   >
                     <div

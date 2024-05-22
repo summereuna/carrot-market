@@ -16,11 +16,13 @@ interface LoginForm {
 
 interface TokenForm {
   token: string;
+  formErrors?: string;
 }
 
 //login 페이지에서 useMutation하면 응답 결과로 data.ok 반환받음
 interface MutationResult {
   ok: boolean;
+  tokenError?: string;
 }
 
 const Login: NextPage = () => {
@@ -33,8 +35,13 @@ const Login: NextPage = () => {
     useMutation<MutationResult>("/api/users/confirm");
 
   const { register, reset, handleSubmit } = useForm<LoginForm>();
-  const { register: tokenRegister, handleSubmit: tokenHandleSubmit } =
-    useForm<TokenForm>();
+  const {
+    register: tokenRegister,
+    handleSubmit: tokenHandleSubmit,
+    formState: { errors },
+    setError,
+    clearErrors,
+  } = useForm<TokenForm>();
 
   //email/phone 메소드 바꾸면 email/phone form clear 해줘야 함
   const [method, setMethod] = useState("email");
@@ -66,10 +73,16 @@ const Login: NextPage = () => {
   const router = useRouter();
 
   useEffect(() => {
+    if (!tokenData?.ok) {
+      setError("formErrors", {
+        message: tokenData?.tokenError,
+      });
+      return;
+    }
     if (tokenData?.ok) {
       router.push("/");
     }
-  }, [tokenData, router]);
+  }, [tokenData, router, setError]);
 
   const githubLogo =
     "M10 0C4.477 0 0 4.484 0 10.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0020 10.017C20 4.484 15.522 0 10 0z";
@@ -79,7 +92,11 @@ const Login: NextPage = () => {
     <>
       <Seo title="로그인 | 당근마켓" description="당근마켓 로그인" />
       <div className="mt-16 px-4">
-        <h3 className="text-4xl font-bold text-center">지금 우리 동네는? 👀</h3>
+        <h3 className="text-4xl font-bold text-center mb-5">🪴</h3>
+        <h3 className="text-[1.8rem] font-bold text-center ">이웃과 나눠요</h3>
+        <h3 className="text-4xl font-extrabold text-center text-lime-600">
+          네이버후드
+        </h3>
         <div className="mt-12">
           {/*data가 undefined일 수 있기 때문에 ? 써주기 */}
           {data?.ok ? (
@@ -95,7 +112,21 @@ const Login: NextPage = () => {
                 required
               />
 
-              <Button loading={tokenLoading} text="인증하기" />
+              {errors.formErrors?.message ? (
+                <span className="my-2 text-red-500 text-sm block">
+                  {errors.formErrors?.message}
+                </span>
+              ) : null}
+              <p className="text-sm font-md text-gray-700">
+                <p>인증번호를 입력하세요. </p>
+                <p>인증번호가 오기 까지 1~3분 정도 소요될 수 있습니다.</p>
+              </p>
+
+              <Button
+                loading={tokenLoading}
+                text="인증하기"
+                onClick={() => clearErrors()}
+              />
             </form>
           ) : (
             <>
@@ -106,7 +137,7 @@ const Login: NextPage = () => {
                     className={cls(
                       "pb-4 font-md border-b-2",
                       method === "email"
-                        ? " border-orange-500 text-orange-400"
+                        ? " border-lime-600 text-lime-500"
                         : "border-transparent text-gray-500"
                     )}
                     onClick={onEmailClick}
@@ -117,7 +148,7 @@ const Login: NextPage = () => {
                     className={cls(
                       "pb-4 font-md border-b-2",
                       method === "phone"
-                        ? " border-orange-500 text-orange-400"
+                        ? " border-lime-600 text-lime-500"
                         : "border-transparent text-gray-500"
                     )}
                     onClick={onPhoneClick}
@@ -150,7 +181,7 @@ const Login: NextPage = () => {
                   />
                 ) : null}
                 {method === "email" ? (
-                  <Button loading={loading} text="로그인 링크 받기" />
+                  <Button loading={loading} text="일회용 비밀번호 받기" />
                 ) : null}
                 {method === "phone" ? (
                   <Button loading={loading} text="일회용 비밀번호 받기" />

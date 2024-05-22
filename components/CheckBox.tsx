@@ -11,7 +11,7 @@ export default function Checkboxes({ options, register }: CheckBoxProps) {
       {options.map((option: string, index: any) => (
         <div className="space-x-2 flex items-center" key={index}>
           <input
-            className="appearance-none w-4 h-4 text-orange-600 bg-gray-100 border-gray-300 rounded-full focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+            className="appearance-none w-4 h-4 text-lime-700 bg-gray-100 border-gray-300 rounded-full focus:ring-lime-600 dark:focus:ring-lime-700 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
             type="checkbox"
             id={index}
             value={option}

@@ -27,14 +27,14 @@ const sendEmail = (userPayload: string, tokenPayload: string) => {
       console.log(error);
       return null;
     } else {
-      console.log(res);
+      // console.log(res);
       return null;
     }
   });
 
   smtpTransport.close();
 
-  return console.log(result);
+  return;
 };
 
 export default sendEmail;

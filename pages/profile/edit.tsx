@@ -150,7 +150,7 @@ const EditProfile: NextPage = () => {
           )}
           <label
             htmlFor="picture"
-            className="cursor-pointer py-2 px-3 border border-gray-300 hover:bg-slate-100 rounded-md shadow-sm text-sm font-medium focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 text-gray-700"
+            className="cursor-pointer py-2 px-3 border border-gray-300 hover:bg-slate-100 rounded-md shadow-sm text-sm font-medium focus:ring-2 focus:ring-offset-2 focus:ring-lime-600 text-gray-700"
           >
             수정
             <input

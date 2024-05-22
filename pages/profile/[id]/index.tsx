@@ -19,7 +19,7 @@ export interface UserResponse {
 }
 
 const UserProfile: NextPage = () => {
-  const { user } = useUser();
+  const { user, isLoading } = useUser();
   const router = useRouter();
 
   const handlerProfileEdit = () => {
@@ -129,7 +129,8 @@ const UserProfile: NextPage = () => {
           </div>
         </div>
       )}
-      {!data?.profile && (
+
+      {!isLoading && !data?.ok && (
         <div className="flex justify-center mt-20">
           존재하지 않는 사용자 입니다.
         </div>

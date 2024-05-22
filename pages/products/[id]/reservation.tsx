@@ -148,7 +148,7 @@ const Reservation: NextPage = () => {
               valueAsDate: true,
             })}
             required
-            className="text-gray-800 font-bold placeholder:text-gray-500 placeholder:font-bold placeholder:text-lg  appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-400 focus:border-orange-400
+            className="text-gray-800 font-bold placeholder:text-gray-500 placeholder:font-bold placeholder:text-lg  appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-lime-500 focus:border-lime-500
                 "
           />
           {errors.formErrors ? (

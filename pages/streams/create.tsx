@@ -22,7 +22,11 @@ interface LiveFormResponse {
 }
 
 const Create: NextPage = () => {
-  const { register, handleSubmit } = useForm<CreateStreamForm>();
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<CreateStreamForm>();
 
   const [createStream, { data, loading }] =
     useMutation<LiveFormResponse>(`/api/streams`);
@@ -39,6 +43,7 @@ const Create: NextPage = () => {
       router.push(`/streams/${data.stream.id}`);
     }
   }, [data, router]);
+  console.log(errors?.description);
 
   return (
     <Layout canGoBack title="라이브">
@@ -52,7 +57,7 @@ const Create: NextPage = () => {
             required: true,
             minLength: {
               value: 5,
-              message: "제목을 5글자 이상 입력해주세요.",
+              message: "*제목을 5글자 이상 입력해주세요.",
             },
           })}
           required
@@ -78,7 +83,7 @@ const Create: NextPage = () => {
             required: true,
             minLength: {
               value: 5,
-              message: "내용을 5글자 이상 입력해주세요.",
+              message: "*설명을 5글자 이상 입력해주세요.",
             },
           })}
           required
@@ -86,6 +91,12 @@ const Create: NextPage = () => {
           name="description"
           placeholder="올릴 게시글 내용을 작성해 주세요.&#10;(판매 금지 물품은 게시가 제한될 수 있어요.)&#10;신뢰할수 있는 거래를 위해 자세히 적어주세요."
         />
+        {errors?.name ? (
+          <p className="text-red-600 text-sm">{errors.name?.message}</p>
+        ) : null}
+        {errors?.description ? (
+          <p className="text-red-600 text-sm">{errors.description?.message}</p>
+        ) : null}
         <Button loading={loading} text="라이브 시작하기" />
       </form>
     </Layout>

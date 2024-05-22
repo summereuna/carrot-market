@@ -37,7 +37,7 @@ export default function Input({
             type="text"
             placeholder={placeholder}
             required={required}
-            className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-400 focus:border-orange-400"
+            className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-lime-500 focus:border-lime-500"
           />
         </div>
       ) : null}
@@ -51,7 +51,7 @@ export default function Input({
             type="email"
             placeholder={placeholder}
             required={required}
-            className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-400 focus:border-orange-400"
+            className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-lime-500 focus:border-lime-500"
           />
         </div>
       ) : null}
@@ -68,7 +68,7 @@ export default function Input({
             type="number"
             placeholder={placeholder}
             required={required}
-            className="pl-7 appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-400 focus:border-orange-400"
+            className="pl-7 appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-lime-500 focus:border-lime-500"
           />
           <div className="absolute right-0 pr-3 flex items-center pointer-events-none">
             <span className="text-gray-500">원</span>
@@ -87,7 +87,7 @@ export default function Input({
             id={name}
             type="number"
             required={required}
-            className="w-full appearance-none px-3 py-2 border border-gray-300 rounded-r-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+            className="w-full appearance-none px-3 py-2 border border-gray-300 rounded-r-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-lime-600 focus:border-lime-600"
           />
         </div>
       ) : null}
@@ -101,7 +101,7 @@ export default function Input({
             type="number"
             placeholder={placeholder}
             required={required}
-            className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-400 focus:border-orange-400"
+            className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-lime-500 focus:border-lime-500"
           />
         </div>
       ) : null}

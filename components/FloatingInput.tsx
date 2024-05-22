@@ -25,10 +25,10 @@ export default function FloatingInput({
         type="text"
         placeholder={errorMessage ? errorMessage : placeholder}
         required={required}
-        className="pr-14 shadow-sm rounded-full w-full border-gray-300 focus:outline-none focus:border-orange-500 focus:ring-orange-500"
+        className="pr-14 shadow-sm rounded-full w-full border-gray-300 focus:outline-none focus:border-lime-600 focus:ring-lime-600"
       />
       <div className="absolute inset-y-0 flex py-1.5 pr-1.5 right-0">
-        <button className="flex items-center bg-orange-500 rounded-full pr-2 pl-3 hover:bg-orange-600 focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 text-sm text-white">
+        <button className="flex items-center bg-lime-600 rounded-full pr-2 pl-3 hover:bg-lime-700 focus:ring-2 focus:ring-offset-2 focus:ring-lime-600 text-sm text-white">
           {isLoading ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"

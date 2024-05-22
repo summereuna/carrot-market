@@ -47,7 +47,7 @@ export default function Message({
       {me && !isReservedAlarm && (
         <div className="flex justify-end">
           <div className="w-[90%] flex flex-row-reverse space-x-2 space-x-reverse items-end">
-            <div className="bg-orange-500 text-yellow-50 rounded-xl p-3 text-sm text-left">
+            <div className="bg-lime-600 text-yellow-50 rounded-xl p-3 text-sm text-left">
               <p>{message}</p>
             </div>
             <span className="text-xs text-gray-400 text-right flex-shrink-0">

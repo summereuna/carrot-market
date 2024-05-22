@@ -28,6 +28,7 @@ const Write: NextPage = () => {
   const {
     register,
     formState: { errors },
+    clearErrors,
     handleSubmit,
   } = useForm<WriteForm>();
 
@@ -91,7 +92,7 @@ const Write: NextPage = () => {
             placeholder="제목을 입력하세요 (5글자 이상 입력하기)"
             required
             minLength={5}
-            className="text-gray-800 font-bold text-lg placeholder:text-gray-500 placeholder:font-bold placeholder:text-lg  appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-400 focus:border-orange-400
+            className="text-gray-800 font-bold text-lg placeholder:text-gray-500 placeholder:font-bold placeholder:text-lg  appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-lime-500 focus:border-lime-500
                 "
           />
           <Textarea
@@ -106,9 +107,13 @@ const Write: NextPage = () => {
             required
             placeholder="가까이 사는 동네 이웃들에게 궁금한 것을 물어보세요! 근처 이웃이 친절하게 진짜 동네 정보를 알려줄거예요. (5글자 이상 입력하기)"
           />
-          {errors?.title ? <p>{errors.title?.message}</p> : null}
-          {errors?.content ? <p>{errors.content?.message}</p> : null}
-          <Button loading={loading} text="완료" />
+          {errors?.title ? (
+            <p className="text-red-600 text-sm">{errors.title?.message}</p>
+          ) : null}
+          {errors?.content ? (
+            <p className="text-red-600 text-sm">{errors.content?.message}</p>
+          ) : null}
+          <Button loading={loading} text="완료" onClick={() => clearErrors()} />
         </form>
       </div>
     </Layout>

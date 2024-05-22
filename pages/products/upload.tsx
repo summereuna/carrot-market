@@ -67,7 +67,7 @@ const Upload: NextPage = () => {
       });
     } else {
       return setError("formErrors", {
-        message: "상품의 사진을 업로드하세요",
+        message: "*상품의 사진을 업로드하세요",
       });
     }
   };
@@ -107,7 +107,7 @@ const Upload: NextPage = () => {
               />
             </div>
           ) : (
-            <label className="flex items-center justify-center text-gray-600 hover:text-orange-500 border-2 border-dashed border-gray-300 w-full h-48 rounded-md mb-8 cursor-pointer hover:border-orange-500">
+            <label className="flex items-center justify-center text-gray-600 hover:text-lime-600 border-2 border-dashed border-gray-300 w-full h-48 rounded-md mb-8 cursor-pointer hover:border-lime-600">
               <svg
                 className="h-12 w-12"
                 stroke="currentColor"
@@ -132,7 +132,13 @@ const Upload: NextPage = () => {
             </label>
           )}
           <Input
-            register={register("name", { required: true })}
+            register={register("name", {
+              required: true,
+              minLength: {
+                value: 5,
+                message: "*제목을 5글자 이상 입력해주세요.",
+              },
+            })}
             label="제목"
             name="text"
             kind="text"
@@ -151,7 +157,13 @@ const Upload: NextPage = () => {
             required
           />
           <Textarea
-            register={register("description", { required: true })}
+            register={register("description", {
+              required: true,
+              minLength: {
+                value: 5,
+                message: "*설명을 5글자 이상 입력해주세요.",
+              },
+            })}
             label="자세한 설명"
             name="description"
             placeholder="올릴 게시글 내용을 작성해 주세요.&#10;(판매 금지 물품은 게시가 제한될 수 있어요.)&#10;신뢰할수 있는 거래를 위해 자세히 적어주세요."
@@ -161,6 +173,14 @@ const Upload: NextPage = () => {
             <span className="my-2 text-red-500 font-medium block">
               {errors.formErrors.message}
             </span>
+          ) : null}
+          {errors?.name ? (
+            <p className="text-red-600 text-sm">{errors.name?.message}</p>
+          ) : null}
+          {errors?.description ? (
+            <p className="text-red-600 text-sm">
+              {errors.description?.message}
+            </p>
           ) : null}
           <Button
             loading={loading}

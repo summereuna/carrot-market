@@ -21,7 +21,11 @@ async function handler(
 
   //2. 존재하는지 확인
   //존재하지 않으면 null리턴
-  if (!foundToken) return res.status(404).end();
+  if (!foundToken)
+    return res.status(404).json({
+      ok: false,
+      tokenError: "*인증번호가 틀렸습니다.",
+    });
 
   //3. 존재하면 해당 토큰 가진 유저의 id를 세션의 user에 저장
   req.session.user = {

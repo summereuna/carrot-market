@@ -147,7 +147,7 @@ const PostDetail: NextPage<CommunityPostResponse> = ({ post }) => {
               onClick={onRecommendationClick}
               className={cls(
                 "flex space-x-2 items-center text-sm focus:outline-none border-[1px] py-1 px-3 rounded-2xl",
-                data?.isRecommend ? "text-orange-400 border-orange-400" : ""
+                data?.isRecommend ? "text-lime-500 border-lime-500" : ""
               )}
             >
               <svg

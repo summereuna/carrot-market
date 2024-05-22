@@ -157,7 +157,7 @@ const ProductEdit: NextPage = ({
       />
       <form onSubmit={handleSubmit(onValid)}>
         <div className="px-4 py-2 space-y-5">
-          <label className="flex items-center justify-center text-gray-600 hover:text-orange-500 border-2 border-dashed border-gray-300 w-full h-48 rounded-md mb-8 cursor-pointer hover:border-orange-500">
+          <label className="flex items-center justify-center text-gray-600 hover:text-lime-600 border-2 border-dashed border-gray-300 w-full h-48 rounded-md mb-8 cursor-pointer hover:border-lime-600">
             <div className="relative -z-10 w-full h-48 flex justify-center items-center">
               {productImagePreview ? (
                 <Image

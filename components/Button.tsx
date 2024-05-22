@@ -23,7 +23,7 @@ export default function Button({
       onClick={onClick}
       {...rest}
       className={cls(
-        "w-full px-4 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2  shadow-sm font-medium bg-orange-500 hover:bg-orange-600",
+        "w-full px-4 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2  shadow-sm font-medium bg-lime-600 hover:bg-lime-700",
         large ? "py-3 text-base" : "py-2 text-sm",
         bgGray
           ? "enabled:bg-gray-300 enabled:hover:bg-gray-400 enabled:focus:bg-gray-200"

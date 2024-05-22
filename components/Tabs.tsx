@@ -27,7 +27,7 @@ export default function Tabs({ tabs }: TabsProps) {
               className={cls(
                 "flex w-1/3 py-2 items-center justify-center space-y-2 border-b-2",
                 activeTab === tab.id
-                  ? "text-orange-500 border-orange-500 active"
+                  ? "text-lime-600 border-lime-600 active"
                   : "hover:text-gray-500 hover:border-gray-300 border-transparent"
               )}
               onClick={() => handleTabChange(tab.id)}

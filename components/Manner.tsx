@@ -24,7 +24,7 @@ export default function Manner({ degree }: MannerProps) {
               "text-xl font-semibold",
               degree < 36.5 ? "text-gray-400" : "",
               36.5 <= degree && degree < 65.5 ? "text-sky-400" : "",
-              65.5 <= degree ? "text-orange-400" : ""
+              65.5 <= degree ? "text-lime-500" : ""
             )}
           >
             {getUserDegree(degree)}℃

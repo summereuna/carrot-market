@@ -48,7 +48,7 @@ const Posts: NextPage<{ posts: PostWithRecsAndAnswers[] }> = ({ posts }) => {
                   동네질문
                 </span>
                 <div className="mt-2 px-4 text-gray-700">
-                  <span className="text-orange-500 font-medium">Q.</span>{" "}
+                  <span className="text-lime-600 font-medium">Q.</span>{" "}
                   {post.title}
                 </div>
                 <div className="px-4 flex justify-between w-full text-gray-500 font-medium text-xs">

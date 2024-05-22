@@ -34,7 +34,7 @@ TextareaProps) {
         id={name}
         rows={4}
         placeholder={placeholder}
-        className="mt-1 shadow-sm w-full placeholder-gray-400  border-gray-300 focus:outline-none focus:ring-orange-400 focus:border-orange-400 rounded-md "
+        className="mt-1 shadow-sm w-full placeholder-gray-400  border-gray-300 focus:outline-none focus:ring-lime-500 focus:border-lime-500 rounded-md "
       />
     </div>
   );

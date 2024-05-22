@@ -49,10 +49,10 @@ const Profile: NextPage = () => {
 
   return (
     user && (
-      <Layout title="나의 프로필" hasTabBar>
+      <Layout title="나의 후드" hasTabBar>
         <Seo
-          title="나의 프로필 | 네이버후드"
-          description="네이버후드 나의 프로필"
+          title="나의 후드 | 네이버후드"
+          description="네이버후드 나의 후드"
         />
         <div className="divide-y-[1px]">
           {/* 유저 정보 */}
@@ -161,7 +161,7 @@ const Profile: NextPage = () => {
           </div>
 
           <div className="mt-3 py-4">
-            <h2 className="px-4 font-semibold mb-2 py-3">받은 매너 평가</h2>
+            <h2 className="px-4 font-semibold mb-2 py-3">받은 거래 후기</h2>
             {/* 유저 평가 */}
             <Reviews reviews={data?.reviews} />
           </div>

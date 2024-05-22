@@ -204,12 +204,14 @@ const ChatDetail: NextPage = () => {
 
             {/* <button
               onClick={onLeaveChatRoom}
-              className="w-24 underline cursor-pointer hover:text-orange-500 focus:text-orange-500"
+              className="w-24 underline cursor-pointer hover:text-lime-600 focus:text-lime-600"
             >
               {removeChatRoomLoading ? "로딩 중..." : "채팅방 나가기"}
             </button> */}
             <div className="flex flex-col items-center text-sm">
-              <p>나가기를 하면 대화내용이 모두 삭제되고</p>
+              <p>
+                <i>나가기</i>를 하면 대화내용이 모두 삭제되고
+              </p>
               <p>채팅목록에서도 삭제됩니다.</p>
             </div>
           </div>
