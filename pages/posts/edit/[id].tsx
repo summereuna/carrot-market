@@ -92,14 +92,14 @@ const PostEdit: NextPage = ({
   }, [data, router]);
 
   return (
-    <Layout canGoBack title="동네생활 글쓰기">
-      <Seo title="글쓰기 | 동네생활" description="네이버후드 동네생활 글쓰기" />
+    <Layout canGoBack title="커뮤니티 글쓰기">
+      <Seo title="글쓰기 | 커뮤니티" description="네이버후드 커뮤니티 글쓰기" />
       <div className="px-4 py-2 space-y-2">
         <div
           className="cursor-pointer flex items-center justify-between px-3 py-3 text-gray-800 border-b border-gray-300
         "
         >
-          <span>동네질문</span>
+          <span>질문</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -147,7 +147,7 @@ const PostEdit: NextPage = ({
             })}
             name="community_write"
             required
-            placeholder="가까이 사는 동네 이웃들에게 궁금한 것을 물어보세요! 근처 이웃이 친절하게 진짜 동네 정보를 알려줄거예요. (5글자 이상 입력하기)"
+            placeholder="궁금한 것을 물어보세요! 이웃들이 친절하게 정보를 알려줄거예요. (5글자 이상 입력하기)"
           />
           {errors.formErrors ? (
             <span className="my-2 text-red-500 font-medium block text-sm">

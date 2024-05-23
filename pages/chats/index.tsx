@@ -76,7 +76,7 @@ const Chats: NextPage = () => {
               lastChat={
                 chatRoom.chats.length > 0
                   ? chatRoom?.chats?.at(-1)?.chat
-                  : `🥕 채팅을 시작해 보세요!`
+                  : `🍀 채팅을 시작해 보세요!`
               }
             />
           ))}

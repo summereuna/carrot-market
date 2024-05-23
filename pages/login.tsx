@@ -92,7 +92,7 @@ const Login: NextPage = () => {
     <>
       <Seo title="로그인 | 당근마켓" description="당근마켓 로그인" />
       <div className="mt-16 px-4">
-        <h3 className="text-4xl font-bold text-center mb-5">🪴</h3>
+        <h3 className="text-4xl font-bold text-center mb-5">🍀</h3>
         <h3 className="text-[1.8rem] font-bold text-center ">이웃과 나눠요</h3>
         <h3 className="text-4xl font-extrabold text-center text-lime-600">
           네이버후드

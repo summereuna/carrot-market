@@ -59,7 +59,7 @@ async function handler(
     // }
 
     try {
-      // 동네생활 write form의 post 데이터
+      // 커뮤니티 write form의 post 데이터
       // req.session의 유저
       const {
         body: { title, content, latitude, longitude },

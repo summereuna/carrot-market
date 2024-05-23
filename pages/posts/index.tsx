@@ -34,8 +34,8 @@ const Posts: NextPage<{ posts: PostWithRecsAndAnswers[] }> = ({ posts }) => {
   // console.log(latitude, longitude);
 
   return (
-    <Layout title="동네생활" hasTabBar>
-      <Seo title="동네생활 | 네이버후드" description="네이버후드 동네생활" />
+    <Layout title="커뮤니티" hasTabBar>
+      <Seo title="커뮤니티 | 네이버후드" description="네이버후드 커뮤니티" />
       <div className="divide-y">
         {posts?.map((post) => (
           <div key={post.id}>
@@ -45,7 +45,7 @@ const Posts: NextPage<{ posts: PostWithRecsAndAnswers[] }> = ({ posts }) => {
                   className="flex ml-4 items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800
         "
                 >
-                  동네질문
+                  질문
                 </span>
                 <div className="mt-2 px-4 text-gray-700">
                   <span className="text-lime-600 font-medium">Q.</span>{" "}

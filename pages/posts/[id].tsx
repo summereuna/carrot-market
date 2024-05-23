@@ -116,7 +116,7 @@ const PostDetail: NextPage<CommunityPostResponse> = ({ post }) => {
   return (
     <Layout canGoBack isMe={user?.id !== post?.userId ? false : true}>
       <Seo
-        title={`${post?.title} | 동네생활`}
+        title={`${post?.title} | 커뮤니티`}
         description={`네이버후드 동네 생활: ${post?.content}`}
       />
       <div className="border-b-8 border-slate-100 w-full space-y-5 py-3">
@@ -124,7 +124,7 @@ const PostDetail: NextPage<CommunityPostResponse> = ({ post }) => {
           className="ml-4 inline-flex my-3 items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800
         "
         >
-          동네질문
+          질문
         </span>
         {/*user-profile"*/}
         <div className="px-4">
